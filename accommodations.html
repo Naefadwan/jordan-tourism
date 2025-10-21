@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accommodations in Jordan - Discover Jordan</title>
+    <meta name="description" content="Find the perfect accommodation in Jordan. From luxury resorts to desert camps, discover where to stay during your Jordan adventure.">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="site-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="header-left">
+                    <a href="index.html" class="logo">
+                        <span class="logo-text">Discover Jordan</span>
+                    </a>
+                    
+                    <nav class="main-nav">
+                        <a href="attractions.html" class="nav-link">Attractions</a>
+                        <a href="accommodations.html" class="nav-link active">Accommodations</a>
+                        <a href="experiences.html" class="nav-link">Experiences</a>
+                        <a href="about.html" class="nav-link">About Jordan</a>
+                    </nav>
+                </div>
+                
+                <div class="header-right">
+                    <button class="btn-icon" aria-label="Search">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                    </button>
+                    <button class="btn-icon" aria-label="Account">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </button>
+                    <button class="btn-primary">Book Now</button>
+                    <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div class="mobile-menu" id="mobileMenu">
+                <nav class="mobile-nav">
+                    <a href="attractions.html" class="mobile-nav-link">Attractions</a>
+                    <a href="accommodations.html" class="mobile-nav-link active">Accommodations</a>
+                    <a href="experiences.html" class="mobile-nav-link">Experiences</a>
+                    <a href="about.html" class="mobile-nav-link">About Jordan</a>
+                    <button class="btn-primary mobile-book-btn">Book Now</button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="page-hero">
+            <div class="container">
+                <h1 class="page-title">Accommodations in Jordan</h1>
+                <p class="page-subtitle">From luxury resorts to authentic desert camps, find your perfect stay</p>
+            </div>
+        </section>
+
+        <!-- Accommodations Grid -->
+        <section class="accommodations-section">
+            <div class="container">
+                <div class="accommodations-grid">
+                    <!-- Movenpick Petra Resort -->
+                    <div class="accommodation-card">
+                        <div class="accommodation-image">
+                            <img src="/movenpick-petra-resort-luxury-hotel.jpg" alt="Movenpick Petra Resort">
+                            <div class="accommodation-badge">Luxury</div>
+                            <div class="accommodation-price">From $200/night</div>
+                        </div>
+                        <div class="accommodation-content">
+                            <div class="accommodation-rating">
+                                <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                                    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon>
+                                </svg>
+                                <span class="rating-score">4.8</span>
+                                <span class="rating-count">(1247 reviews)</span>
+                            </div>
+                            <h3 class="accommodation-name">Movenpick Petra Resort</h3>
+                            <div class="accommodation-location">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                                <span>Petra, Jordan</span>
+                            </div>
+                            <p class="accommodation-description">Luxury resort with stunning views of Petra's ancient city, featuring world-class amenities and authentic Jordanian hospitality.</p>
+                            <div class="accommodation-features">
+                                <span class="feature">🏊 Pool</span>
+                                <span class="feature">🍽️ Restaurant</span>
+                                <span class="feature">🚗 Parking</span>
+                                <span class="feature">📶 WiFi</span>
+                            </div>
+                            <div class="accommodation-footer">
+                                <button class="btn-primary btn-sm">View Details</button>
+                                <button class="btn-outline btn-sm">Book Now</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kempinski Dead Sea -->
+                    <div class="accommodation-card">
+                        <div class="accommodation-image">
+                            <img src="/kempinski-dead-sea-resort-luxury.jpg" alt="Kempinski Dead Sea Resort">
+                            <div class="accommodation-badge">Luxury</div>
+                            <div class="accommodation-price">From $180/night</div>
+                        </div>
+                        <div class="accommodation-content">
+                            <div class="accommodation-rating">
+                                <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                                    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon>
+                                </svg>
+                                <span class="rating-score">4.7</span>
+                                <span class="rating-count">(892 reviews)</span>
+                            </div>
+                            <h3 class="accommodation-name">Kempinski Dead Sea Resort</h3>
+                            <div class="accommodation-location">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                                <span>Dead Sea, Jordan</span>
+                            </div>
+                            <p class="accommodation-description">World-class spa resort on the shores of the Dead Sea, offering therapeutic treatments and breathtaking views.</p>
+                            <div class="accommodation-features">
+                                <span class="feature">🏊 Pool</span>
+                                <span class="feature">🧖 Spa</span>
+                                <span class="feature">🍽️ Restaurant</span>
+                                <span class="feature">🚗 Parking</span>
+                            </div>
+                            <div class="accommodation-footer">
+                                <button class="btn-primary btn-sm">View Details</button>
+                                <button class="btn-outline btn-sm">Book Now</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Wadi Rum Luxury Camp -->
+                    <div class="accommodation-card">
+                        <div class="accommodation-image">
+                            <img src="/wadi-rum-luxury-camp-bubble-tent-desert.jpg" alt="Wadi Rum Luxury Camp">
+                            <div class="accommodation-badge">Unique</div>
+                            <div class="accommodation-price">From $120/night</div>
+                        </div>
+                        <div class="accommodation-content">
+                            <div class="accommodation-rating">
+                                <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                                    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon>
+                                </svg>
+                                <span class="rating-score">4.9</span>
+                                <span class="rating-count">(634 reviews)</span>
+                            </div>
+                            <h3 class="accommodation-name">Wadi Rum Luxury Camp</h3>
+                            <div class="accommodation-location">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                                <span>Wadi Rum, Jordan</span>
+                            </div>
+                            <p class="accommodation-description">Experience the magic of the desert in luxury bubble tents with panoramic views of the Martian landscape.</p>
+                            <div class="accommodation-features">
+                                <span class="feature">🏜️ Desert View</span>
+                                <span class="feature">🍽️ Bedouin Meals</span>
+                                <span class="feature">🌟 Stargazing</span>
+                                <span class="feature">📶 WiFi</span>
+                            </div>
+                            <div class="accommodation-footer">
+                                <button class="btn-primary btn-sm">View Details</button>
+                                <button class="btn-outline btn-sm">Book Now</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Four Seasons Amman -->
+                    <div class="accommodation-card">
+                        <div class="accommodation-image">
+                            <img src="/four-seasons-amman-luxury-hotel-city.jpg" alt="Four Seasons Amman">
+                            <div class="accommodation-badge">Luxury</div>
+                            <div class="accommodation-price">From $150/night</div>
+                        </div>
+                        <div class="accommodation-content">
+                            <div class="accommodation-rating">
+                                <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                                    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon>
+                                </svg>
+                                <span class="rating-score">4.6</span>
+                                <span class="rating-count">(756 reviews)</span>
+                            </div>
+                            <h3 class="accommodation-name">Four Seasons Amman</h3>
+                            <div class="accommodation-location">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                                <span>Amman, Jordan</span>
+                            </div>
+                            <p class="accommodation-description">Luxury hotel in the heart of Amman with modern amenities and easy access to the city's attractions.</p>
+                            <div class="accommodation-features">
+                                <span class="feature">🏊 Pool</span>
+                                <span class="feature">🍽️ Restaurant</span>
+                                <span class="feature">🚗 Valet</span>
+                                <span class="feature">📶 WiFi</span>
+                            </div>
+                            <div class="accommodation-footer">
+                                <button class="btn-primary btn-sm">View Details</button>
+                                <button class="btn-outline btn-sm">Book Now</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Feynan Ecolodge -->
+                    <div class="accommodation-card">
+                        <div class="accommodation-image">
+                            <img src="/feynan-ecolodge-dana-reserve-jordan-sustainable.jpg" alt="Feynan Ecolodge">
+                            <div class="accommodation-badge">Eco-Friendly</div>
+                            <div class="accommodation-price">From $80/night</div>
+                        </div>
+                        <div class="accommodation-content">
+                            <div class="accommodation-rating">
+                                <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                                    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon>
+                                </svg>
+                                <span class="rating-score">4.8</span>
+                                <span class="rating-count">(423 reviews)</span>
+                            </div>
+                            <h3 class="accommodation-name">Feynan Ecolodge</h3>
+                            <div class="accommodation-location">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                                <span>Dana Biosphere Reserve</span>
+                            </div>
+                            <p class="accommodation-description">Sustainable eco-lodge offering authentic experiences in the heart of Jordan's largest nature reserve.</p>
+                            <div class="accommodation-features">
+                                <span class="feature">🌱 Eco-Friendly</span>
+                                <span class="feature">🥾 Hiking</span>
+                                <span class="feature">🍽️ Local Cuisine</span>
+                                <span class="feature">🦅 Wildlife</span>
+                            </div>
+                            <div class="accommodation-footer">
+                                <button class="btn-primary btn-sm">View Details</button>
+                                <button class="btn-outline btn-sm">Book Now</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Boutique Hotel Jerash -->
+                    <div class="accommodation-card">
+                        <div class="accommodation-image">
+                            <img src="/boutique-hotel-jerash-jordan-traditional.jpg" alt="Boutique Hotel Jerash">
+                            <div class="accommodation-badge">Boutique</div>
+                            <div class="accommodation-price">From $60/night</div>
+                        </div>
+                        <div class="accommodation-content">
+                            <div class="accommodation-rating">
+                                <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                                    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon>
+                                </svg>
+                                <span class="rating-score">4.5</span>
+                                <span class="rating-count">(312 reviews)</span>
+                            </div>
+                            <h3 class="accommodation-name">Boutique Hotel Jerash</h3>
+                            <div class="accommodation-location">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                                <span>Jerash, Jordan</span>
+                            </div>
+                            <p class="accommodation-description">Charming boutique hotel near the ancient Roman ruins, offering traditional Jordanian hospitality.</p>
+                            <div class="accommodation-features">
+                                <span class="feature">🏛️ Historic Location</span>
+                                <span class="feature">🍽️ Traditional Food</span>
+                                <span class="feature">🚗 Parking</span>
+                                <span class="feature">📶 WiFi</span>
+                            </div>
+                            <div class="accommodation-footer">
+                                <button class="btn-primary btn-sm">View Details</button>
+                                <button class="btn-outline btn-sm">Book Now</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <div class="container">
+                <h2 class="cta-title">Need Help Choosing?</h2>
+                <p class="cta-subtitle">Our travel experts can help you find the perfect accommodation for your Jordan adventure</p>
+                <button class="btn-primary btn-lg">Contact Us</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3 class="footer-title">Discover Jordan</h3>
+                    <p class="footer-description">Your gateway to exploring the ancient wonders and natural beauty of Jordan.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="Facebook">
+                            <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Instagram">
+                            <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Twitter">
+                            <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Email">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <h4 class="footer-heading">Explore</h4>
+                    <ul class="footer-links">
+                        <li><a href="attractions.html">Attractions</a></li>
+                        <li><a href="accommodations.html">Accommodations</a></li>
+                        <li><a href="experiences.html">Experiences</a></li>
+                        <li><a href="tours.html">Guided Tours</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4 class="footer-heading">Support</h4>
+                    <ul class="footer-links">
+                        <li><a href="help.html">Help Center</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="travel-tips.html">Travel Tips</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4 class="footer-heading">Legal</h4>
+                    <ul class="footer-links">
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                        <li><a href="cancellation.html">Cancellation Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; <span id="currentYear"></span> Discover Jordan. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="scripts/main.js"></script>
+</body>
+</html>
