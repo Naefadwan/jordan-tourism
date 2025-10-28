@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Your Booking - Discover Jordan</title>
+    <meta name="description" content="Securely complete your booking for your stay in Jordan.">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="site-header scrolled">
+        <div class="container">
+            <div class="header-content">
+                <div class="header-left">
+                    <a href="index.html" class="logo">
+                        <span class="logo-text">Discover Jordan</span>
+                    </a>
+                </div>
+                <div class="header-right">
+                    <a href="help.html" class="nav-link">Help Center</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="booking-page-container container">
+            <!-- Booking Progress Bar -->
+            <div class="booking-progress">
+                <div class="progress-step active" data-step="1">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">Dates & Rooms</div>
+                </div>
+                <div class="progress-line"></div>
+                <div class="progress-step" data-step="2">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">Guest Details</div>
+                </div>
+                <div class="progress-line"></div>
+                <div class="progress-step" data-step="3">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">Payment</div>
+                </div>
+                <div class="progress-line"></div>
+                <div class="progress-step" data-step="4">
+                    <div class="step-circle">✓</div>
+                    <div class="step-label">Confirmation</div>
+                </div>
+            </div>
+
+            <!-- Booking Steps -->
+            <div class="booking-steps-container">
+                <!-- Step 1: Dates & Rooms -->
+                <div class="booking-step active" data-step="1">
+                    <h2 class="booking-step-title">1. Select Your Room</h2>
+                    <p class="booking-step-subtitle">Your selected dates: <strong id="date-range-display"></strong> for <strong id="guest-count-display"></strong>.</p>
+                    <div class="room-selection-grid">
+                        <div class="room-type-card">
+                            <h3>Standard Room</h3>
+                            <p>Comfortable room with a city view.</p>
+                            <div class="room-price">$200/night</div>
+                            <button class="btn-primary select-room-btn" data-room-type="Standard Room" data-price="200">Select</button>
+                        </div>
+                        <div class="room-type-card">
+                            <h3>Deluxe Room</h3>
+                            <p>Spacious room with a balcony and pool view.</p>
+                            <div class="room-price">$280/night</div>
+                            <button class="btn-primary select-room-btn" data-room-type="Deluxe Room" data-price="280">Select</button>
+                        </div>
+                        <div class="room-type-card">
+                            <h3>Junior Suite</h3>
+                            <p>Large suite with a separate living area.</p>
+                            <div class="room-price">$450/night</div>
+                            <button class="btn-primary select-room-btn" data-room-type="Junior Suite" data-price="450">Select</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Guest Details -->
+                <div class="booking-step" data-step="2">
+                    <h2 class="booking-step-title">2. Enter Your Details</h2>
+                    <form id="guest-details-form" class="guest-form" novalidate>
+                        <div class="form-group">
+                            <label for="fullName">Full Name</label>
+                            <input type="text" id="fullName" name="fullName" required>
+                            <span class="error-message"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" required>
+                            <span class="error-message"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone">
+                            <span class="error-message"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="requests">Special Requests (optional)</label>
+                            <textarea id="requests" name="requests" rows="3"></textarea>
+                            <span class="error-message"></span>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Step 3: Payment -->
+                <div class="booking-step" data-step="3">
+                    <div class="payment-layout">
+                        <div class="payment-form-container">
+                            <h2 class="booking-step-title">3. Complete Payment</h2>
+                            <form id="payment-form" class="payment-form" novalidate>
+                                <div class="form-group">
+                                    <label for="cardName">Name on Card</label>
+                                    <input type="text" id="cardName" required>
+                                    <span class="error-message"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cardNumber">Card Number</label>
+                                    <input type="text" id="cardNumber" placeholder="•••• •••• •••• ••••" required>
+                                    <span class="error-message"></span>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="expiryDate">Expiry Date</label>
+                                        <input type="text" id="expiryDate" placeholder="MM / YY" required>
+                                        <span class="error-message"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cvc">CVC</label>
+                                        <input type="text" id="cvc" placeholder="•••" required>
+                                        <span class="error-message"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group promo-code">
+                                    <input type="text" id="promoCode" placeholder="Promo Code">
+                                    <button type="button" class="btn-outline">Apply</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="booking-summary-sidebar">
+                            <h3>Booking Summary</h3>
+                            <p id="summary-hotel-name">Movenpick Petra Resort</p>
+                            <div class="summary-details">
+                                <p><strong>Dates:</strong> <span id="summary-dates"></span></p>
+                                <p><strong>Guests:</strong> <span id="summary-guests"></span></p>
+                                <p><strong>Room:</strong> <span id="summary-room-type"></span></p>
+                            </div>
+                            <div class="booking-summary">
+                                <div class="summary-line">
+                                    <span id="summary-price-calc"></span>
+                                    <span id="summary-base-price"></span>
+                                </div>
+                                <div class="summary-line">
+                                    <span>Service fee & taxes</span>
+                                    <span id="summary-fees"></span>
+                                </div>
+                                <div class="summary-total">
+                                    <span>Total</span>
+                                    <span id="summary-total-price"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Confirmation -->
+                <div class="booking-step" data-step="4">
+                    <div class="confirmation-container">
+                        <div class="confirmation-icon">✓</div>
+                        <h2 class="booking-step-title">Booking Confirmed!</h2>
+                        <p>Thank you for booking with Discover Jordan. Your confirmation and receipt have been sent to your email address.</p>
+                        <div class="confirmation-details">
+                            <p><strong>Booking Reference:</strong> <span id="booking-ref"></span></p>
+                            <p><strong>Total Amount Paid:</strong> <span id="final-price"></span></p>
+                        </div>
+                        <a href="index.html" class="btn-primary">Back to Homepage</a>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="booking-navigation">
+                    <button class="btn-outline" id="back-btn" style="display: none;">Back</button>
+                    <button class="btn-primary" id="next-btn" style="display: none;">Next</button>
+                    <button class="btn-primary" id="confirm-btn" style="display: none;">Confirm & Pay</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="scripts/main.js"></script>
+    <script src="scripts/booking.js"></script>
+</body>
+</html>

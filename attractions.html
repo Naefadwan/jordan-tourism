@@ -24,6 +24,7 @@
                         <a href="attractions.html" class="nav-link active">Attractions</a>
                         <a href="accommodations.html" class="nav-link">Accommodations</a>
                         <a href="experiences.html" class="nav-link">Experiences</a>
+                        <a href="liked-attractions.html" class="nav-link">My Likes</a>
                         <a href="about.html" class="nav-link">About Jordan</a>
                     </nav>
                 </div>
@@ -41,7 +42,16 @@
                             <circle cx="12" cy="7" r="4"></circle>
                         </svg>
                     </button>
-                    <button class="btn-primary">Book Now</button>
+                    <button class="btn-icon" id="theme-toggle" aria-label="Toggle theme">
+                        <svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                    </button>
+                    <a href="accommodations.html" class="btn-primary">Book Now</a>
                     <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
                         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -58,8 +68,9 @@
                     <a href="attractions.html" class="mobile-nav-link active">Attractions</a>
                     <a href="accommodations.html" class="mobile-nav-link">Accommodations</a>
                     <a href="experiences.html" class="mobile-nav-link">Experiences</a>
+                    <a href="liked-attractions.html" class="mobile-nav-link">My Likes</a>
                     <a href="about.html" class="mobile-nav-link">About Jordan</a>
-                    <button class="btn-primary mobile-book-btn">Book Now</button>
+                    <a href="accommodations.html" class="btn-primary mobile-book-btn">Book Now</a>
                 </nav>
             </div>
         </div>
@@ -75,7 +86,7 @@
         </section>
 
         <!-- Search and Filter Section -->
-        <section class="search-filter-section">
+        <section class="search-filter-section fade-in-section">
             <div class="container">
                 <div class="search-filter-grid">
                     <div class="search-input-wrapper">
@@ -119,14 +130,22 @@
         </section>
 
         <!-- Attractions Grid -->
-        <section class="attractions-section">
+        <section class="attractions-section fade-in-section">
             <div class="container">
                 <div class="attractions-grid" id="attractionsGrid">
+                    <div class="attractions-grid-empty" id="noResultsMessage">
+                        <p>No attractions found. Try adjusting your search or filters.</p>
+                    </div>
                     <!-- Petra -->
                     <div class="attraction-card" data-category="historical" data-price="50" data-rating="4.9">
                         <div class="attraction-image">
-                            <img src="/petra-treasury-jordan-ancient-city.jpg" alt="Petra">
+                            <img data-src="public/petra-treasury-jordan-ancient-city.jpg" alt="Petra" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
                             <div class="attraction-badge">Historical</div>
+                            <button class="btn-icon like-btn" aria-label="Like Petra" data-attraction-id="petra">
+                                <svg class="icon icon-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                </svg>
+                            </button>
                             <div class="attraction-price">$50</div>
                         </div>
                         <div class="attraction-content">
@@ -162,8 +181,13 @@
                     <!-- Wadi Rum -->
                     <div class="attraction-card" data-category="nature" data-price="35" data-rating="4.8">
                         <div class="attraction-image">
-                            <img src="/wadi-rum-desert-jordan-red-sand.jpg" alt="Wadi Rum">
+                            <img data-src="public/wadi-rum-desert-jordan-red-sand.jpg" alt="Wadi Rum" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
                             <div class="attraction-badge">Nature</div>
+                            <button class="btn-icon like-btn" aria-label="Like Wadi Rum" data-attraction-id="wadi-rum">
+                                <svg class="icon icon-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                </svg>
+                            </button>
                             <div class="attraction-price">$35</div>
                         </div>
                         <div class="attraction-content">
@@ -199,8 +223,13 @@
                     <!-- Dead Sea -->
                     <div class="attraction-card" data-category="nature" data-price="25" data-rating="4.7">
                         <div class="attraction-image">
-                            <img src="/dead-sea-jordan-floating-sunset.jpg" alt="Dead Sea">
+                            <img data-src="public/dead-sea-jordan-floating-sunset.jpg" alt="Dead Sea" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
                             <div class="attraction-badge">Nature</div>
+                            <button class="btn-icon like-btn" aria-label="Like Dead Sea" data-attraction-id="dead-sea">
+                                <svg class="icon icon-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                </svg>
+                            </button>
                             <div class="attraction-price">$25</div>
                         </div>
                         <div class="attraction-content">
@@ -236,8 +265,13 @@
                     <!-- Jerash -->
                     <div class="attraction-card" data-category="historical" data-price="20" data-rating="4.6">
                         <div class="attraction-image">
-                            <img src="/jerash-roman-ruins-jordan-columns.jpg" alt="Jerash">
+                            <img data-src="public/jerash-roman-ruins-jordan-columns.jpg" alt="Jerash" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
                             <div class="attraction-badge">Historical</div>
+                            <button class="btn-icon like-btn" aria-label="Like Jerash" data-attraction-id="jerash">
+                                <svg class="icon icon-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                </svg>
+                            </button>
                             <div class="attraction-price">$20</div>
                         </div>
                         <div class="attraction-content">
@@ -273,8 +307,13 @@
                     <!-- Amman Citadel -->
                     <div class="attraction-card" data-category="historical" data-price="15" data-rating="4.5">
                         <div class="attraction-image">
-                            <img src="/amman-citadel-ruins-temple-hercules.jpg" alt="Amman Citadel">
+                            <img data-src="public/amman-citadel-ruins-temple-hercules.jpg" alt="Amman Citadel" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
                             <div class="attraction-badge">Historical</div>
+                            <button class="btn-icon like-btn" aria-label="Like Amman Citadel" data-attraction-id="amman-citadel">
+                                <svg class="icon icon-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                </svg>
+                            </button>
                             <div class="attraction-price">$15</div>
                         </div>
                         <div class="attraction-content">
@@ -310,8 +349,13 @@
                     <!-- Aqaba Red Sea -->
                     <div class="attraction-card" data-category="nature" data-price="30" data-rating="4.7">
                         <div class="attraction-image">
-                            <img src="/aqaba-red-sea-coral-reef-diving.jpg" alt="Aqaba Red Sea">
+                            <img data-src="public/aqaba-red-sea-coral-reef-diving.jpg" alt="Aqaba Red Sea" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
                             <div class="attraction-badge">Nature</div>
+                            <button class="btn-icon like-btn" aria-label="Like Aqaba Red Sea" data-attraction-id="aqaba-red-sea">
+                                <svg class="icon icon-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                </svg>
+                            </button>
                             <div class="attraction-price">$30</div>
                         </div>
                         <div class="attraction-content">
@@ -347,8 +391,13 @@
                     <!-- Dana Biosphere Reserve -->
                     <div class="attraction-card" data-category="nature" data-price="18" data-rating="4.6">
                         <div class="attraction-image">
-                            <img src="/dana-biosphere-reserve-jordan-mountains-hiking.jpg" alt="Dana Biosphere Reserve">
+                            <img data-src="public/dana-biosphere-reserve-jordan-mountains-hiking.jpg" alt="Dana Biosphere Reserve" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
                             <div class="attraction-badge">Nature</div>
+                            <button class="btn-icon like-btn" aria-label="Like Dana Biosphere Reserve" data-attraction-id="dana-biosphere-reserve">
+                                <svg class="icon icon-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                </svg>
+                            </button>
                             <div class="attraction-price">$18</div>
                         </div>
                         <div class="attraction-content">
@@ -384,8 +433,13 @@
                     <!-- Madaba Mosaic Map -->
                     <div class="attraction-card" data-category="historical" data-price="12" data-rating="4.4">
                         <div class="attraction-image">
-                            <img src="/madaba-mosaic-map-jordan-byzantine.jpg" alt="Madaba Mosaic Map">
+                            <img data-src="public/madaba-mosaic-map-jordan-byzantine.jpg" alt="Madaba Mosaic Map" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
                             <div class="attraction-badge">Historical</div>
+                            <button class="btn-icon like-btn" aria-label="Like Madaba Mosaic Map" data-attraction-id="madaba-mosaic-map">
+                                <svg class="icon icon-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                </svg>
+                            </button>
                             <div class="attraction-price">$12</div>
                         </div>
                         <div class="attraction-content">
@@ -422,7 +476,7 @@
         </section>
 
         <!-- CTA Section -->
-        <section class="cta-section">
+        <section class="cta-section fade-in-section">
             <div class="container">
                 <h2 class="cta-title">Can't Find What You're Looking For?</h2>
                 <p class="cta-subtitle">Contact our travel experts to create a custom itinerary tailored to your interests</p>
@@ -470,7 +524,6 @@
                     <ul class="footer-links">
                         <li><a href="attractions.html">Attractions</a></li>
                         <li><a href="accommodations.html">Accommodations</a></li>
-                        <li><a href="experiences.html">Experiences</a></li>
                         <li><a href="tours.html">Guided Tours</a></li>
                     </ul>
                 </div>
@@ -500,6 +553,13 @@
             </div>
         </div>
     </footer>
+
+    <!-- Back to Top Button -->
+    <button id="backToTopBtn" class="back-to-top-btn" title="Go to top">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 19V5M5 12l7-7 7 7"/>
+        </svg>
+    </button>
 
     <script src="scripts/main.js"></script>
     <script src="scripts/attractions.js"></script>

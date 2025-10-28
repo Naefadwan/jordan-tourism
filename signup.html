@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Discover Jordan</title>
+    <meta name="description" content="Create an account with Discover Jordan.">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="site-header scrolled">
+        <div class="container">
+            <div class="header-content">
+                <div class="header-left">
+                    <a href="index.html" class="logo">
+                        <span class="logo-text">Discover Jordan</span>
+                    </a>
+                </div>
+                <div class="header-right">
+                    <a href="help.html" class="nav-link">Help Center</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="auth-page-container">
+            <div class="auth-form-container">
+                <h1 class="auth-title">Create Your Account</h1>
+                <p class="auth-subtitle">Join us to start planning your adventure.</p>
+                <form id="signup-form" class="auth-form" novalidate>
+                    <div id="signup-error" class="error-message" style="text-align: center; margin-bottom: 1rem;"></div>
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" id="fullName" name="fullName" required>
+                        <span class="error-message"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                        <span class="error-message"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required minlength="8">
+                        <span class="error-message"></span>
+                    </div>
+                    <button type="submit" class="btn-primary auth-btn">Create Account</button>
+                </form>
+                <p class="auth-switch-text">
+                    Already have an account? <a href="login.html" class="link">Login</a>
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer" style="margin-top: auto;">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; <span id="currentYear"></span> Discover Jordan. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="scripts/main.js"></script>
+    <script src="scripts/auth.js"></script>
+</body>
+</html>

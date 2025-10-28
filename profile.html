@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Profile - Discover Jordan</title>
+    <meta name="description" content="Your Discover Jordan user profile.">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="site-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="header-left">
+                    <a href="index.html" class="logo">
+                        <span class="logo-text">Discover Jordan</span>
+                    </a>
+                    
+                    <nav class="main-nav">
+                        <a href="attractions.html" class="nav-link">Attractions</a>
+                        <a href="accommodations.html" class="nav-link">Accommodations</a>
+                        <a href="experiences.html" class="nav-link">Experiences</a>
+                        <a href="liked-attractions.html" class="nav-link">My Likes</a>
+                        <a href="about.html" class="nav-link">About Jordan</a>
+                    </nav>
+                </div>
+                
+                <div class="header-right">
+                    <a href="profile.html" id="authLink" class="btn-icon" aria-label="Account">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </a>
+                    <button class="btn-icon" id="theme-toggle" aria-label="Toggle theme"></button>
+                    <a href="accommodations.html" class="btn-primary">Book Now</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="page-hero">
+            <div class="container">
+                <h1 id="welcome-message" class="page-title">Welcome, User!</h1>
+                <p class="page-subtitle">Manage your profile and view your saved items here.</p>
+            </div>
+        </div>
+
+        <section class="profile-section fade-in-section">
+            <div class="container">
+                <div class="profile-content">
+                    <h2>Your Details</h2>
+                    <p><strong>Email:</strong> <span id="profile-email"></span></p>
+                    <div class="profile-actions">
+                        <a href="liked-attractions.html" class="btn-primary">View My Likes</a>
+                        <button id="logout-btn" class="btn-outline">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; <span id="currentYear"></span> Discover Jordan. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="scripts/main.js"></script>
+    <script src="scripts/auth.js"></script>
+</body>
+</html>

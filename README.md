@@ -1,28 +1,29 @@
 # Discover Jordan - Tourism Website
 
-A beautiful, responsive tourism website showcasing Jordan's incredible attractions, accommodations, and experiences.
+A beautiful, responsive front-end prototype for a tourism website showcasing Jordan's incredible attractions, accommodations, and experiences. Includes a simulated multi-step booking process.
 
 ## Features
 
 - **Responsive Design**: Works perfectly on desktop, tablet, and mobile devices
-- **Interactive Attractions**: Browse and filter Jordan's top attractions
-- **Modern UI**: Clean, modern design with smooth animations
-- **Search & Filter**: Find attractions by category, price, and rating
-- **Mobile-Friendly**: Optimized mobile navigation and interactions
+- **Modern UI**: Clean, modern design with smooth animations and a light/dark theme switcher.
+- **Interactive Attractions**: Browse, search, and filter Jordan's top attractions with real-time updates.
+- **Accommodation Details**: View detailed pages for lodging with an image gallery and booking widget.
+- **Multi-Step Booking Form**: A simulated, multi-step booking process with custom form validation.
+- **Personalization**: Users can "like" attractions, and their choices are saved to a dedicated "My Likes" page using `localStorage`.
 
 ## Pages
 
 - **Homepage** (`index.html`): Hero section, featured destinations, and experiences
 - **Attractions** (`attractions.html`): Complete list of Jordan's attractions with filtering
 - **Accommodations** (`accommodations.html`): Hotels and lodging options
-- **Experiences** (`experiences.html`): Guided tours and activities
+- **Accommodation Detail** (`accommodation-detail.html`): A detailed view of a single accommodation.
+- **Experiences** (`experiences.html`): A page for guided tours and activities.
+- **My Likes** (`liked-attractions.html`): A page that displays all attractions the user has liked.
+- **Booking** (`booking.html`): A multi-step booking form simulation.
 
 ## Getting Started
 
-### Prerequisites
 
-- A modern web browser
-- Python 3.x (for local development server)
 
 ### Installation
 
@@ -47,12 +48,18 @@ jordan-tourism/
 ├── index.html              # Homepage
 ├── attractions.html        # Attractions listing page
 ├── accommodations.html     # Accommodations page
+├── accommodation-detail.html # Single accommodation detail page
 ├── experiences.html        # Experiences page
+├── liked-attractions.html  # Liked attractions page
+├── booking.html            # Multi-step booking form page
 ├── styles/
 │   └── main.css           # Main stylesheet
 ├── scripts/
 │   ├── main.js            # Core JavaScript functionality
 │   └── attractions.js     # Attractions page functionality
+│   └── accommodation-detail.js # Accommodation detail page script
+│   └── liked-attractions.js  # Liked attractions page script
+│   └── booking.js         # Booking page script
 ├── public/                # Images and assets
 └── package.json           # Project configuration
 ```

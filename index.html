@@ -24,6 +24,7 @@
                         <a href="attractions.html" class="nav-link">Attractions</a>
                         <a href="accommodations.html" class="nav-link">Accommodations</a>
                         <a href="experiences.html" class="nav-link">Experiences</a>
+                        <a href="liked-attractions.html" class="nav-link">My Likes</a>
                         <a href="about.html" class="nav-link">About Jordan</a>
                     </nav>
                 </div>
@@ -35,13 +36,22 @@
                             <path d="m21 21-4.35-4.35"></path>
                         </svg>
                     </button>
-                    <button class="btn-icon" aria-label="Account">
+                    <a href="login.html" id="authLink" class="btn-icon" aria-label="Account">
                         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                             <circle cx="12" cy="7" r="4"></circle>
                         </svg>
+                    </a>
+                    <button class="btn-icon" id="theme-toggle" aria-label="Toggle theme">
+                        <svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
                     </button>
-                    <button class="btn-primary">Book Now</button>
+                    <a href="accommodations.html" class="btn-primary">Book Now</a>
                     <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
                         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -58,8 +68,9 @@
                     <a href="attractions.html" class="mobile-nav-link">Attractions</a>
                     <a href="accommodations.html" class="mobile-nav-link">Accommodations</a>
                     <a href="experiences.html" class="mobile-nav-link">Experiences</a>
+                    <a href="liked-attractions.html" class="mobile-nav-link">My Likes</a>
                     <a href="about.html" class="mobile-nav-link">About Jordan</a>
-                    <button class="btn-primary mobile-book-btn">Book Now</button>
+                    <a href="accommodations.html" class="btn-primary mobile-book-btn">Book Now</a>
                 </nav>
             </div>
         </div>
@@ -69,7 +80,7 @@
         <!-- Hero Section -->
         <section class="hero-section">
             <div class="hero-background">
-                <img src="/petra-treasury-at-sunset-jordan-ancient-ruins.jpg" alt="Petra Treasury at sunset" class="hero-image">
+                <img src="public/petra-treasury-at-sunset-jordan-ancient-ruins.jpg" alt="Petra Treasury at sunset" class="hero-image">
                 <div class="hero-overlay"></div>
             </div>
             <div class="container hero-content">
@@ -83,7 +94,7 @@
         </section>
 
         <!-- Featured Destinations -->
-        <section class="featured-destinations">
+        <section class="featured-destinations fade-in-section">
             <div class="container">
                 <div class="section-header">
                     <h2 class="section-title">Iconic Destinations</h2>
@@ -93,7 +104,7 @@
                 <div class="destinations-grid">
                     <div class="destination-card">
                         <div class="destination-image">
-                            <img src="/petra-treasury-jordan-ancient-city.jpg" alt="Petra">
+                            <img data-src="public/petra-treasury-jordan-ancient-city.jpg" alt="Petra" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
                             <div class="destination-price">From $50</div>
                         </div>
                         <div class="destination-content">
@@ -105,7 +116,7 @@
 
                     <div class="destination-card">
                         <div class="destination-image">
-                            <img src="/wadi-rum-desert-jordan-red-sand.jpg" alt="Wadi Rum">
+                            <img data-src="public/wadi-rum-desert-jordan-red-sand.jpg" alt="Wadi Rum" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
                             <div class="destination-price">From $35</div>
                         </div>
                         <div class="destination-content">
@@ -117,7 +128,7 @@
 
                     <div class="destination-card">
                         <div class="destination-image">
-                            <img src="/dead-sea-jordan-floating-sunset.jpg" alt="Dead Sea">
+                            <img data-src="public/dead-sea-jordan-floating-sunset.jpg" alt="Dead Sea" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
                             <div class="destination-price">From $25</div>
                         </div>
                         <div class="destination-content">
@@ -129,7 +140,7 @@
 
                     <div class="destination-card">
                         <div class="destination-image">
-                            <img src="/jerash-roman-ruins-jordan-columns.jpg" alt="Jerash">
+                            <img data-src="public/jerash-roman-ruins-jordan-columns.jpg" alt="Jerash" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
                             <div class="destination-price">From $20</div>
                         </div>
                         <div class="destination-content">
@@ -143,7 +154,7 @@
         </section>
 
         <!-- Why Choose Us -->
-        <section class="why-choose-us">
+        <section class="why-choose-us fade-in-section">
             <div class="container">
                 <div class="section-header">
                     <h2 class="section-title">Why Travel with Us</h2>
@@ -194,7 +205,7 @@
                         <h3 class="feature-title">Curated Experiences</h3>
                         <p class="feature-description">Handpicked attractions and activities for authentic adventures.</p>
                     </div>
-
+                    
                     <div class="feature-item">
                         <div class="feature-icon">
                             <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -223,7 +234,7 @@
         </section>
 
         <!-- Popular Experiences -->
-        <section class="popular-experiences">
+        <section class="popular-experiences fade-in-section">
             <div class="container">
                 <div class="section-header">
                     <h2 class="section-title">Popular Experiences</h2>
@@ -233,7 +244,7 @@
                 <div class="experiences-grid">
                     <div class="experience-card">
                         <div class="experience-image">
-                            <img src="/petra-by-night-candles-treasury.jpg" alt="Petra by Night">
+                            <img data-src="public/petra-by-night-candles-treasury.jpg" alt="Petra by Night" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
                         </div>
                         <div class="experience-content">
                             <div class="experience-rating">
@@ -253,14 +264,14 @@
                                     </svg>
                                     <span>2 hours</span>
                                 </div>
-                                <button class="btn-primary btn-sm">Book Now</button>
+                                <a href="attractions.html?search=petra" class="btn-primary btn-sm">Book Now</a>
                             </div>
                         </div>
                     </div>
 
                     <div class="experience-card">
                         <div class="experience-image">
-                            <img src="/wadi-rum-jeep-safari-desert.jpg" alt="Wadi Rum Jeep Safari">
+                            <img data-src="public/wadi-rum-jeep-safari-desert.jpg" alt="Wadi Rum Jeep Safari" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
                         </div>
                         <div class="experience-content">
                             <div class="experience-rating">
@@ -280,14 +291,14 @@
                                     </svg>
                                     <span>4 hours</span>
                                 </div>
-                                <button class="btn-primary btn-sm">Book Now</button>
+                                <a href="attractions.html?search=wadi%20rum" class="btn-primary btn-sm">Book Now</a>
                             </div>
                         </div>
                     </div>
 
                     <div class="experience-card">
                         <div class="experience-image">
-                            <img src="/dead-sea-spa-mud-treatment.jpg" alt="Dead Sea Spa Day">
+                            <img data-src="public/dead-sea-spa-mud-treatment.jpg" alt="Dead Sea Spa Day" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
                         </div>
                         <div class="experience-content">
                             <div class="experience-rating">
@@ -307,7 +318,7 @@
                                     </svg>
                                     <span>Full day</span>
                                 </div>
-                                <button class="btn-primary btn-sm">Book Now</button>
+                                <a href="attractions.html?search=dead%20sea" class="btn-primary btn-sm">Book Now</a>
                             </div>
                         </div>
                     </div>
@@ -316,7 +327,7 @@
         </section>
 
         <!-- CTA Section -->
-        <section class="cta-section">
+        <section class="cta-section fade-in-section">
             <div class="container">
                 <h2 class="cta-title">Ready to Start Your Journey?</h2>
                 <p class="cta-subtitle">Join thousands of travelers who have discovered the magic of Jordan. Book your adventure today.</p>
@@ -367,7 +378,6 @@
                     <ul class="footer-links">
                         <li><a href="attractions.html">Attractions</a></li>
                         <li><a href="accommodations.html">Accommodations</a></li>
-                        <li><a href="experiences.html">Experiences</a></li>
                         <li><a href="tours.html">Guided Tours</a></li>
                     </ul>
                 </div>
@@ -397,6 +407,13 @@
             </div>
         </div>
     </footer>
+
+    <!-- Back to Top Button -->
+    <button id="backToTopBtn" class="back-to-top-btn" title="Go to top">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 19V5M5 12l7-7 7 7"/>
+        </svg>
+    </button>
 
     <script src="scripts/main.js"></script>
 </body>
