@@ -112,9 +112,6 @@ jordan-tourism/
 - Edge (latest)
 - Mobile browsers (iOS Safari, Chrome Mobile)
 
-## License
-
-MIT License - feel free to use this project for your own tourism website.
 
 ## Contact
 
