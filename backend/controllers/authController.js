@@ -44,7 +44,7 @@ exports.login = async (req, res) => {
         const payload = { user: { id: user.email } }; // Use a unique ID in a real app
         const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-        res.json({ token, user: { fullName: user.fullName, email: user.email } });
+        res.json({ token, user: { full_name: user.full_name, email: user.email } });
 
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });

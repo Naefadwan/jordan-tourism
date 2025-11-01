@@ -85,6 +85,51 @@
             </div>
         </section>
 
+        <!-- Search and Filter Section -->
+        <section class="search-filter-section fade-in-section">
+            <div class="container">
+                <div class="search-filter-grid">
+                    <div class="search-input-wrapper">
+                        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                        <input type="text" placeholder="Search hotels, camps, locations..." class="search-input" id="searchInput">
+                    </div>
+                    
+                    <select class="filter-select" id="typeFilter">
+                        <option value="all">All Types</option>
+                        <option value="Luxury">Luxury</option>
+                        <option value="Eco-Friendly">Eco-Friendly</option>
+                        <option value="Boutique">Boutique</option>
+                        <option value="Unique">Unique</option>
+                    </select>
+                    
+                    <select class="filter-select" id="sortFilter">
+                        <option value="popular">Most Popular</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="rating">Highest Rated</option>
+                    </select>
+                    
+                    <button class="btn-outline filter-btn">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="4" y1="21" x2="4" y2="14"></line>
+                            <line x1="4" y1="10" x2="4" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="12"></line>
+                            <line x1="12" y1="8" x2="12" y2="3"></line>
+                            <line x1="20" y1="21" x2="20" y2="16"></line>
+                            <line x1="20" y1="12" x2="20" y2="3"></line>
+                            <line x1="1" y1="14" x2="7" y2="14"></line>
+                            <line x1="9" y1="8" x2="15" y2="8"></line>
+                            <line x1="17" y1="16" x2="23" y2="16"></line>
+                        </svg>
+                        Filters
+                    </button>
+                </div>
+            </div>
+        </section>
+
         <!-- Accommodations Grid -->
         <section class="accommodations-section fade-in-section" id="accommodationsSection">
             <div class="container">
@@ -184,5 +229,6 @@
     </button>
 
     <script src="scripts/main.js"></script>
+    <script src="scripts/accommodations.js"></script>
 </body>
 </html>

@@ -5,14 +5,16 @@ const Review = require('../models/reviewModel');
 
 exports.getAllAccommodations = async (req, res) => {
     try {
-        const accommodations = await Accommodation.findAll();
-        // In a real app, you might want to add pagination or more filters here
-        res.json(accommodations.map(acc => ({
+        const { type, search } = req.query;
+        const accommodations = await Accommodation.findAll({ type, search });
+
+        // You can enhance this later to pull real ratings from your reviews table
+        const accommodationsWithRatings = accommodations.map(acc => ({
             ...acc,
-            // Simulate rating and reviews count for list view
-            rating: 4.5 + Math.random() * 0.4, // Random rating between 4.5 and 4.9
-            reviewsCount: Math.floor(500 + Math.random() * 1500) // Random reviews between 500 and 2000
-        })));
+            rating: 4.5 + Math.random() * 0.4,
+            reviewsCount: Math.floor(300 + Math.random() * 1200)
+        }));
+        res.json(accommodationsWithRatings);
     } catch (error) {
         console.error('Error fetching accommodations:', error);
         res.status(500).json({ message: 'Server error', error: error.message });

@@ -1,9 +1,28 @@
 const db = require('../config/db');
 
 const Attraction = {
-    findAll: async () => {
-        const { rows } = await db.query('SELECT * FROM attractions');
+    findAll: async (filters = {}) => {
+        let query = 'SELECT * FROM attractions';
+        const conditions = [];
+        const values = [];
+
+        if (filters.category && filters.category !== 'all') {
+            conditions.push(`category = $${values.length + 1}`);
+            values.push(filters.category);
+        }
+
+        if (filters.search && filters.search.trim() !== '') {
+            const searchParam = `%${filters.search.trim()}%`;
+            conditions.push(`(COALESCE(name, '') ILIKE $${values.length + 1} OR COALESCE(description, '') ILIKE $${values.length + 1})`);
+            values.push(searchParam);
+        }
+
+        if (conditions.length > 0) {
+            query += ' WHERE ' + conditions.join(' AND ');
+        }
         
+        const { rows } = await db.query(query, values);
+
         // Map database snake_case columns to frontend camelCase properties
         const mappedRows = rows.map(row => ({
             id: row.id,
@@ -15,7 +34,7 @@ const Attraction = {
             location: row.location,
             description: row.description,
             duration: row.duration,
-            image: row.image_url // Map image_url to image
+            image: row.image_url || 'public/placeholder-image.jpg' // Fallback image
         }));
 
         return mappedRows;
@@ -37,7 +56,7 @@ const Attraction = {
             location: row.location,
             description: row.description,
             duration: row.duration,
-            image: row.image_url // Map image_url to image
+            image: row.image_url || 'public/placeholder-image.jpg' // Fallback image
         };
     }
 };

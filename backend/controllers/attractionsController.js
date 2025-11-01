@@ -2,25 +2,12 @@ const Attraction = require('../models/attractionModel');
 
 exports.getAllAttractions = async (req, res) => {
     try {
-        let attractions = await Attraction.findAll();
-
-        // Filtering logic
+        // Pass query params directly to the model for server-side filtering
         const { category, search } = req.query;
-
-        if (category && category !== 'all') {
-            attractions = attractions.filter(att => att.category === category);
-        }
-
-        if (search) {
-            const searchTerm = search.toLowerCase();
-            attractions = attractions.filter(att => 
-                att.name.toLowerCase().includes(searchTerm) || 
-                att.description.toLowerCase().includes(searchTerm)
-            );
-        }
-
+        const attractions = await Attraction.findAll({ category, search });
         res.json(attractions);
     } catch (error) {
+        console.error('Error fetching attractions:', error);
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 };

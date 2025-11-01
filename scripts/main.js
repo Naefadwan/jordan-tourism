@@ -103,6 +103,27 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   })
 })
 
+function checkAuthState() {
+  const authLink = document.getElementById("authLink");
+  const token = localStorage.getItem("token");
+  const user = localStorage.getItem("user");
+
+  if (authLink) {
+      if (token && user) {
+          try {
+              const userData = JSON.parse(user);
+              // Update icon to link to profile, using full_name from backend
+              authLink.href = "profile.html";
+              authLink.setAttribute('aria-label', `View profile for ${userData.full_name}`);
+          } catch (e) { console.error("Error parsing user data from localStorage", e); }
+      } else {
+          // Update icon to link to login
+          authLink.href = "login.html";
+          authLink.setAttribute('aria-label', 'Login or create an account');
+      }
+  }
+}
+
 // Add loading animation for images and set current year
 document.addEventListener("DOMContentLoaded", () => {
   const images = document.querySelectorAll("img")
@@ -159,6 +180,9 @@ document.addEventListener("DOMContentLoaded", () => {
       imageObserver.observe(image);
     });
   }
+
+  // Check authentication state on every page load
+  checkAuthState();
 })
 
 // Theme switcher
@@ -187,11 +211,13 @@ function applyTheme(theme) {
     }
 }
 
-themeToggle.addEventListener('click', () => {
-    const newTheme = body.classList.contains('light-theme') ? 'dark' : 'light';
-    localStorage.setItem('theme', newTheme);
-    applyTheme(newTheme);
-});
+if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+        const newTheme = body.classList.contains('light-theme') ? 'dark' : 'light';
+        localStorage.setItem('theme', newTheme);
+        applyTheme(newTheme);
+    });
+}
 
 // Apply saved theme on page load
 const savedTheme = localStorage.getItem('theme') || 'dark';

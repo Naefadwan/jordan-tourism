@@ -10,22 +10,23 @@ document.addEventListener('DOMContentLoaded', function() {
     // Search functionality
     if (searchInput) {
         searchInput.addEventListener('input', function() {
-            const searchTerm = this.value.toLowerCase();
-            filterAttractions();
+            fetchAndDisplayAttractions();
         });
     }
 
     // Category filter functionality
     if (categoryFilter) {
         categoryFilter.addEventListener('change', function() {
-            filterAttractions();
+            fetchAndDisplayAttractions();
         });
     }
 
     // Sort functionality
     if (sortFilter) {
         sortFilter.addEventListener('change', function() {
-            sortAttractions();
+            // Sorting is still client-side for now, so we just re-sort the existing cards
+            const allCards = Array.from(attractionsGrid.querySelectorAll('.attraction-card'));
+            sortAttractions(allCards);
         });
     }
 
@@ -74,7 +75,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function fetchAndDisplayAttractions() {
         try {
-            const response = await fetch(`${API_URL}/attractions`);
+            const searchTerm = searchInput ? searchInput.value : '';
+            const selectedCategory = categoryFilter ? categoryFilter.value : 'all';
+            
+            const queryParams = new URLSearchParams({ search: searchTerm, category: selectedCategory });
+            const response = await fetch(`${API_URL}/attractions?${queryParams}`);
+
             if (!response.ok) throw new Error('Failed to fetch attractions');
             const attractions = await response.json();
 
@@ -87,8 +93,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 attractionsGrid.appendChild(card);
             });
 
-            // Re-initialize filters and event listeners for the new cards
-            filterAttractions();
+            noResultsMessage.style.display = attractions.length === 0 ? 'block' : 'none';
+
+            const allCards = Array.from(attractionsGrid.querySelectorAll('.attraction-card'));
+            sortAttractions(allCards); // Sort the newly fetched cards
+            initializeLikeButtons(); // Re-initialize like buttons for the new cards
 
         } catch (error) {
             console.error('Error fetching attractions:', error);
@@ -120,38 +129,27 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    function filterAttractions() {
-        const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
-        const selectedCategory = categoryFilter ? categoryFilter.value : 'all';
-        const allCards = document.querySelectorAll('.attraction-card');
-        let visibleCards = [];
-
-        allCards.forEach(card => {
-            const name = card.querySelector('.attraction-name').textContent.toLowerCase();
-            const category = card.getAttribute('data-category');
-            const matchesSearch = searchTerm === '' || name.includes(searchTerm);
-            const matchesCategory = selectedCategory === 'all' || category === selectedCategory;
-
-            if (matchesSearch && matchesCategory) {
-                card.style.display = 'block';
-                visibleCards.push(card);
-            } else {
-                card.style.display = 'none';
-            }
-        });
-
-        noResultsMessage.style.display = visibleCards.length === 0 ? 'block' : 'none';
-        sortAttractions(visibleCards);
-        initializeLikeButtons(); // Re-initialize like buttons for visible cards
-    }
-
     // Like button functionality
-    function initializeLikeButtons() {
-        const likeButtons = document.querySelectorAll('.like-btn');
-        let likedAttractions = JSON.parse(localStorage.getItem('likedAttractions')) || [];
+    async function initializeLikeButtons() {
+        let likedAttractions = [];
+        const token = localStorage.getItem('token');
+
+        // Fetch user's likes if logged in
+        if (token) {
+            try {
+                const response = await fetch(`${API_URL}/likes`, {
+                    headers: { 'x-auth-token': token }
+                });
+                if (response.ok) {
+                    likedAttractions = await response.json();
+                }
+            } catch (error) {
+                console.error('Error fetching likes:', error);
+            }
+        }
 
         function updateLikeButtons() {
-            likeButtons.forEach(button => {
+            document.querySelectorAll('.like-btn').forEach(button => {
                 const attractionId = button.dataset.attractionId;
                 if (likedAttractions.includes(attractionId)) {
                     button.classList.add('liked');
@@ -161,22 +159,28 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
 
-        likeButtons.forEach(button => {
-            // Remove old listener to prevent duplicates
-            button.replaceWith(button.cloneNode(true));
-        });
-
         document.querySelectorAll('.like-btn').forEach(button => {
-            button.addEventListener('click', (e) => {
+            // Clone and replace the node to remove any old event listeners
+            const newButton = button.cloneNode(true);
+            button.parentNode.replaceChild(newButton, button);
+
+            newButton.addEventListener('click', async (e) => {
                 e.stopPropagation();
-                const attractionId = button.dataset.attractionId;
-                if (likedAttractions.includes(attractionId)) {
-                    likedAttractions = likedAttractions.filter(id => id !== attractionId);
-                } else {
-                    likedAttractions.push(attractionId);
+                if (!token) {
+                    window.location.href = 'login.html'; // Redirect to login if not authenticated
+                    return;
                 }
-                localStorage.setItem('likedAttractions', JSON.stringify(likedAttractions));
-                updateLikeButtons();
+
+                const attractionId = newButton.dataset.attractionId;
+                const isLiked = newButton.classList.contains('liked');
+                const method = isLiked ? 'DELETE' : 'POST';
+
+                try {
+                    await fetch(`${API_URL}/likes/${attractionId}`, { method, headers: { 'x-auth-token': token } });
+                    newButton.classList.toggle('liked'); // Optimistically update UI
+                } catch (error) {
+                    console.error('Error updating like status:', error);
+                }
             });
         });
 

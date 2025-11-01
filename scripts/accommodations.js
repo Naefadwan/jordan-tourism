@@ -1,8 +1,34 @@
 // Accommodations page functionality
 document.addEventListener('DOMContentLoaded', function() {
     const API_URL = 'http://localhost:5000/api';
+    const searchInput = document.getElementById('searchInput');
+    const typeFilter = document.getElementById('typeFilter');
+    const sortFilter = document.getElementById('sortFilter');
     const accommodationsGrid = document.getElementById('accommodationsGrid');
     const noAccommodationsMessage = document.getElementById('noAccommodationsMessage');
+
+    // --- EVENT LISTENERS ---
+    if (searchInput) {
+        // Use a debounce function to avoid firing API calls on every keystroke
+        let debounceTimer;
+        searchInput.addEventListener('input', () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                fetchAndDisplayAccommodations();
+            }, 300); // Wait 300ms after user stops typing
+        });
+    }
+
+    if (typeFilter) {
+        typeFilter.addEventListener('change', fetchAndDisplayAccommodations);
+    }
+
+    if (sortFilter) {
+        sortFilter.addEventListener('change', () => {
+            const allCards = Array.from(accommodationsGrid.querySelectorAll('.accommodation-card'));
+            sortAccommodations(allCards);
+        });
+    }
 
     function createAccommodationCard(accommodation) {
         const card = document.createElement('div');
@@ -11,13 +37,15 @@ document.addEventListener('DOMContentLoaded', function() {
         card.dataset.type = accommodation.type;
         card.dataset.location = accommodation.location;
         card.dataset.rating = accommodation.rating;
-        card.dataset.reviewsCount = accommodation.reviewsCount;
+        card.dataset.reviews = accommodation.reviewsCount; // Match sorting data attribute
+        const price = accommodation.rooms?.[0]?.pricePerNight || 150; // Use a fallback price
+        card.dataset.price = price;
 
         card.innerHTML = `
             <div class="accommodation-image">
                 <img data-src="${accommodation.mainImage}" alt="${accommodation.name}" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
-                <div class="accommodation-badge">${accommodation.type}</div>
-                <div class="accommodation-price">From $${accommodation.pricePerNight || 100}/night</div>
+                <div class="accommodation-badge">${accommodation.type || 'Hotel'}</div>
+                <div class="accommodation-price">From $${price}/night</div>
             </div>
             <div class="accommodation-content">
                 <div class="accommodation-rating">
@@ -45,18 +73,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function fetchAndDisplayAccommodations() {
         try {
-            const response = await fetch(`${API_URL}/accommodations`);
+            const searchTerm = searchInput ? searchInput.value : '';
+            const selectedType = typeFilter ? typeFilter.value : 'all';
+
+            const queryParams = new URLSearchParams({ search: searchTerm, type: selectedType });
+            const response = await fetch(`${API_URL}/accommodations?${queryParams}`);
+
             if (!response.ok) throw new Error('Failed to fetch accommodations');
             const accommodations = await response.json();
 
-            accommodationsGrid.innerHTML = ''; // Clear existing content
+            // Clear existing cards but keep the 'no results' message element
+            accommodationsGrid.innerHTML = '';
+            accommodationsGrid.appendChild(noAccommodationsMessage);
 
             if (accommodations.length === 0) {
                 noAccommodationsMessage.style.display = 'block';
             } else {
                 noAccommodationsMessage.style.display = 'none';
                 accommodations.forEach(accommodation => {
-                    const card = createAccommodationCard(accommodation);
+                    // The API now returns simulated rating/reviews, so we can pass it directly
+                    const card = createAccommodationCard(accommodation); 
                     accommodationsGrid.appendChild(card);
                 });
             }
@@ -67,11 +103,37 @@ document.addEventListener('DOMContentLoaded', function() {
                 window.initializeLazyLoading(lazyImages);
             }
 
+            const allCards = Array.from(accommodationsGrid.querySelectorAll('.accommodation-card'));
+            sortAccommodations(allCards);
+
         } catch (error) {
             console.error('Error fetching accommodations:', error);
             noAccommodationsMessage.textContent = 'Could not load accommodations. Please try again later.';
             noAccommodationsMessage.style.display = 'block';
         }
+    }
+
+    function sortAccommodations(cards) {
+        const sortBy = sortFilter ? sortFilter.value : 'popular';
+        
+        cards.sort((a, b) => {
+            switch (sortBy) {
+                case 'price-low':
+                    return parseFloat(a.dataset.price) - parseFloat(b.dataset.price);
+                case 'price-high':
+                    return parseFloat(b.dataset.price) - parseFloat(a.dataset.price);
+                case 'rating':
+                    return parseFloat(b.dataset.rating) - parseFloat(a.dataset.rating);
+                case 'popular':
+                default:
+                    return parseInt(b.dataset.reviews) - parseInt(a.dataset.reviews);
+            }
+        });
+
+        // Reorder the cards in the grid
+        cards.forEach(card => {
+            accommodationsGrid.appendChild(card);
+        });
     }
 
     fetchAndDisplayAccommodations();

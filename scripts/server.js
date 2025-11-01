@@ -7,7 +7,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-    origin: 'http://127.0.0.1:5500', // Or your frontend's local dev address
+    origin: 'http://127.0.0.1:5500' // Or your frontend's local dev address
 }));
 app.use(express.json()); // To parse JSON request bodies
 app.use(express.urlencoded({ extended: true })); // To parse URL-encoded bodies
@@ -24,8 +24,6 @@ app.use('/api/auth', authRoutes);
 const attractionsRoutes = require('./routes/attractionsRoutes');
 app.use('/api/attractions', attractionsRoutes);
 
-
-
 // Accommodations routes
 const accommodationsRoutes = require('./routes/accommodationsRoutes');
 app.use('/api/accommodations', accommodationsRoutes);
@@ -33,7 +31,6 @@ app.use('/api/accommodations', accommodationsRoutes);
 // Likes routes
 const likesRoutes = require('./routes/likesRoutes');
 app.use('/api/likes', likesRoutes);
-
 
 // Other routes will go here as they are implemented
 

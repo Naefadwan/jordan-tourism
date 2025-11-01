@@ -78,16 +78,16 @@
         <div class="detail-page-container container">
             <!-- Page Header -->
             <section class="detail-header">
-                <h1 class="detail-title">Movenpick Petra Resort</h1>
+                <h1 class="detail-title" id="accommodationName">Loading...</h1>
                 <div class="detail-subtitle-info">
                     <div class="detail-rating">
                         <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon></svg>
-                        <span>4.8 (1,247 reviews)</span>
+                        <span id="accommodationRating"></span>
                     </div>
                     <span class="separator">·</span>
                     <div class="detail-location">
                         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                        <span>Petra, Jordan</span>
+                        <span id="accommodationLocation"></span>
                     </div>
                 </div>
             </section>
@@ -95,14 +95,10 @@
             <!-- Image Gallery -->
             <section class="detail-gallery">
                 <div class="gallery-main-image">
-                    <img id="mainImage" src="public/movenpick-petra-resort-luxury-hotel.jpg" alt="Main view of Movenpick Petra Resort">
+                    <img id="mainImage" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Main view of Accommodation">
                 </div>
-                <div class="gallery-thumbnails">
-                    <img class="thumbnail active" src="public/movenpick-petra-resort-luxury-hotel.jpg" alt="Thumbnail 1">
-                    <img class="thumbnail" src="public/kempinski-dead-sea-resort-luxury.jpg" alt="Thumbnail 2 - Pool View">
-                    <img class="thumbnail" src="public/four-seasons-amman-luxury-hotel-city.jpg" alt="Thumbnail 3 - Lobby">
-                    <img class="thumbnail" src="public/wadi-rum-luxury-camp-bubble-tent-desert.jpg" alt="Thumbnail 4 - Room View">
-                    <img class="thumbnail" src="public/feynan-ecolodge-dana-reserve-jordan-sustainable.jpg" alt="Thumbnail 5 - Restaurant">
+                <div class="gallery-thumbnails" id="galleryThumbnails">
+                    <!-- Thumbnails will be dynamically loaded here -->
                 </div>
             </section>
 
@@ -110,48 +106,38 @@
                 <!-- Left Column: Info -->
                 <div class="detail-info-column">
                     <section class="detail-description">
-                        <h2 class="detail-section-title">About this Resort</h2>
-                        <p>Luxury resort with stunning views of Petra's ancient city, featuring world-class amenities and authentic Jordanian hospitality. Located at the entrance to the historic site, it's the perfect base for exploring one of the New Seven Wonders of the World.</p>
-                        <p>The resort blends traditional Middle Eastern architecture with modern comfort, offering multiple restaurants, a rooftop garden, and a swimming pool to relax in after a day of exploration.</p>
+                        <h2 class="detail-section-title">About this Accommodation</h2>
+                        <div id="accommodationDescription"></div>
                     </section>
 
                     <section class="detail-amenities">
                         <h2 class="detail-section-title">Amenities</h2>
-                        <div class="amenities-grid">
-                            <div class="amenity-item"><span>🏊</span> Pool</div>
-                            <div class="amenity-item"><span>📶</span> Free WiFi</div>
-                            <div class="amenity-item"><span>🍽️</span> Restaurant</div>
-                            <div class="amenity-item"><span>☕</span> Coffee Shop</div>
-                            <div class="amenity-item"><span>🏋️</span> Fitness Center</div>
-                            <div class="amenity-item"><span>🚗</span> Free Parking</div>
-                            <div class="amenity-item"><span>🛎️</span> 24-hour Front Desk</div>
-                            <div class="amenity-item"><span>♿</span> Accessible</div>
+                        <div class="amenities-grid" id="amenitiesGrid">
+                            <!-- Amenities will be dynamically loaded here -->
                         </div>
                     </section>
 
                     <section class="detail-reviews">
                         <h2 class="detail-section-title">Guest Reviews</h2>
-                        <div class="review-card">
-                            <div class="review-header">
-                                <div class="review-author">Jane Doe</div>
-                                <div class="review-rating">★★★★★</div>
-                            </div>
-                            <p class="review-text">"Absolutely breathtaking location right at the entrance of Petra. The service was impeccable and the rooftop bar has the most amazing sunset views. Highly recommend!"</p>
+                        <div id="reviewsContainer">
+                            <!-- Reviews will be dynamically loaded here -->
+                            <p id="noReviewsMessage" style="display: none; color: hsl(var(--muted-foreground));">No reviews yet.</p>
                         </div>
-                        <div class="review-card">
-                            <div class="review-header">
-                                <div class="review-author">John Smith</div>
-                                <div class="review-rating">★★★★☆</div>
-                            </div>
-                            <p class="review-text">"Great hotel, very convenient for visiting Petra. The rooms were clean and comfortable. The food was a bit pricey, but the quality was good."</p>
+                        <button class="btn-outline" id="showAllReviewsBtn" style="display: none;">Show all reviews</button>
+                    </section>
+
+                    <section class="detail-room-types">
+                        <h2 class="detail-section-title">Available Room Types</h2>
+                        <div class="room-types-grid" id="roomTypesGrid">
+                            <!-- Room types will be dynamically loaded here -->
+                            <p id="noRoomTypesMessage" style="display: none; color: hsl(var(--muted-foreground));">No room types available.</p>
                         </div>
-                        <button class="btn-outline">Show all 1,247 reviews</button>
                     </section>
 
                     <section class="detail-map">
                         <h2 class="detail-section-title">Location</h2>
                         <div class="map-placeholder">
-                            <p>Map Area - Integration with Google Maps or Leaflet.js would go here.</p>
+                            <p id="mapText">Map Area - Integration with Google Maps or Leaflet.js would go here for <span id="mapLocation"></span>.</p>
                         </div>
                     </section>
                 </div>
@@ -159,7 +145,7 @@
                 <!-- Right Column: Booking Widget -->
                 <aside class="detail-booking-widget">
                     <div class="booking-widget-content">
-                        <div class="booking-price">
+                        <div class="booking-price" id="bookingPriceDisplay">
                             <span class="price-amount">From $200</span>
                             <span class="price-period">/ night</span>
                         </div>
@@ -183,20 +169,20 @@
                                     <option value="4">4 guests</option>
                                 </select>
                             </div>
-                            <a href="#" id="checkAvailabilityBtn" class="btn-primary btn-lg booking-btn">Check Availability</a>
+                            <a href="#" id="checkAvailabilityBtn" class="btn-primary btn-lg booking-btn">Book Now</a>
                         </div>
-                        <div class="booking-summary">
+                        <div class="booking-summary" id="bookingSummary" style="display: none;">
                             <div class="summary-line">
-                                <span>$200 x 5 nights</span>
-                                <span>$1,000</span>
+                                <span id="summaryPriceCalc"></span>
+                                <span id="summaryBasePrice"></span>
                             </div>
                             <div class="summary-line">
                                 <span>Service fee</span>
-                                <span>$140</span>
+                                <span id="summaryFees"></span>
                             </div>
                             <div class="summary-total">
                                 <span>Total</span>
-                                <span>$1,140</span>
+                                <span id="summaryTotalPrice"></span>
                             </div>
                         </div>
                     </div>
@@ -204,6 +190,7 @@
             </div>
         </div>
     </main>
+
 
     <!-- Footer -->
     <footer class="site-footer">
@@ -283,6 +270,6 @@
     </button>
 
     <script src="scripts/main.js"></script>
-    <script src="scripts/accommodation-detail.js" defer></script>
+    <script src="scripts/accommodation-detail.js"></script>
 </body>
 </html>

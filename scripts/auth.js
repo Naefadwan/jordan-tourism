@@ -107,26 +107,3 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
-
-// This function will be called by main.js to update the header
-function checkAuthState() {
-    const authLink = document.getElementById("authLink");
-    const token = localStorage.getItem("token");
-    const user = localStorage.getItem("user");
-
-    if (authLink) {
-        if (token && user) {
-            const userData = JSON.parse(user);
-            // Update icon to link to profile, using full_name from backend
-            authLink.href = "profile.html";
-            authLink.setAttribute('aria-label', `View profile for ${userData.full_name}`);
-        } else {
-            // Update icon to link to login
-            authLink.href = "login.html";
-            authLink.setAttribute('aria-label', 'Login or create an account');
-        }
-    }
-}
-
-// Run on every page load
-checkAuthState();
