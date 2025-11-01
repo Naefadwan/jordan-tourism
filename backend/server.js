@@ -21,6 +21,10 @@ app.get('/api', (req, res) => {
 const authRoutes = require('./routes/authRoutes');
 app.use('/api/auth', authRoutes);
 
+const configController = require('./controllers/configController');
+// This route does not need to be in a separate file as it's very simple
+app.get('/api/config', configController.getConfig);
+
 const attractionsRoutes = require('./routes/attractionsRoutes');
 app.use('/api/attractions', attractionsRoutes);
 
@@ -33,6 +37,14 @@ app.use('/api/accommodations', accommodationsRoutes);
 // Likes routes
 const likesRoutes = require('./routes/likesRoutes');
 app.use('/api/likes', likesRoutes);
+
+// Bookings routes
+const bookingsRoutes = require('./routes/bookingsRoutes');
+app.use('/api/bookings', bookingsRoutes);
+
+// Payments routes
+const paymentsRoutes = require('./routes/paymentsRoutes');
+app.use('/api/payments', paymentsRoutes);
 
 
 // Other routes will go here as they are implemented

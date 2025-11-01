@@ -100,10 +100,60 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             // Populate profile page with user data
             const user = JSON.parse(localStorage.getItem('user'));
+            const profileBookingsGrid = document.getElementById('profileBookingsGrid');
+
             if (user) {
                 document.getElementById('welcome-message').textContent = `Welcome, ${user.full_name}!`;
                 document.getElementById('profile-email').textContent = user.email;
             }
+
+            // Fetch and display user's bookings
+            if (profileBookingsGrid) {
+                fetchMyBookings(token);
+            }
         }
     }
 });
+
+async function fetchMyBookings(token) {
+    const API_URL = 'http://localhost:5000/api';
+    const grid = document.getElementById('profileBookingsGrid');
+    const noBookingsMessage = document.getElementById('no-bookings-message');
+
+    try {
+        const response = await fetch(`${API_URL}/bookings/my-bookings`, {
+            headers: { 'x-auth-token': token }
+        });
+
+        if (!response.ok) throw new Error('Failed to fetch bookings');
+        const bookings = await response.json();
+
+        if (bookings.length === 0) {
+            noBookingsMessage.style.display = 'block';
+        } else {
+            grid.innerHTML = ''; // Clear placeholder
+            bookings.forEach(booking => {
+                const card = createBookingCard(booking);
+                grid.appendChild(card);
+            });
+        }
+    } catch (error) {
+        console.error('Error fetching bookings:', error);
+        grid.innerHTML = '<p>Could not load your bookings. Please try again later.</p>';
+    }
+}
+
+function createBookingCard(booking) {
+    const card = document.createElement('div');
+    card.className = 'booking-summary-card';
+    card.innerHTML = `
+        <img src="${booking.accommodation_image || 'public/placeholder-image.jpg'}" alt="${booking.accommodation_name}" class="booking-card-image">
+        <div class="booking-card-content">
+            <h3 class="booking-card-title">${booking.accommodation_name}</h3>
+            <p class="booking-card-dates">${new Date(booking.check_in_date).toLocaleDateString()} - ${new Date(booking.check_out_date).toLocaleDateString()}</p>
+            <p class="booking-card-ref">Ref: ${booking.booking_reference}</p>
+            <div class="booking-card-status status-${booking.status}">${booking.status}</div>
+        </div>
+    `;
+    return card;
+}

@@ -11,7 +11,13 @@ const Room = {
             pricePerNight: parseFloat(row.price_per_night),
             maxGuests: row.max_guests
         }));
-    }
+    },
+
+    findById: async (id) => {
+        const { rows } = await db.query('SELECT * FROM rooms WHERE id = $1', [id]);
+        if (rows.length === 0) return null;
+        return { ...rows[0], price_per_night: parseFloat(rows[0].price_per_night) };
+    },
 };
 
 module.exports = Room;

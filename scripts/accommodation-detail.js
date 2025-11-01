@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const accommodationNameElem = document.getElementById('accommodationName');
     const accommodationRatingElem = document.querySelector('.detail-rating span');
-    const accommodationLocationElem = document.getElementById('accommodationLocation');
+    const accommodationLocationElem = document.querySelector('.detail-location span');
     const accommodationDescriptionElem = document.getElementById('accommodationDescription');
     const amenitiesGrid = document.getElementById('amenitiesGrid');
     const reviewsContainer = document.getElementById('reviewsContainer');
@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const summaryPriceCalc = document.getElementById('summaryPriceCalc');
     const summaryBasePrice = document.getElementById('summaryBasePrice');
     const summaryFees = document.getElementById('summaryFees');
+    const mapLocationElem = document.getElementById('mapLocation');
     const summaryTotalPrice = document.getElementById('summaryTotalPrice');
     const bookingSummary = document.getElementById('bookingSummary');
 
@@ -49,7 +50,9 @@ document.addEventListener('DOMContentLoaded', () => {
         document.title = `${accommodation.name} - Discover Jordan`;
         accommodationNameElem.textContent = accommodation.name;
         accommodationRatingElem.textContent = `${accommodation.rating} (${accommodation.reviews.length} reviews)`;
-        accommodationLocationElem.textContent = accommodation.location;
+        if(accommodationLocationElem) accommodationLocationElem.textContent = accommodation.location;
+        if(mapLocationElem) mapLocationElem.textContent = accommodation.location;
+
         accommodationDescriptionElem.innerHTML = `<p>${accommodation.description}</p>`;
         bookingPriceDisplay.querySelector('.price-amount').textContent = `From $${accommodation.rooms[0]?.pricePerNight || 0}`;
 
