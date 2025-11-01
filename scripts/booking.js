@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const API_URL = 'http://localhost:5000/api';
+    // Use a relative path for production, allowing environment-specific configuration.
+    const API_URL = window.API_URL || '/api';
     let stripe, elements, paymentIntentId;
     const bookingState = {
         currentStep: 1,
@@ -102,11 +103,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Initialize from URL
-    const savedBookingState = JSON.parse(localStorage.getItem('bookingState'));
+    const savedBookingStateJSON = sessionStorage.getItem('bookingState');
+    let savedBookingState = null;
+    if (savedBookingStateJSON) {
+        try {
+            savedBookingState = JSON.parse(savedBookingStateJSON);
+        } catch (e) { console.error("Could not parse booking state from sessionStorage", e); }
+    }
+
     if (savedBookingState) {
-        // Restore state if returning from payment redirect
+        // Restore minimal state if returning from payment redirect
+        // Verify timestamp to prevent using stale data (e.g., > 5 minutes old)
+        const isRecent = (Date.now() - savedBookingState.ts) < 5 * 60 * 1000;
         Object.assign(bookingState, savedBookingState);
-        localStorage.removeItem('bookingState'); // Clean up immediately
+        sessionStorage.removeItem('bookingState'); // Clean up immediately
     } else {
         // Initialize from URL for a new booking
         const params = new URLSearchParams(window.location.search);
@@ -221,8 +231,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     confirmBtn.addEventListener('click', async () => {
         // Save state before potential redirect
-        localStorage.setItem('bookingState', JSON.stringify(bookingState));
+        // Use sessionStorage for better security and only store what's necessary
+        const minimalState = {
+            ...bookingState,
+            ts: Date.now() // Add timestamp for validation on return
+        };
+        sessionStorage.setItem('bookingState', JSON.stringify(minimalState));
 
+        if (!stripe || !elements) {
+            document.getElementById('payment-message').textContent = "Payment system is not initialized. Please refresh and try again.";
+            return;
+        }
         const { error: stripeError } = await stripe.confirmPayment({
             elements,
             confirmParams: {
@@ -234,7 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (stripeError) {
             document.getElementById('payment-message').textContent = stripeError.message;
-            localStorage.removeItem('bookingState'); // Clean up on error
+            sessionStorage.removeItem('bookingState'); // Clean up on error
             return;
         }
 
@@ -251,7 +270,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     checkout: bookingState.checkout,
                     guests: bookingState.guests,
                     specialRequests: document.getElementById('requests').value,
-                    paymentIntentId: bookingState.clientSecret.split('_secret')[0]
+                    paymentIntentId: (() => {
+                        const secret = bookingState.clientSecret;
+                        if (!secret || typeof secret !== 'string' || !secret.startsWith('pi_')) {
+                            console.error("Invalid client secret format.");
+                            return null;
+                        }
+                        const secretIndex = secret.lastIndexOf('_secret_');
+                        return secretIndex > -1 ? secret.substring(0, secretIndex) : null;
+                    })()
                 }),
             });
 

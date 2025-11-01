@@ -42,11 +42,11 @@ const Booking = {
     },
 
     create: async (bookingData) => {
-        const {
-            booking_reference, user_id, accommodation_id, room_id,
-            check_in_date, check_out_date, num_guests,
-            base_price, fees_and_taxes, total_price,
-            special_requests, payment_intent_id
+        const { 
+            booking_reference, user_id, accommodation_id, room_id, 
+            check_in_date, check_out_date, num_guests, 
+            base_price, fees_and_taxes, total_price, 
+            special_requests, payment_intent_id 
         } = bookingData;
         const query = `
             INSERT INTO bookings (booking_reference, user_id, accommodation_id, room_id, check_in_date, check_out_date, num_guests, base_price, fees_and_taxes, total_price, special_requests, status, payment_intent_id)
@@ -54,8 +54,8 @@ const Booking = {
             RETURNING id, booking_reference, total_price;
         `;
         const values = [
-            booking_reference, user_id, accommodation_id, room_id,
-            check_in_date, check_out_date, num_guests, base_price,
+            booking_reference, user_id, accommodation_id, room_id, 
+            check_in_date, check_out_date, num_guests, base_price, 
             fees_and_taxes, total_price, special_requests, payment_intent_id
         ];
 

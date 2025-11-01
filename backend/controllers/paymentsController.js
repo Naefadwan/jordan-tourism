@@ -10,9 +10,18 @@ exports.createPaymentIntent = async (req, res) => {
             return res.status(400).json({ message: 'Room ID is required' });
         }
         
-        if (!checkin || !checkout) {
-            return res.status(400).json({ message: 'Check-in and check-out dates are required' });
+        if (!checkin || !checkout || !Date.parse(checkin) || !Date.parse(checkout)) {
+            return res.status(400).json({ message: 'Valid check-in and check-out dates in ISO 8601 format are required' });
         }
+
+        const checkinDate = new Date(checkin);
+        const checkoutDate = new Date(checkout);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Compare against the start of today
+
+        if (checkinDate < today) return res.status(400).json({ message: 'Check-in date cannot be in the past.' });
+        if (checkinDate >= checkoutDate) return res.status(400).json({ message: 'Checkout date must be after check-in date.' });
+
 
         // 1. Validate Room and Get Price (Server-side)
         const room = await Room.findById(roomId);
@@ -22,14 +31,20 @@ exports.createPaymentIntent = async (req, res) => {
         }
 
         // 2. Calculate Price (Server-side)
-        const checkinDate = new Date(checkin);
-        const checkoutDate = new Date(checkout);
         const nights = Math.ceil((checkoutDate - checkinDate) / (1000 * 60 * 60 * 24));
-        if (nights <= 0) {
+        if (!Number.isInteger(nights) || nights <= 0) {
             return res.status(400).json({ message: 'Invalid date range.' });
         }
+        if (nights > 365) { // Maximum stay length
+            return res.status(400).json({ message: 'Bookings cannot exceed 365 nights.' });
+        }
 
-        const basePrice = room.price_per_night * nights;
+        const pricePerNight = parseFloat(room.price_per_night);
+        if (!Number.isFinite(pricePerNight) || pricePerNight < 0) {
+            return res.status(400).json({ message: 'Invalid room price.' });
+        }
+
+        const basePrice = pricePerNight * nights;
         const feesAndTaxes = basePrice * 0.14; // 14% fee
         const totalPrice = basePrice + feesAndTaxes;
 
@@ -38,6 +53,11 @@ exports.createPaymentIntent = async (req, res) => {
             amount: Math.round(totalPrice * 100), // Amount in cents
             currency: 'usd',
             automatic_payment_methods: { enabled: true },
+            metadata: {
+                roomId: String(roomId),
+                checkin: checkin, // ISO string
+                checkout: checkout, // ISO string
+            }
         });
 
         res.send({ clientSecret: paymentIntent.client_secret });

@@ -146,14 +146,38 @@ async function fetchMyBookings(token) {
 function createBookingCard(booking) {
     const card = document.createElement('div');
     card.className = 'booking-summary-card';
-    card.innerHTML = `
-        <img src="${booking.accommodation_image || 'public/placeholder-image.jpg'}" alt="${booking.accommodation_name}" class="booking-card-image">
-        <div class="booking-card-content">
-            <h3 class="booking-card-title">${booking.accommodation_name}</h3>
-            <p class="booking-card-dates">${new Date(booking.check_in_date).toLocaleDateString()} - ${new Date(booking.check_out_date).toLocaleDateString()}</p>
-            <p class="booking-card-ref">Ref: ${booking.booking_reference}</p>
-            <div class="booking-card-status status-${booking.status}">${booking.status}</div>
-        </div>
-    `;
+    
+    const img = document.createElement('img');
+    img.src = booking.accommodation_image || 'public/placeholder-image.jpg';
+    img.alt = booking.accommodation_name || 'Accommodation';
+    img.className = 'booking-card-image';
+    
+    const content = document.createElement('div');
+    content.className = 'booking-card-content';
+    
+    const title = document.createElement('h3');
+    title.className = 'booking-card-title';
+    title.textContent = booking.accommodation_name;
+    
+    const dates = document.createElement('p');
+    dates.className = 'booking-card-dates';
+    dates.textContent = `${new Date(booking.check_in_date).toLocaleDateString()} - ${new Date(booking.check_out_date).toLocaleDateString()}`;
+    
+    const ref = document.createElement('p');
+    ref.className = 'booking-card-ref';
+    ref.textContent = `Ref: ${booking.booking_reference}`;
+    
+    const status = document.createElement('div');
+    status.className = `booking-card-status status-${booking.status}`;
+    status.textContent = booking.status;
+    
+    content.appendChild(title);
+    content.appendChild(dates);
+    content.appendChild(ref);
+    content.appendChild(status);
+    
+    card.appendChild(img);
+    card.appendChild(content);
+    
     return card;
 }
