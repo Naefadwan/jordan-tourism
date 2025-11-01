@@ -148,10 +148,9 @@ function createBookingCard(booking) {
     card.className = 'booking-summary-card';
     
     const img = document.createElement('img');
-    img.src = booking.accommodation_image || 'public/placeholder-image.jpg';
+    img.src = booking.accommodation_image || '/placeholder-image.jpg';
     img.alt = booking.accommodation_name || 'Accommodation';
-    img.className = 'booking-card-image';
-    
+    img.className = 'booking-card-image';    
     const content = document.createElement('div');
     content.className = 'booking-card-content';
     

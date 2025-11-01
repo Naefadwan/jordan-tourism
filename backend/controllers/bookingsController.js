@@ -31,16 +31,20 @@ exports.createBooking = async (req, res) => {
         }
         const checkinDate = new Date(checkin);
         const checkoutDate = new Date(checkout);
+        checkinDate.setHours(0, 0, 0, 0);
+        checkoutDate.setHours(0, 0, 0, 0);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
         if (checkinDate >= checkoutDate) {
-            return res.status(400).json({ message: 'Checkout date must be after check-in date.' });
+            return res.status(400).json({ message: 'Check-out date must be after check-in date.' });
         }
-        if (checkinDate < new Date()) {
+        if (checkinDate < today) {
             return res.status(400).json({ message: 'Check-in date cannot be in the past.' });
         }
         if (!Number.isInteger(guests) || guests <= 0) {
             return res.status(400).json({ message: 'Number of guests must be a positive integer.' });
-        }
-        if (specialRequests && specialRequests.length > 500) {
+        }        if (specialRequests && specialRequests.length > 500) {
             return res.status(400).json({ message: 'Special requests cannot exceed 500 characters.' });
         }
         if (!paymentIntentId || typeof paymentIntentId !== 'string' || !paymentIntentId.startsWith('pi_')) {
@@ -71,12 +75,18 @@ exports.createBooking = async (req, res) => {
 
         // 6. Idempotency Check: Ensure Payment Intent hasn't been used
         const existingBooking = await Booking.findByPaymentIntentId(paymentIntentId);
-        if (existingBooking) {
-            return res.status(400).json({ message: 'This payment has already been used for a booking.' });
-        }
-
         // 7. Verify Payment Intent with Stripe
-        const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+        let paymentIntent;
+        try {
+            paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId, {
+                timeout: 5000 // 5 second timeout
+            });
+        } catch (stripeError) {
+            console.error('Stripe API error:', stripeError);
+            return res.status(503).json({ 
+                message: 'Payment verification service temporarily unavailable. Please try again.' 
+            });
+        }
 
         // 8. Calculate Price (Server-side) and Verify Amount
         const nights = Math.ceil((checkoutDate - checkinDate) / (1000 * 60 * 60 * 24));
@@ -84,6 +94,9 @@ exports.createBooking = async (req, res) => {
         const feesAndTaxes = basePrice * 0.14; // 14% fee
         const totalPrice = basePrice + feesAndTaxes;
 
+        if (paymentIntent.amount !== Math.round(totalPrice * 100) || paymentIntent.status !== 'succeeded') {
+            return res.status(400).json({ message: 'Payment verification failed. Please try again.' });
+        }
         if (paymentIntent.amount !== Math.round(totalPrice * 100) || paymentIntent.status !== 'succeeded') {
             return res.status(400).json({ message: 'Payment verification failed. Please try again.' });
         }

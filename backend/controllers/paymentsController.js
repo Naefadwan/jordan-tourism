@@ -18,7 +18,8 @@ exports.createPaymentIntent = async (req, res) => {
         const checkoutDate = new Date(checkout);
         const today = new Date();
         today.setHours(0, 0, 0, 0); // Compare against the start of today
-
+        checkinDate.setHours(0, 0, 0, 0);
+        checkoutDate.setHours(0, 0, 0, 0);
         if (checkinDate < today) return res.status(400).json({ message: 'Check-in date cannot be in the past.' });
         if (checkinDate >= checkoutDate) return res.status(400).json({ message: 'Checkout date must be after check-in date.' });
 

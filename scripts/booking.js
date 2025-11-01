@@ -112,11 +112,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (savedBookingState) {
-        // Restore minimal state if returning from payment redirect
-        // Verify timestamp to prevent using stale data (e.g., > 5 minutes old)
         const isRecent = (Date.now() - savedBookingState.ts) < 5 * 60 * 1000;
-        Object.assign(bookingState, savedBookingState);
-        sessionStorage.removeItem('bookingState'); // Clean up immediately
+        if (isRecent) {
+                  Object.assign(bookingState, savedBookingState);
+        } else {
+                        console.warn("Booking state is stale (>5 minutes), discarding.");
+                    }
+        sessionStorage.removeItem('bookingState');
     } else {
         // Initialize from URL for a new booking
         const params = new URLSearchParams(window.location.search);
