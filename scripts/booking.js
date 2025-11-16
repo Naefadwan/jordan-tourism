@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Use a relative path for production, allowing environment-specific configuration.
-    const API_URL = window.API_URL || '/api';
+    const API_URL = 'http://localhost:5000/api';
     let stripe, elements, paymentIntentId;
     const bookingState = {
         currentStep: 1,

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Travel Packages - Discover Jordan</title>
+    <link rel="stylesheet" href="styles/main.css" />    
+    
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="header-left">
+                    <a href="index.html" class="logo">
+                        <span class="logo-text">Discover Jordan</span>
+                    </a>
+    
+                    <nav class="main-nav">
+                        <a href="attractions.html" class="nav-link">Attractions</a>
+                        <a href="accommodations.html" class="nav-link">Accommodations</a>
+                        <a href="packages.html" class="nav-link">Packages</a>
+                        <a href="liked-attractions.html" class="nav-link">My Likes</a>
+                        <a href="about.html" class="nav-link">About Jordan</a>
+                    </nav>
+                </div>
+    
+                <div class="header-right">
+                    <button class="btn-icon" aria-label="Search">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                    </button>
+                    <a href="login.html" id="authLink" class="btn-icon" aria-label="Account">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </a>
+                    <button class="btn-icon" id="theme-toggle" aria-label="Toggle theme">
+                        <svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                    </button>
+                    <a href="accommodations.html" class="btn-primary">Book Now</a>
+                    <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+    
+            <!-- Mobile Menu -->
+            <div class="mobile-menu" id="mobileMenu">
+                <nav class="mobile-nav">
+                    <a href="attractions.html" class="mobile-nav-link">Attractions</a>
+                    <a href="accommodations.html" class="mobile-nav-link">Accommodations</a>
+                    <a href="experiences.html" class="mobile-nav-link">Experiences</a>
+                    <a href="liked-attractions.html" class="mobile-nav-link">My Likes</a>
+                    <a href="about.html" class="mobile-nav-link">About Jordan</a>
+                    <a href="accommodations.html" class="btn-primary mobile-book-btn">Book Now</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <section class="hero-section">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Curated Travel Packages</h1>
+                    <p>Book flights, stays, and must-see attractions in one seamless experience.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="packages-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Featured Packages</h2>
+                    <p>Hand-picked itineraries to explore Jordan without the planning stress.</p>
+                </div>
+
+                <div id="noPackagesMessage" class="empty-state" style="display:none;">
+                    <p>No packages available yet. Please check back soon.</p>
+                </div>
+
+                <div id="packagesGrid" class="cards-grid">
+                    <!-- Filled dynamically by packages.js -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="scripts/packages.js" defer></script>
+</body>
+
+</html>

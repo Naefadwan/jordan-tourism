@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Package Details | Jordan Tourism</title>
+    <link rel="stylesheet" href="styles/main.css" />
+</head>
+
+<body>
+    <!-- existing header -->
+
+    <main class="page-content">
+        <section class="package-hero">
+            <img id="packageImage" class="package-hero-image" src="" alt="" />
+            <div class="package-hero-overlay">
+                <h1 id="packageName"></h1>
+                <p id="packageSummary"></p>
+                <div class="package-hero-meta">
+                    <span id="packageNights"></span>
+                    <span id="packageRoute"></span>
+                    <span id="packagePrice"></span>
+                </div>
+            </div>
+        </section>
+
+        <section class="package-layout">
+            <div class="package-main">
+                <h2>Itinerary</h2>
+                <div id="itinerary"></div>
+            </div>
+
+            <aside class="package-sidebar">
+                <div class="package-card booking-card">
+                    <h3>Book this package</h3>
+                    <label class="form-label">
+                        Start date
+                        <input type="date" id="startDate" class="form-input" />
+                    </label>
+                    <label class="form-label">
+                        Travelers
+                        <input type="number" id="guests" class="form-input" min="1" value="2" />
+                    </label>
+                    <button id="bookPackageBtn" class="btn-primary btn-block">Continue to booking</button>
+                    <p class="small-text">You’ll review and pay on the next step.</p>
+                </div>
+
+                <div class="package-card">
+                    <h3>Includes</h3>
+                    <ul id="includesList" class="bullet-list"></ul>
+                </div>
+            </aside>
+        </section>
+    </main>
+
+    <!-- footer -->
+
+    <script src="scripts/package-detail.js" defer></script>
+</body>
+
+</html>

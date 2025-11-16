@@ -13,7 +13,10 @@ const Attraction = {
 
         if (filters.search && filters.search.trim() !== '') {
             const searchParam = `%${filters.search.trim()}%`;
-            conditions.push(`(COALESCE(name, '') ILIKE $${values.length + 1} OR COALESCE(description, '') ILIKE $${values.length + 1})`);
+            conditions.push(
+                `(COALESCE(name, '') ILIKE $${values.length + 1} 
+          OR COALESCE(location, '') ILIKE $${values.length + 1})`
+            );
             values.push(searchParam);
         }
 

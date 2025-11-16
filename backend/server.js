@@ -45,10 +45,24 @@ app.use('/api/bookings', bookingsRoutes);
 // Payments routes
 const paymentsRoutes = require('./routes/paymentsRoutes');
 app.use('/api/payments', paymentsRoutes);
+const packageRoutes = require('./routes/packageRoutes');
+app.use('/api/packages', packageRoutes);
+const packageBookingsRoutes = require('./routes/packageBookingsRoutes');
 
+app.use('/api/package-bookings', packageBookingsRoutes);
 
 // Other routes will go here as they are implemented
 
 const PORT = process.env.PORT || 5000;
+// Global error handler (last middleware)
+app.use((err, req, res, next) => {
+    console.error(err);
+    const status = err.status || 500;
+    const response = { message: err.message || 'Server error' };
+    if (process.env.NODE_ENV === 'development') {
+        response.stack = err.stack;
+    }
+    res.status(status).json(response);
+});
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
