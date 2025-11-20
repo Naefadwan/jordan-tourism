@@ -41,3 +41,31 @@ exports.getAccommodationById = async (req, res) => {
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 };
+
+exports.createAccommodation = async (req, res) => {
+    try {
+        const accommodationData = req.body;
+        // If file was uploaded, add the image URL
+        if (req.file) {
+            accommodationData.main_image_url = `public/uploads/${req.file.filename}`;
+        }
+        const newAccommodation = await Accommodation.create(accommodationData);
+        res.status(201).json(newAccommodation);
+    } catch (error) {
+        console.error('Error creating accommodation:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
+exports.deleteAccommodation = async (req, res) => {
+    try {
+        const deletedAccommodation = await Accommodation.delete(req.params.id);
+        if (!deletedAccommodation) {
+            return res.status(404).json({ message: 'Accommodation not found' });
+        }
+        res.json({ message: 'Accommodation deleted successfully', accommodation: deletedAccommodation });
+    } catch (error) {
+        console.error('Error deleting accommodation:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};

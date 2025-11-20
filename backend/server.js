@@ -1,14 +1,12 @@
 // Load environment variables from .env file
-require('dotenv').config(); 
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 
 const app = express();
 
 // Middleware
-app.use(cors({
-    origin: 'http://127.0.0.1:5500', // Or your frontend's local dev address
-}));
+app.use(cors()); // Allow all origins for development
 app.use(express.json()); // To parse JSON request bodies
 app.use(express.urlencoded({ extended: true })); // To parse URL-encoded bodies
 
@@ -27,8 +25,6 @@ app.get('/api/config', configController.getConfig);
 
 const attractionsRoutes = require('./routes/attractionsRoutes');
 app.use('/api/attractions', attractionsRoutes);
-
-
 
 // Accommodations routes
 const accommodationsRoutes = require('./routes/accommodationsRoutes');

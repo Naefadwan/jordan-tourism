@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard - Discover Jordan</title>
+    <link rel="stylesheet" href="styles/main.css" />
+    <link rel="stylesheet" href="styles/admin.css" />
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="header-left">
+                    <a href="index.html" class="logo">
+                        <span class="logo-text">Discover Jordan Admin</span>
+                    </a>
+                </div>
+                <div class="header-right">
+                    <span id="adminUsername" style="margin-right: 15px; color: #fff;"></span>
+                    <button onclick="logout()" class="btn-secondary">Logout</button>
+                    <a href="index.html" class="btn-secondary" style="margin-left: 10px;">Back to Site</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <div class="container">
+            <div class="admin-layout">
+                <aside class="admin-sidebar">
+                    <nav class="admin-nav">
+                        <button class="admin-nav-link active" data-tab="packages">Packages</button>
+                        <button class="admin-nav-link" data-tab="accommodations">Accommodations</button>
+                        <button class="admin-nav-link" data-tab="attractions">Attractions</button>
+                    </nav>
+                </aside>
+
+                <section class="admin-main">
+                    <!-- Packages Tab -->
+                    <div id="packages-tab" class="admin-tab-content active">
+                        <div class="tab-header">
+                            <h2>Manage Packages</h2>
+                            <button class="btn-primary" id="addPackageBtn">Add New Package</button>
+                        </div>
+                        <div class="admin-table-wrapper">
+                            <table class="admin-table" id="packagesTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Price</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Accommodations Tab -->
+                    <div id="accommodations-tab" class="admin-tab-content">
+                        <div class="tab-header">
+                            <h2>Manage Accommodations</h2>
+                            <button class="btn-primary" id="addAccommodationBtn">Add New Accommodation</button>
+                        </div>
+                        <div class="admin-table-wrapper">
+                            <table class="admin-table" id="accommodationsTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Type</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Attractions Tab -->
+                    <div id="attractions-tab" class="admin-tab-content">
+                        <div class="tab-header">
+                            <h2>Manage Attractions</h2>
+                            <button class="btn-primary" id="addAttractionBtn">Add New Attraction</button>
+                        </div>
+                        <div class="admin-table-wrapper">
+                            <table class="admin-table" id="attractionsTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Category</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modals for Adding Items -->
+    <div id="packageModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Add New Package</h2>
+            <form id="packageForm">
+                <div class="form-group">
+                    <label for="pkgName">Name</label>
+                    <input type="text" id="pkgName" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="pkgSlug">Slug</label>
+                    <input type="text" id="pkgSlug" name="slug" required>
+                </div>
+                <div class="form-group">
+                    <label for="pkgDesc">Description</label>
+                    <textarea id="pkgDesc" name="description" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="pkgPrice">From Price</label>
+                    <input type="number" id="pkgPrice" name="from_price" required>
+                </div>
+                <div class="form-group">
+                    <label for="pkgNights">Nights</label>
+                    <input type="number" id="pkgNights" name="nights" required>
+                </div>
+                <div class="form-group">
+                    <label for="pkgOrigin">Origin City</label>
+                    <input type="text" id="pkgOrigin" name="origin_city" required>
+                </div>
+                <div class="form-group">
+                    <label for="pkgDest">Destination City</label>
+                    <input type="text" id="pkgDest" name="destination_city" required>
+                </div>
+                <div class="form-group">
+                    <label for="pkgImage">Package Image</label>
+                    <input type="file" id="pkgImage" name="image" accept="image/*" required>
+                </div>
+                <button type="submit" class="btn-primary">Save Package</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="accommodationModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Add New Accommodation</h2>
+            <form id="accommodationForm">
+                <div class="form-group">
+                    <label for="accName">Name</label>
+                    <input type="text" id="accName" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="accType">Type</label>
+                    <select id="accType" name="type" required>
+                        <option value="hotel">Hotel</option>
+                        <option value="resort">Resort</option>
+                        <option value="camp">Camp</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="accLocation">Location</label>
+                    <input type="text" id="accLocation" name="location" required>
+                </div>
+                <div class="form-group">
+                    <label for="accDesc">Description</label>
+                    <textarea id="accDesc" name="description" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="accImage">Accommodation Image</label>
+                    <input type="file" id="accImage" name="image" accept="image/*" required>
+                </div>
+                <button type="submit" class="btn-primary">Save Accommodation</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="attractionModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Add New Attraction</h2>
+            <form id="attractionForm">
+                <div class="form-group">
+                    <label for="attName">Name</label>
+                    <input type="text" id="attName" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="attCategory">Category</label>
+                    <select id="attCategory" name="category" required>
+                        <option value="historical">Historical</option>
+                        <option value="nature">Nature</option>
+                        <option value="adventure">Adventure</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="attLocation">Location</label>
+                    <input type="text" id="attLocation" name="location" required>
+                </div>
+                <div class="form-group">
+                    <label for="attDesc">Description</label>
+                    <textarea id="attDesc" name="description" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="attDuration">Duration</label>
+                    <input type="text" id="attDuration" name="duration" required>
+                </div>
+                <div class="form-group">
+                    <label for="attPrice">Price</label>
+                    <input type="number" id="attPrice" name="price" required>
+                </div>
+                <div class="form-group">
+                    <label for="attImage">Attraction Image</label>
+                    <input type="file" id="attImage" name="image" accept="image/*" required>
+                </div>
+                <button type="submit" class="btn-primary">Save Attraction</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="scripts/admin.js"></script>
+</body>
+
+</html>

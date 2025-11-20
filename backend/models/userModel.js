@@ -1,13 +1,13 @@
 const db = require('../config/db');
 
 const User = {
-    create: async ({ fullName, email, password }) => {
+    create: async ({ fullName, email, password, role = 'user' }) => {
         const query = `
-            INSERT INTO users (full_name, email, password_hash)
-            VALUES ($1, $2, $3)
-            RETURNING id, full_name, email;
+            INSERT INTO users (full_name, email, password_hash, role)
+            VALUES ($1, $2, $3, $4)
+            RETURNING id, full_name, email, role;
         `;
-        const values = [fullName, email, password];
+        const values = [fullName, email, password, role];
         const { rows } = await db.query(query, values);
         return rows[0];
     },

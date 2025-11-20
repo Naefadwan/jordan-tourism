@@ -1,5 +1,5 @@
 // Accommodations page functionality
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const API_URL = 'http://localhost:5000/api';
     const searchInput = document.getElementById('searchInput');
     const typeFilter = document.getElementById('typeFilter');
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         card.innerHTML = `
             <div class="accommodation-image">
-                <img data-src="${accommodation.mainImage}" alt="${accommodation.name}" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+                <img src="${accommodation.main_image_url || accommodation.mainImage || 'public/placeholder.jpg'}" alt="${accommodation.name}" loading="lazy" onerror="this.src='public/placeholder.jpg'">
                 <div class="accommodation-badge">${accommodation.type || 'Hotel'}</div>
                 <div class="accommodation-price">From $${price}/night</div>
             </div>
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 noAccommodationsMessage.style.display = 'none';
                 accommodations.forEach(accommodation => {
                     // The API now returns simulated rating/reviews, so we can pass it directly
-                    const card = createAccommodationCard(accommodation); 
+                    const card = createAccommodationCard(accommodation);
                     accommodationsGrid.appendChild(card);
                 });
             }
@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function sortAccommodations(cards) {
         const sortBy = sortFilter ? sortFilter.value : 'popular';
-        
+
         cards.sort((a, b) => {
             switch (sortBy) {
                 case 'price-low':

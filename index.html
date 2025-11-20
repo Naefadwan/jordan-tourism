@@ -1,15 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Discover Jordan - Ancient Wonders & Desert Adventures</title>
-    <meta name="description" content="Explore the timeless beauty of Jordan. Book tickets to Petra, Wadi Rum, Dead Sea, and more. Your gateway to unforgettable Middle Eastern adventures.">
+    <meta name="description"
+        content="Explore the timeless beauty of Jordan. Book tickets to Petra, Wadi Rum, Dead Sea, and more. Your gateway to unforgettable Middle Eastern adventures.">
     <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/dark-theme-polish.css">
+    <link rel="stylesheet" href="styles/homepage-enhancements.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
     <!-- Header -->
     <header class="site-header">
@@ -19,7 +26,7 @@
                     <a href="index.html" class="logo">
                         <span class="logo-text">Discover Jordan</span>
                     </a>
-                    
+
                     <nav class="main-nav">
                         <a href="attractions.html" class="nav-link">Attractions</a>
                         <a href="accommodations.html" class="nav-link">Accommodations</a>
@@ -28,9 +35,9 @@
                         <a href="about.html" class="nav-link">About Jordan</a>
                     </nav>
                 </div>
-                
+
                 <div class="header-right">
-                    <button class="btn-icon" aria-label="Search">
+                    <button class="btn-icon" id="searchBtn" aria-label="Search">
                         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="11" cy="11" r="8"></circle>
                             <path d="m21 21-4.35-4.35"></path>
@@ -43,12 +50,17 @@
                         </svg>
                     </a>
                     <button class="btn-icon" id="theme-toggle" aria-label="Toggle theme">
-                        <svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
                             <circle cx="12" cy="12" r="5"></circle>
-                            <line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line>
-                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                            <line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line>
-                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
                         </svg>
                     </button>
                     <a href="accommodations.html" class="btn-primary">Book Now</a>
@@ -61,7 +73,7 @@
                     </button>
                 </div>
             </div>
-            
+
             <!-- Mobile Menu -->
             <div class="mobile-menu" id="mobileMenu">
                 <nav class="mobile-nav">
@@ -80,15 +92,29 @@
         <!-- Hero Section -->
         <section class="hero-section">
             <div class="hero-background">
-                <img src="public/petra-treasury-at-sunset-jordan-ancient-ruins.jpg" alt="Petra Treasury at sunset" class="hero-image">
+                <img src="public/petra-treasury-at-sunset-jordan-ancient-ruins.jpg" alt="Petra Treasury at sunset"
+                    class="hero-image">
                 <div class="hero-overlay"></div>
             </div>
             <div class="container hero-content">
                 <h1 class="hero-title">Discover the Timeless Beauty of Jordan</h1>
-                <p class="hero-subtitle">From the rose-red city of Petra to the otherworldly deserts of Wadi Rum, embark on a journey through ancient history and natural wonders.</p>
+                <p class="hero-subtitle">From the rose-red city of Petra to the otherworldly deserts of Wadi Rum, embark
+                    on a journey through ancient history and natural wonders.</p>
                 <div class="hero-actions">
-                    <button class="btn-primary btn-lg">Explore Attractions</button>
-                    <button class="btn-outline btn-lg">Plan Your Trip</button>
+                    <a href="attractions.html" class="btn-primary btn-lg">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polygon points="10,8 16,12 10,16"></polygon>
+                        </svg>
+                        <span>Explore Attractions</span>
+                    </a>
+                    <a href="packages.html" class="btn-outline btn-lg">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        <span>Plan Your Trip</span>
+                    </a>
                 </div>
             </div>
         </section>
@@ -98,55 +124,65 @@
             <div class="container">
                 <div class="section-header">
                     <h2 class="section-title">Iconic Destinations</h2>
-                    <p class="section-subtitle">Explore Jordan's most breathtaking sites, each offering a unique glimpse into the country's rich heritage.</p>
+                    <p class="section-subtitle">Explore Jordan's most breathtaking sites, each offering a unique glimpse
+                        into the country's rich heritage.</p>
                 </div>
 
                 <div class="destinations-grid">
-                    <div class="destination-card">
+                    <div class="destination-card" data-attraction="petra">
                         <div class="destination-image">
-                            <img data-src="public/petra-treasury-jordan-ancient-city.jpg" alt="Petra" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+                            <img data-src="public/petra-treasury-jordan-ancient-city.jpg" alt="Petra" class="lazy"
+                                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
                             <div class="destination-price">From $50</div>
                         </div>
                         <div class="destination-content">
                             <h3 class="destination-name">Petra</h3>
                             <p class="destination-description">Ancient Nabataean city carved into rose-red cliffs</p>
-                            <button class="btn-outline destination-btn">View Details</button>
+                            <a href="attractions.html?search=petra" class="btn-outline destination-btn">View Details</a>
                         </div>
                     </div>
 
-                    <div class="destination-card">
+                    <div class="destination-card" data-attraction="wadi-rum">
                         <div class="destination-image">
-                            <img data-src="public/wadi-rum-desert-jordan-red-sand.jpg" alt="Wadi Rum" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+                            <img data-src="public/wadi-rum-desert-jordan-red-sand.jpg" alt="Wadi Rum" class="lazy"
+                                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
                             <div class="destination-price">From $35</div>
                         </div>
                         <div class="destination-content">
                             <h3 class="destination-name">Wadi Rum</h3>
-                            <p class="destination-description">Spectacular desert landscape with towering sandstone mountains</p>
-                            <button class="btn-outline destination-btn">View Details</button>
+                            <p class="destination-description">Spectacular desert landscape with towering sandstone
+                                mountains</p>
+                            <a href="attractions.html?search=wadi%20rum" class="btn-outline destination-btn">View
+                                Details</a>
                         </div>
                     </div>
 
-                    <div class="destination-card">
+                    <div class="destination-card" data-attraction="dead-sea">
                         <div class="destination-image">
-                            <img data-src="public/dead-sea-jordan-floating-sunset.jpg" alt="Dead Sea" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+                            <img data-src="public/dead-sea-jordan-floating-sunset.jpg" alt="Dead Sea" class="lazy"
+                                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
                             <div class="destination-price">From $25</div>
                         </div>
                         <div class="destination-content">
                             <h3 class="destination-name">Dead Sea</h3>
                             <p class="destination-description">Float in the world's saltiest body of water</p>
-                            <button class="btn-outline destination-btn">View Details</button>
+                            <a href="attractions.html?search=dead%20sea" class="btn-outline destination-btn">View
+                                Details</a>
                         </div>
                     </div>
 
-                    <div class="destination-card">
+                    <div class="destination-card" data-attraction="jerash">
                         <div class="destination-image">
-                            <img data-src="public/jerash-roman-ruins-jordan-columns.jpg" alt="Jerash" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+                            <img data-src="public/jerash-roman-ruins-jordan-columns.jpg" alt="Jerash" class="lazy"
+                                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
                             <div class="destination-price">From $20</div>
                         </div>
                         <div class="destination-content">
                             <h3 class="destination-name">Jerash</h3>
-                            <p class="destination-description">Remarkably preserved Roman ruins and ancient architecture</p>
-                            <button class="btn-outline destination-btn">View Details</button>
+                            <p class="destination-description">Remarkably preserved Roman ruins and ancient architecture
+                            </p>
+                            <a href="attractions.html?search=jerash" class="btn-outline destination-btn">View
+                                Details</a>
                         </div>
                     </div>
                 </div>
@@ -169,13 +205,16 @@
                             </svg>
                         </div>
                         <h3 class="feature-title">Trusted & Secure</h3>
-                        <p class="feature-description">Book with confidence through our secure platform with verified partners.</p>
+                        <p class="feature-description">Book with confidence through our secure platform with verified
+                            partners.</p>
                     </div>
 
                     <div class="feature-item">
                         <div class="feature-icon">
                             <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon>
+                                <polygon
+                                    points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26">
+                                </polygon>
                             </svg>
                         </div>
                         <h3 class="feature-title">Expert Guides</h3>
@@ -203,9 +242,10 @@
                             </svg>
                         </div>
                         <h3 class="feature-title">Curated Experiences</h3>
-                        <p class="feature-description">Handpicked attractions and activities for authentic adventures.</p>
+                        <p class="feature-description">Handpicked attractions and activities for authentic adventures.
+                        </p>
                     </div>
-                    
+
                     <div class="feature-item">
                         <div class="feature-icon">
                             <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -216,7 +256,8 @@
                             </svg>
                         </div>
                         <h3 class="feature-title">24/7 Support</h3>
-                        <p class="feature-description">Our team is always available to assist you during your journey.</p>
+                        <p class="feature-description">Our team is always available to assist you during your journey.
+                        </p>
                     </div>
 
                     <div class="feature-item">
@@ -244,12 +285,15 @@
                 <div class="experiences-grid">
                     <div class="experience-card">
                         <div class="experience-image">
-                            <img data-src="public/petra-by-night-candles-treasury.jpg" alt="Petra by Night" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+                            <img data-src="public/petra-by-night-candles-treasury.jpg" alt="Petra by Night" class="lazy"
+                                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
                         </div>
                         <div class="experience-content">
                             <div class="experience-rating">
                                 <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
-                                    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon>
+                                    <polygon
+                                        points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26">
+                                    </polygon>
                                 </svg>
                                 <span class="rating-score">4.9</span>
                                 <span class="rating-count">(2847 reviews)</span>
@@ -258,7 +302,8 @@
                             <p class="experience-description">Experience the Treasury illuminated by 1,500 candles</p>
                             <div class="experience-footer">
                                 <div class="experience-duration">
-                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
                                         <circle cx="12" cy="12" r="10"></circle>
                                         <polyline points="12,6 12,12 16,14"></polyline>
                                     </svg>
@@ -271,12 +316,16 @@
 
                     <div class="experience-card">
                         <div class="experience-image">
-                            <img data-src="public/wadi-rum-jeep-safari-desert.jpg" alt="Wadi Rum Jeep Safari" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+                            <img data-src="public/wadi-rum-jeep-safari-desert.jpg" alt="Wadi Rum Jeep Safari"
+                                class="lazy"
+                                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
                         </div>
                         <div class="experience-content">
                             <div class="experience-rating">
                                 <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
-                                    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon>
+                                    <polygon
+                                        points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26">
+                                    </polygon>
                                 </svg>
                                 <span class="rating-score">4.8</span>
                                 <span class="rating-count">(1923 reviews)</span>
@@ -285,7 +334,8 @@
                             <p class="experience-description">Explore the Martian landscape in a 4x4 adventure</p>
                             <div class="experience-footer">
                                 <div class="experience-duration">
-                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
                                         <circle cx="12" cy="12" r="10"></circle>
                                         <polyline points="12,6 12,12 16,14"></polyline>
                                     </svg>
@@ -298,12 +348,15 @@
 
                     <div class="experience-card">
                         <div class="experience-image">
-                            <img data-src="public/dead-sea-spa-mud-treatment.jpg" alt="Dead Sea Spa Day" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+                            <img data-src="public/dead-sea-spa-mud-treatment.jpg" alt="Dead Sea Spa Day" class="lazy"
+                                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
                         </div>
                         <div class="experience-content">
                             <div class="experience-rating">
                                 <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
-                                    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon>
+                                    <polygon
+                                        points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26">
+                                    </polygon>
                                 </svg>
                                 <span class="rating-score">4.7</span>
                                 <span class="rating-count">(1456 reviews)</span>
@@ -312,7 +365,8 @@
                             <p class="experience-description">Relax and rejuvenate with mineral-rich mud treatments</p>
                             <div class="experience-footer">
                                 <div class="experience-duration">
-                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
                                         <circle cx="12" cy="12" r="10"></circle>
                                         <polyline points="12,6 12,12 16,14"></polyline>
                                     </svg>
@@ -326,14 +380,171 @@
             </div>
         </section>
 
+        <!-- Testimonials Section -->
+        <section class="testimonials-section fade-in-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">What Travelers Say</h2>
+                    <p class="section-subtitle">Real experiences from people who've explored Jordan with us.</p>
+                </div>
+
+                <div class="testimonials-grid">
+                    <div class="testimonial-card">
+                        <div class="testimonial-rating">
+                            <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                                <polygon
+                                    points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26">
+                                </polygon>
+                            </svg>
+                            <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                                <polygon
+                                    points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26">
+                                </polygon>
+                            </svg>
+                            <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                                <polygon
+                                    points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26">
+                                </polygon>
+                            </svg>
+                            <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                                <polygon
+                                    points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26">
+                                </polygon>
+                            </svg>
+                            <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                                <polygon
+                                    points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26">
+                                </polygon>
+                            </svg>
+                        </div>
+                        <p class="testimonial-text">"Petra was absolutely breathtaking! The booking process was
+                            seamless, and our guide was incredibly knowledgeable. This was truly the trip of a
+                            lifetime."</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">SM</div>
+                            <div class="author-info">
+                                <div class="author-name">Sarah Mitchell</div>
+                                <div class="author-location">United Kingdom</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="testimonial-card">
+                        <div class="testimonial-rating">
+                            <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                                <polygon
+                                    points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26">
+                                </polygon>
+                            </svg>
+                            <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                                <polygon
+                                    points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26">
+                                </polygon>
+                            </svg>
+                            <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                                <polygon
+                                    points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26">
+                                </polygon>
+                            </svg>
+                            <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                                <polygon
+                                    points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26">
+                                </polygon>
+                            </svg>
+                            <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                                <polygon
+                                    points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26">
+                                </polygon>
+                            </svg>
+                        </div>
+                        <p class="testimonial-text">"Wadi Rum's desert landscape exceeded all expectations. The jeep
+                            safari was thrilling and our overnight camping experience was magical. Highly recommend!"
+                        </p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">JC</div>
+                            <div class="author-info">
+                                <div class="author-name">James Chen</div>
+                                <div class="author-location">United States</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="testimonial-card">
+                        <div class="testimonial-rating">
+                            <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                                <polygon
+                                    points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26">
+                                </polygon>
+                            </svg>
+                            <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                                <polygon
+                                    points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26">
+                                </polygon>
+                            </svg>
+                            <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                                <polygon
+                                    points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26">
+                                </polygon>
+                            </svg>
+                            <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                                <polygon
+                                    points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26">
+                                </polygon>
+                            </svg>
+                            <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                                <polygon
+                                    points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26">
+                                </polygon>
+                            </svg>
+                        </div>
+                        <p class="testimonial-text">"The Dead Sea experience was unforgettable. Floating in the water
+                            and the spa treatments were incredibly relaxing. Perfect organization from start to finish!"
+                        </p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">MC</div>
+                            <div class="author-info">
+                                <div class="author-name">Maria Garcia</div>
+                                <div class="author-location">Spain</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Statistics Section -->
+        <section class="statistics-section fade-in-section">
+            <div class="container">
+                <div class="statistics-grid">
+                    <div class="stat-item">
+                        <div class="stat-number" data-count="50000">0</div>
+                        <div class="stat-label">Happy Travelers</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-count="100">0</div>
+                        <div class="stat-label">Unique Experiences</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-count="25">0</div>
+                        <div class="stat-label">Years of Excellence</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-count="4.9">0</div>
+                        <div class="stat-label">Average Rating</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- CTA Section -->
         <section class="cta-section fade-in-section">
             <div class="container">
                 <h2 class="cta-title">Ready to Start Your Journey?</h2>
-                <p class="cta-subtitle">Join thousands of travelers who have discovered the magic of Jordan. Book your adventure today.</p>
+                <p class="cta-subtitle">Join thousands of travelers who have discovered the magic of Jordan. Book your
+                    adventure today.</p>
                 <div class="cta-actions">
-                    <button class="btn-secondary btn-lg">Browse All Attractions</button>
-                    <button class="btn-outline btn-lg">Contact Us</button>
+                    <a href="attractions.html" class="btn-secondary btn-lg">Browse All Attractions</a>
+                    <a href="about.html#contact" class="btn-outline btn-lg">Contact Us</a>
                 </div>
             </div>
         </section>
@@ -345,7 +556,8 @@
             <div class="footer-grid">
                 <div class="footer-col">
                     <h3 class="footer-title">Discover Jordan</h3>
-                    <p class="footer-description">Your gateway to exploring the ancient wonders and natural beauty of Jordan.</p>
+                    <p class="footer-description">Your gateway to exploring the ancient wonders and natural beauty of
+                        Jordan.</p>
                     <div class="social-links">
                         <a href="#" class="social-link" aria-label="Facebook">
                             <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
@@ -361,12 +573,15 @@
                         </a>
                         <a href="#" class="social-link" aria-label="Twitter">
                             <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
+                                <path
+                                    d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z">
+                                </path>
                             </svg>
                         </a>
                         <a href="#" class="social-link" aria-label="Email">
                             <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                                </path>
                                 <polyline points="22,6 12,13 2,6"></polyline>
                             </svg>
                         </a>
@@ -408,14 +623,55 @@
         </div>
     </footer>
 
+    <!-- Search Modal -->
+    <div id="searchModal" class="search-modal" style="display: none;">
+        <div class="search-modal-content">
+            <div class="search-modal-header">
+                <h3>Search Discover Jordan</h3>
+                <button id="closeSearchModal" class="close-modal-btn" aria-label="Close search">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="search-modal-body">
+                <div class="search-input-wrapper">
+                    <svg class="icon search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                    <input type="text" id="searchInput" placeholder="Search attractions, accommodations, packages..."
+                        autofocus>
+                </div>
+                <div class="search-quick-links">
+                    <h4>Popular Searches</h4>
+                    <div class="quick-links-grid">
+                        <a href="attractions.html?search=petra" class="quick-link">Petra</a>
+                        <a href="attractions.html?search=wadi%20rum" class="quick-link">Wadi Rum</a>
+                        <a href="attractions.html?search=dead%20sea" class="quick-link">Dead Sea</a>
+                        <a href="attractions.html?search=jerash" class="quick-link">Jerash</a>
+                        <a href="accommodations.html?search=amman" class="quick-link">Hotels in Amman</a>
+                        <a href="packages.html" class="quick-link">Tour Packages</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Back to Top Button -->
     <button id="backToTopBtn" class="back-to-top-btn" title="Go to top">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 19V5M5 12l7-7 7 7"/>
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M12 19V5M5 12l7-7 7 7" />
         </svg>
     </button>
 
+    <script src="scripts/auth-utils.js"></script>
     <script src="scripts/main.js"></script>
     <script src="scripts/api.js"></script>
+    <script src="scripts/homepage-enhancements.js"></script>
 </body>
+
 </html>

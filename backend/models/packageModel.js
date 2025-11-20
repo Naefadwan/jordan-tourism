@@ -39,6 +39,31 @@ const Package = {
             [packageId]
         );
         return rows;
+    },
+
+    async create(data) {
+        const {
+            slug, name, description, from_price, nights,
+            origin_city, destination_city, includes_flights,
+            accommodation_id, image_url
+        } = data;
+
+        const { rows } = await db.query(
+            `INSERT INTO travel_packages 
+            (slug, name, description, from_price, nights, origin_city, destination_city, includes_flights, accommodation_id, image_url, is_active)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, true)
+            RETURNING *`,
+            [slug, name, description, from_price, nights, origin_city, destination_city, includes_flights, accommodation_id, image_url]
+        );
+        return rows[0];
+    },
+
+    async delete(id) {
+        const { rows } = await db.query(
+            `UPDATE travel_packages SET is_active = false WHERE id = $1 RETURNING *`,
+            [id]
+        );
+        return rows[0];
     }
 };
 

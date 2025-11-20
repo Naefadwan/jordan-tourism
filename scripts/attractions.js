@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         card.innerHTML = `
             <div class="attraction-image">
-                <img data-src="${attraction.image}" alt="${attraction.name}" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+                <img src="${attraction.image_url || attraction.image || 'public/placeholder.jpg'}" alt="${attraction.name}" loading="lazy" onerror="this.src='public/placeholder.jpg'">
                 <div class="attraction-badge">${attraction.category.charAt(0).toUpperCase() + attraction.category.slice(1)}</div>
                 <button class="btn-icon like-btn ${liked ? 'liked' : ''}" aria-label="Like ${attraction.name}" data-attraction-id="${attraction.id}">
                     <svg class="icon icon-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

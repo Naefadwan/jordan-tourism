@@ -1,0 +1,133 @@
+/* Booking Page Layout */
+.booking-page-wrapper {
+    padding: 4rem 1rem;
+    background-color: hsl(var(--background));
+    min-height: calc(100vh - 4rem);
+    /* Adjust based on header height */
+}
+
+.booking-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    max-width: 1024px;
+    margin: 0 auto;
+}
+
+@media (min-width: 1024px) {
+    .booking-layout {
+        grid-template-columns: 1.5fr 1fr;
+        gap: 4rem;
+    }
+}
+
+/* Typography */
+.booking-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: hsl(var(--foreground));
+}
+
+.booking-subtitle {
+    color: hsl(var(--muted-foreground));
+    margin-bottom: 2rem;
+}
+
+/* Summary Card */
+.booking-summary-card {
+    background-color: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-top: 2rem;
+}
+
+.booking-summary-card h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: hsl(var(--card-foreground));
+    border-bottom: 1px solid hsl(var(--border));
+    padding-bottom: 1rem;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid hsl(var(--border) / 0.5);
+    color: hsl(var(--foreground));
+}
+
+.summary-row:last-child {
+    border-bottom: none;
+}
+
+.summary-row.total {
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: hsl(var(--primary));
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 2px solid hsl(var(--border));
+}
+
+/* Payment Card */
+.booking-payment-card {
+    background-color: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.booking-payment-card h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: hsl(var(--card-foreground));
+}
+
+#payment-element {
+    margin-bottom: 1.5rem;
+}
+
+.error-message {
+    color: hsl(var(--destructive));
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+    display: none;
+}
+
+.error-message.visible {
+    display: block;
+}
+
+/* Success State */
+.booking-success-card {
+    text-align: center;
+    padding: 3rem 1.5rem;
+    background-color: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+}
+
+.booking-success-card h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: hsl(var(--primary));
+    margin-bottom: 1rem;
+}
+
+.booking-ref {
+    font-family: monospace;
+    font-size: 1.5rem;
+    background-color: hsl(var(--muted));
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
+    margin: 1.5rem 0;
+    display: inline-block;
+    color: hsl(var(--foreground));
+}

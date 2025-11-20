@@ -1,0 +1,222 @@
+/* Dark Theme Polish - Additional Improvements */
+
+/* Enhanced form inputs for dark theme */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+input[type="tel"],
+textarea,
+select {
+    background-color: hsl(var(--input));
+    color: hsl(var(--foreground));
+    border: 1px solid hsl(var(--border));
+    border-radius: calc(var(--radius) - 2px);
+    padding: 0.75rem 1rem;
+    width: 100%;
+    transition: all 0.2s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+input[type="tel"]:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: hsl(var(--primary));
+    box-shadow: 0 0 0 3px hsl(var(--primary) / 0.1);
+}
+
+input[type="text"]::placeholder,
+input[type="email"]::placeholder,
+input[type="password"]::placeholder,
+input[type="number"]::placeholder,
+input[type="date"]::placeholder,
+input[type="tel"]::placeholder,
+textarea::placeholder {
+    color: hsl(var(--muted-foreground));
+}
+
+/* Better contrast for cards in dark theme */
+.card,
+.package-card,
+.accommodation-card,
+.attraction-card {
+    background-color: hsl(var(--card));
+    border: 1px solid hsl(var(--border) / 0.5);
+    transition: all 0.3s ease;
+}
+
+.card:hover,
+.package-card:hover,
+.accommodation-card:hover,
+.attraction-card:hover {
+    border-color: hsl(var(--border));
+    box-shadow: 0 8px 30px hsl(0 0% 0% / 0.3);
+    transform: translateY(-2px);
+}
+
+/* Improved text contrast */
+.card-title,
+.package-title,
+.accommodation-name,
+.attraction-name {
+    color: hsl(var(--card-foreground));
+}
+
+.card-description,
+.package-description,
+.accommodation-description,
+.attraction-description {
+    color: hsl(var(--muted-foreground));
+}
+
+/* Better button contrast in dark mode */
+.btn-primary {
+    background-color: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: hsl(var(--primary) / 0.9);
+}
+
+.btn-outline {
+    background-color: transparent;
+    color: hsl(var(--foreground));
+    border: 1px solid hsl(var(--border));
+}
+
+.btn-outline:hover {
+    background-color: hsl(var(--card));
+    border-color: hsl(var(--primary));
+}
+
+/* Enhanced modal/popover contrast */
+.modal,
+.popover {
+    background-color: hsl(var(--popover));
+    border: 1px solid hsl(var(--border));
+    box-shadow: 0 10px 40px hsl(0 0% 0% / 0.5);
+}
+
+/* Price tags with better visibility */
+.price,
+.package-price,
+.accommodation-price,
+.attraction-price {
+    color: hsl(var(--accent));
+    font-weight: 600;
+}
+
+/* Rating stars visibility */
+.rating-score {
+    color: hsl(var(--accent));
+}
+
+/* Ensure icons are visible */
+.icon {
+    color: currentColor;
+    opacity: 0.9;
+}
+
+/* Better table contrast */
+table {
+    background-color: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+}
+
+th {
+    background-color: hsl(var(--muted));
+    color: hsl(var(--foreground));
+    border-bottom: 2px solid hsl(var(--border));
+}
+
+td {
+    border-bottom: 1px solid hsl(var(--border) / 0.5);
+}
+
+/* Enhanced dropdown/select styling */
+select {
+    appearance: none;
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><path fill="white" d="M10.293 3.293L6 7.586 1.707 3.293A1 1 0 00.293 4.707l5 5a1 1 0 001.414 0l5-5a1 1 0 10-1.414-1.414z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    padding-right: 2.5rem;
+}
+
+body.light-theme select {
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><path fill="black" d="M10.293 3.293L6 7.586 1.707 3.293A1 1 0 00.293 4.707l5 5a1 1 0 001.414 0l5-5a1 1 0 10-1.414-1.414z"/></svg>');
+}
+
+/* Date input better styling for dark mode */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+}
+
+body.light-theme input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: none;
+}
+
+/* Ensure proper contrast for disabled elements */
+input:disabled,
+button:disabled,
+select:disabled,
+textarea:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Badge and tag improvements */
+.badge,
+.tag,
+.package-badge,
+.accommodation-badge,
+.attraction-badge {
+    background-color: hsl(var(--primary) / 0.15);
+    color: hsl(var(--primary));
+    border: 1px solid hsl(var(--primary) / 0.3);
+}
+
+/* Alert/notification improvements */
+.alert {
+    background-color: hsl(var(--muted));
+    border-left: 4px solid hsl(var(--primary));
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+.alert-success {
+    border-left-color: hsl(142 76% 36%);
+    background-color: hsl(142 76% 36% / 0.1);
+}
+
+.alert-error {
+    border-left-color: hsl(var(--destructive));
+    background-color: hsl(var(--destructive) / 0.1);
+}
+
+/* Loading states */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}

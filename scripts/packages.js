@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 card.innerHTML = `
                     <div class="package-image-wrapper">
-                        <img src="${pkg.image}" alt="${pkg.name}" class="package-image" loading="lazy">
+                        <img src="${pkg.image || 'public/placeholder.jpg'}" alt="${pkg.name}" class="package-image" loading="lazy" onerror="this.src='public/placeholder.jpg'">
                         ${pkg.includesFlights ? '<div class="package-badge">Flights Included</div>' : ''}
                     </div>
                     <div class="package-content">

@@ -18,7 +18,9 @@ exports.register = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        const newUser = await User.create({ fullName, email, password: hashedPassword });
+        // Default role is 'user'. In a real app, you might want to restrict 'admin' registration.
+        const role = 'user';
+        const newUser = await User.create({ fullName, email, password: hashedPassword, role });
 
         res.status(201).json({ message: 'User registered successfully' });
 
@@ -41,10 +43,10 @@ exports.login = async (req, res) => {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
 
-        const payload = { user: { id: user.email } }; // Use a unique ID in a real app
+        const payload = { user: { id: user.email, role: user.role } }; // Use a unique ID in a real app
         const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-        res.json({ token, user: { full_name: user.full_name, email: user.email } });
+        res.json({ token, user: { full_name: user.full_name, email: user.email, role: user.role } });
 
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
@@ -56,7 +58,7 @@ exports.getProfile = async (req, res) => {
         // req.user is set by the authMiddleware
         const user = await User.findByEmail(req.user.id); // req.user.id is the email in our current payload
         if (!user) return res.status(404).json({ message: 'User not found' });
-        res.json({ fullName: user.full_name, email: user.email });
+        res.json({ fullName: user.full_name, email: user.email, role: user.role });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
     }

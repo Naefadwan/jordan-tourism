@@ -25,3 +25,31 @@ exports.getAttractionById = async (req, res) => {
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 };
+
+exports.createAttraction = async (req, res) => {
+    try {
+        const attractionData = req.body;
+        // If file was uploaded, add the image URL
+        if (req.file) {
+            attractionData.image_url = `public/uploads/${req.file.filename}`;
+        }
+        const newAttraction = await Attraction.create(attractionData);
+        res.status(201).json(newAttraction);
+    } catch (error) {
+        console.error('Error creating attraction:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
+exports.deleteAttraction = async (req, res) => {
+    try {
+        const deletedAttraction = await Attraction.delete(req.params.id);
+        if (!deletedAttraction) {
+            return res.status(404).json({ message: 'Attraction not found' });
+        }
+        res.json({ message: 'Attraction deleted successfully', attraction: deletedAttraction });
+    } catch (error) {
+        console.error('Error deleting attraction:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};

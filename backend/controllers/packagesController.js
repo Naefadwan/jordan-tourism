@@ -67,3 +67,31 @@ exports.getPackageById = async (req, res) => {
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 };
+
+exports.createPackage = async (req, res) => {
+    try {
+        const packageData = req.body;
+        // If file was uploaded, add the image URL
+        if (req.file) {
+            packageData.image_url = `public/uploads/${req.file.filename}`;
+        }
+        const newPackage = await Package.create(packageData);
+        res.status(201).json(newPackage);
+    } catch (error) {
+        console.error('Error creating package:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
+exports.deletePackage = async (req, res) => {
+    try {
+        const deletedPackage = await Package.delete(req.params.id);
+        if (!deletedPackage) {
+            return res.status(404).json({ message: 'Package not found' });
+        }
+        res.json({ message: 'Package deleted successfully', package: deletedPackage });
+    } catch (error) {
+        console.error('Error deleting package:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};

@@ -26,7 +26,6 @@ const Accommodation = {
 
         const { rows } = await db.query(query, values);
 
-        // Map database snake_case columns to frontend camelCase properties if needed
         const mappedRows = rows.map(row => ({
             id: row.id,
             name: row.name,
@@ -50,6 +49,23 @@ const Accommodation = {
             description: row.description,
             mainImage: row.main_image_url || 'public/placeholder-image.jpg'
         };
+    },
+
+    create: async (data) => {
+        const { name, type, location, description, main_image_url } = data;
+        const { rows } = await db.query(
+            'INSERT INTO accommodations (name, type, location, description, main_image_url) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+            [name, type, location, description, main_image_url]
+        );
+        return rows[0];
+    },
+
+    delete: async (id) => {
+        const { rows } = await db.query(
+            'DELETE FROM accommodations WHERE id = $1 RETURNING *',
+            [id]
+        );
+        return rows[0];
     }
 };
 
