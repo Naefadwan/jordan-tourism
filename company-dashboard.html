@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Dashboard - GOJO</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/admin.css"> <!-- Reusing admin styles for consistency -->
+</head>
+
+<body>
+    <header class="admin-header">
+        <div class="logo">GOJO Company Portal</div>
+        <div class="user-info">
+            <span id="companyName">Company Name</span>
+            <button class="btn-logout" onclick="logout()">Logout</button>
+        </div>
+    </header>
+
+    <div class="admin-container">
+        <aside class="admin-sidebar">
+            <nav>
+                <button class="admin-nav-link active" data-tab="packages">My Packages</button>
+                <button class="admin-nav-link" data-tab="accommodations">My Accommodations</button>
+                <button class="admin-nav-link" data-tab="bookings">Bookings</button>
+            </nav>
+        </aside>
+
+        <main class="admin-content">
+            <!-- My Packages Tab -->
+            <div id="packages-tab" class="admin-tab-content active">
+                <div class="tab-header">
+                    <h2>My Packages</h2>
+                    <button class="btn-primary" id="addPackageBtn">Add New Package</button>
+                </div>
+                <div class="admin-table-wrapper">
+                    <table class="admin-table" id="packagesTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th>Bookings</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- My Accommodations Tab -->
+            <div id="accommodations-tab" class="admin-tab-content">
+                <div class="tab-header">
+                    <h2>My Accommodations</h2>
+                    <button class="btn-primary" id="addAccommodationBtn">Add New Accommodation</button>
+                </div>
+                <div class="admin-table-wrapper">
+                    <table class="admin-table" id="accommodationsTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Price</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Bookings Tab -->
+            <div id="bookings-tab" class="admin-tab-content">
+                <div class="tab-header">
+                    <h2>Recent Bookings</h2>
+                </div>
+                <!-- Filtering options could go here -->
+                <div class="admin-table-wrapper">
+                    <table class="admin-table" id="bookingsTable">
+                        <thead>
+                            <tr>
+                                <th>Ref</th>
+                                <th>Package/Hotel</th>
+                                <th>Guest</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals (Reused structure from admin, adapted for company) -->
+    <!-- Package Modal -->
+    <div id="packageModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Add New Package</h2>
+            <form id="packageForm" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="pkgName">Package Name</label>
+                    <input type="text" id="pkgName" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="pkgDesc">Description</label>
+                    <textarea id="pkgDesc" name="description" rows="3" required></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="pkgPrice">From Price ($)</label>
+                        <input type="number" id="pkgPrice" name="from_price" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="pkgNights">Nights</label>
+                        <input type="number" id="pkgNights" name="nights" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="pkgOrigin">Origin City</label>
+                        <input type="text" id="pkgOrigin" name="origin_city" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="pkgDest">Destination City</label>
+                        <input type="text" id="pkgDest" name="destination_city" required>
+                    </div>
+                </div>
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="pkgFlights" name="includes_flights">
+                    <label for="pkgFlights">Includes Flights</label>
+                </div>
+
+                <!-- Ticket Options -->
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="pkgHasTicket" name="has_ticket">
+                    <label for="pkgHasTicket">Offer Optional Entry Ticket</label>
+                </div>
+                <div class="form-group" id="ticketPriceGroup" style="display:none;">
+                    <label for="pkgTicketPrice">Ticket Price ($)</label>
+                    <input type="number" id="pkgTicketPrice" name="ticket_price" step="0.01">
+                </div>
+
+                <div class="form-group">
+                    <label for="pkgImage">Package Image</label>
+                    <input type="file" id="pkgImage" name="image" accept="image/*">
+                </div>
+
+                <button type="submit" class="btn-primary">Save Package</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="scripts/company-dashboard.js"></script>
+</body>
+
+</html>

@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
         card.dataset.location = accommodation.location;
         card.dataset.rating = accommodation.rating;
         card.dataset.reviews = accommodation.reviewsCount; // Match sorting data attribute
-        const price = accommodation.rooms?.[0]?.pricePerNight || 150; // Use a fallback price
+        const price = accommodation.fromPrice || accommodation.price || 150; // Use the new price field or fallback
         card.dataset.price = price;
 
         card.innerHTML = `

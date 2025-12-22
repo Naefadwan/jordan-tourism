@@ -81,7 +81,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('user', JSON.stringify(data.user));
-                window.location.href = 'profile.html';
+
+                if (data.user.role === 'company') {
+                    window.location.href = 'company-dashboard.html';
+                } else if (data.user.role === 'admin') {
+                    window.location.href = 'admin.html';
+                } else {
+                    window.location.href = 'profile.html';
+                }
             } catch (err) {
                 console.error('Login failed:', err);
                 showError(err.message || 'Login failed.');
@@ -130,9 +137,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function fetchMyBookings() {
         try {
-            const bookings = await api('/bookings/my-bookings', { auth: true });
+            const [roomBookings, attractionBookings] = await Promise.all([
+                api('/bookings/my-bookings', { auth: true }).catch(() => []),
+                api('/attraction-bookings/my-bookings', { auth: true }).catch(() => [])
+            ]);
 
-            if (bookings.length === 0) {
+            const allBookings = [...(roomBookings || []), ...(attractionBookings || [])];
+
+            if (allBookings.length === 0) {
                 if (noBookingsMessage) noBookingsMessage.style.display = 'block';
                 return;
             }
@@ -140,7 +152,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if (noBookingsMessage) noBookingsMessage.style.display = 'none';
             profileBookingsGrid.innerHTML = '';
 
-            bookings.forEach((booking) => {
+            // Optional: Sort by date (desc)
+            allBookings.sort((a, b) => {
+                const dateA = new Date(a.check_in_date || a.booking_date);
+                const dateB = new Date(b.check_in_date || b.booking_date);
+                return dateB - dateA;
+            });
+
+            allBookings.forEach((booking) => {
                 const card = createBookingCard(booking);
                 profileBookingsGrid.appendChild(card);
             });
@@ -157,9 +176,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const card = document.createElement('div');
         card.className = 'booking-card';
 
+        // Normalize Data
+        const isAttraction = !!booking.attraction_id;
+        const imageSrc = isAttraction ? booking.attraction_image : booking.accommodation_image;
+        const titleText = isAttraction ? booking.attraction_name : booking.accommodation_name;
+
+        let dateText;
+        if (isAttraction) {
+            dateText = new Date(booking.booking_date).toLocaleDateString();
+        } else {
+            dateText = `${new Date(booking.check_in_date).toLocaleDateString()} - ${new Date(booking.check_out_date).toLocaleDateString()}`;
+        }
+
         const img = document.createElement('img');
-        img.src = booking.accommodation_image || 'public/placeholder-image.jpg';
-        img.alt = booking.accommodation_name || 'Accommodation';
+        img.src = imageSrc || 'public/placeholder-image.jpg';
+        img.alt = titleText || 'Booking';
         img.className = 'booking-card-image';
 
         const content = document.createElement('div');
@@ -167,11 +198,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const title = document.createElement('h3');
         title.className = 'booking-card-title';
-        title.textContent = booking.accommodation_name;
+        title.textContent = titleText;
 
         const dates = document.createElement('p');
         dates.className = 'booking-card-dates';
-        dates.textContent = `${new Date(booking.check_in_date).toLocaleDateString()} - ${new Date(booking.check_out_date).toLocaleDateString()}`;
+        dates.textContent = dateText;
 
         const ref = document.createElement('p');
         ref.className = 'booking-card-ref';

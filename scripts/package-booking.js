@@ -9,11 +9,16 @@ document.addEventListener('DOMContentLoaded', () => {
         guests: Number(params.get('guests') || 2),
         clientSecret: null,
         totalPrice: 0,
+        basePrice: 0,
+        hasTicket: false,
+        ticketPrice: 0,
+        includeTicket: params.get('includeTicket') === 'true',
+        ticketDate: params.get('ticketDate') || ''
     };
 
     const packageSummaryEl = document.getElementById('packageSummary');
-    const summaryStartDateEl = document.getElementById('summaryStartDate');
-    const summaryGuestsEl = document.getElementById('summaryGuests');
+    const summaryStartDateInput = document.getElementById('summaryStartDateInput');
+    const summaryGuestsInput = document.getElementById('summaryGuestsInput');
     const summaryTotalPriceEl = document.getElementById('summaryTotalPrice');
     const paymentForm = document.getElementById('payment-form');
     const paymentMessage = document.getElementById('payment-message');
@@ -79,11 +84,126 @@ document.addEventListener('DOMContentLoaded', () => {
                 </p>
             `;
 
-            summaryStartDateEl.textContent = new Date(state.startDate).toLocaleDateString();
-            summaryGuestsEl.textContent = `${state.guests} traveler${state.guests > 1 ? 's' : ''}`;
+            // Initialize inputs
+            if (state.startDate) {
+                // Ensure date is in YYYY-MM-DD format
+                summaryStartDateInput.value = new Date(state.startDate).toISOString().split('T')[0];
+            }
+            summaryGuestsInput.value = state.guests;
+
+            // Handle Start Date Change
+            summaryStartDateInput.addEventListener('change', (e) => {
+                if (!e.target.value) return;
+                state.startDate = e.target.value;
+                if (state.hasTicket) updateTicketConstraints(pkg);
+                updatePaymentIntent();
+            });
+
+            // Handle Guests Change
+            summaryGuestsInput.addEventListener('change', (e) => {
+                const val = parseInt(e.target.value);
+                if (val && val > 0) {
+                    state.guests = val;
+                    updatePriceDisplay();
+                    updatePaymentIntent();
+                }
+            });
+
+            state.basePrice = parseFloat(pkg.from_price);
+            state.hasTicket = pkg.has_ticket;
+            state.ticketPrice = parseFloat(pkg.ticket_price || 0);
+
+            if (state.hasTicket) {
+                const ticketWrapper = document.getElementById('ticketOptionWrapper');
+                const ticketPriceSpan = document.getElementById('ticketPricePerPerson');
+                if (ticketWrapper) ticketWrapper.style.display = 'block';
+                if (ticketPriceSpan) ticketPriceSpan.textContent = state.ticketPrice;
+
+                const ticketCheckbox = document.getElementById('includeTicket');
+                const ticketDateWrapper = document.getElementById('ticketDateWrapper');
+                const ticketDateInput = document.getElementById('ticketDateInput');
+
+                // Set min/max dates for ticket based on package dates
+                if (state.startDate && pkg.nights) {
+                    const start = new Date(state.startDate);
+                    const end = new Date(start);
+                    end.setDate(end.getDate() + pkg.nights);
+
+                    ticketDateInput.min = start.toISOString().split('T')[0];
+                    ticketDateInput.max = end.toISOString().split('T')[0];
+                }
+
+                // Initialize ticket UI state based on URL params
+                if (state.includeTicket) {
+                    ticketCheckbox.checked = true;
+                    ticketDateWrapper.style.display = 'block';
+                    if (state.ticketDate) {
+                        ticketDateInput.value = state.ticketDate;
+                    }
+                }
+
+                ticketCheckbox.addEventListener('change', (e) => {
+                    state.includeTicket = e.target.checked;
+                    ticketDateWrapper.style.display = state.includeTicket ? 'block' : 'none';
+                    if (!state.includeTicket) {
+                        state.ticketDate = '';
+                        ticketDateInput.value = '';
+                    }
+                    updatePaymentIntent();
+                });
+
+                ticketDateInput.addEventListener('change', (e) => {
+                    state.ticketDate = e.target.value;
+                });
+
+                updateTicketConstraints(pkg);
+            }
+
+            function updateTicketConstraints(pkg) {
+                const ticketDateInput = document.getElementById('ticketDateInput');
+                if (state.startDate && pkg.nights && ticketDateInput) {
+                    const start = new Date(state.startDate);
+                    const end = new Date(start);
+                    end.setDate(end.getDate() + pkg.nights);
+
+                    ticketDateInput.min = start.toISOString().split('T')[0];
+                    ticketDateInput.max = end.toISOString().split('T')[0];
+
+                    // Clear date if it falls out of new range
+                    if (state.ticketDate) {
+                        const current = new Date(state.ticketDate);
+                        if (current < start || current > end) {
+                            state.ticketDate = '';
+                            ticketDateInput.value = '';
+                        }
+                    }
+                }
+            }
+            updatePriceDisplay();
         } catch (err) {
             console.error('Error loading package:', err);
             packageSummaryEl.innerHTML = `<p>Could not load package details. Please go back and try again.</p>`;
+        }
+    }
+
+    function updatePriceDisplay() {
+        const ticketTotal = state.includeTicket ? (state.ticketPrice * state.guests) : 0;
+        state.totalPrice = (state.basePrice * state.guests) + ticketTotal;
+        summaryTotalPriceEl.textContent = `$${state.totalPrice.toFixed(2)}`;
+    }
+
+    async function updatePaymentIntent() {
+        // If Stripe elements are already initialized, we might need a slightly different flow,
+        // but for now, re-running initializeStripe will refresh the element with the new amount.
+        if (!state.clientSecret) return;
+        setLoading(true);
+        try {
+            updatePriceDisplay();
+            await initializeStripe();
+        } catch (err) {
+            console.error('Error updating payment intent:', err);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -118,6 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     packageId: state.packageId,
                     startDate: state.startDate,
                     guests: state.guests,
+                    includeTicket: state.includeTicket
                 }),
             });
 
@@ -159,6 +280,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
+            if (state.includeTicket && !state.ticketDate) {
+                showError('Please select a date for your attraction tickets.');
+                return;
+            }
+
             setLoading(true);
 
             try {
@@ -188,6 +314,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         startDate: state.startDate,
                         guests: state.guests,
                         paymentIntentId,
+                        paymentIntentId,
+                        includeTicket: state.includeTicket,
+                        ticketDate: state.ticketDate
                     }),
                 });
 

@@ -43,6 +43,27 @@
                         Travelers
                         <input type="number" id="guests" class="form-input" min="1" value="2" />
                     </label>
+
+                    <div id="ticketSection"
+                        style="display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                        <label class="form-group-checkbox"
+                            style="display: flex; gap: 0.5rem; align-items: center; cursor: pointer;">
+                            <input type="checkbox" id="includeTicket"
+                                style="width: 1.2rem; height: 1.2rem; accent-color: var(--primary-color);">
+                            <span>
+                                <strong>Include Entry Tickets</strong>
+                                <span style="display: block; font-size: 0.85rem; color: var(--primary-color);">+$<span
+                                        id="ticketPrice">0</span>/person</span>
+                            </span>
+                        </label>
+
+                        <div id="ticketDateWrapper" style="display: none; margin-top: 0.75rem; margin-left: 1.8rem;">
+                            <label class="form-label" style="font-size: 0.9rem;">
+                                Select date for tickets
+                                <input type="date" id="ticketDate" class="form-input" />
+                            </label>
+                        </div>
+                    </div>
                     <button id="bookPackageBtn" class="btn-primary btn-block">Continue to booking</button>
                     <p class="small-text">You’ll review and pay on the next step.</p>
                 </div>

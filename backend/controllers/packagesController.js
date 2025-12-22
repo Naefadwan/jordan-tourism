@@ -47,6 +47,8 @@ exports.getPackageById = async (req, res) => {
             destinationCity: pkg.destination_city,
             includesFlights: pkg.includes_flights,
             flightDetails: pkg.flight_details,
+            has_ticket: pkg.has_ticket,
+            ticket_price: pkg.ticket_price,
             accommodation: {
                 id: pkg.accommodation_id,
                 name: pkg.accommodation_name,
@@ -71,14 +73,55 @@ exports.getPackageById = async (req, res) => {
 exports.createPackage = async (req, res) => {
     try {
         const packageData = req.body;
-        // If file was uploaded, add the image URL
         if (req.file) {
             packageData.image_url = `public/uploads/${req.file.filename}`;
         }
+        // Handle new ticket fields
+        if (packageData.has_ticket) {
+            packageData.has_ticket = packageData.has_ticket === 'true' || packageData.has_ticket === true || packageData.has_ticket === 'on';
+        }
+        if (packageData.ticket_price) packageData.ticket_price = parseFloat(packageData.ticket_price);
+
+        if (!packageData.slug && packageData.name) {
+            packageData.slug = packageData.name.toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '');
+        }
+
         const newPackage = await Package.create(packageData);
         res.status(201).json(newPackage);
     } catch (error) {
         console.error('Error creating package:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
+exports.updatePackage = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const packageData = req.body;
+        if (req.file) {
+            packageData.image_url = `public/uploads/${req.file.filename}`;
+        }
+        // Handle new ticket fields
+        if (packageData.has_ticket) {
+            packageData.has_ticket = packageData.has_ticket === 'true' || packageData.has_ticket === true || packageData.has_ticket === 'on';
+        }
+        if (packageData.ticket_price) packageData.ticket_price = parseFloat(packageData.ticket_price);
+
+        if (!packageData.slug && packageData.name) {
+            packageData.slug = packageData.name.toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '');
+        }
+
+        const updatedPackage = await Package.update(id, packageData);
+        if (!updatedPackage) {
+            return res.status(404).json({ message: 'Package not found' });
+        }
+        res.json(updatedPackage);
+    } catch (error) {
+        console.error('Error updating package:', error);
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 };

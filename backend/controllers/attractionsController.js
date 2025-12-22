@@ -41,6 +41,24 @@ exports.createAttraction = async (req, res) => {
     }
 };
 
+exports.updateAttraction = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const attractionData = req.body;
+        if (req.file) {
+            attractionData.image_url = `public/uploads/${req.file.filename}`;
+        }
+        const updatedAttraction = await Attraction.update(id, attractionData);
+        if (!updatedAttraction) {
+            return res.status(404).json({ message: 'Attraction not found' });
+        }
+        res.json(updatedAttraction);
+    } catch (error) {
+        console.error('Error updating attraction:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
 exports.deleteAttraction = async (req, res) => {
     try {
         const deletedAttraction = await Attraction.delete(req.params.id);

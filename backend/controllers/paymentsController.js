@@ -9,7 +9,7 @@ exports.createPaymentIntent = async (req, res) => {
         if (!roomId) {
             return res.status(400).json({ message: 'Room ID is required' });
         }
-        
+
         if (!checkin || !checkout || !Date.parse(checkin) || !Date.parse(checkout)) {
             return res.status(400).json({ message: 'Valid check-in and check-out dates in ISO 8601 format are required' });
         }
@@ -53,7 +53,7 @@ exports.createPaymentIntent = async (req, res) => {
         const paymentIntent = await stripe.paymentIntents.create({
             amount: Math.round(totalPrice * 100), // Amount in cents
             currency: 'usd',
-            automatic_payment_methods: { enabled: true },
+            payment_method_types: ['card'], // Explicitly allow only cards to avoid Amazon Pay/CashApp
             metadata: {
                 roomId: String(roomId),
                 checkin: checkin, // ISO string

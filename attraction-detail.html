@@ -1,15 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Attraction Details - GOJO</title>
     <meta name="description" content="Detailed information about a specific attraction in Jordan.">
-    <link rel="stylesheet" href="styles/main.css">`n    <link rel="stylesheet" href="styles/dark-theme-polish.css">
+    <link rel="stylesheet" href="styles/main.css">`n
+    <link rel="stylesheet" href="styles/dark-theme-polish.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
     <!-- Header -->
     <header class="site-header">
@@ -19,16 +24,16 @@
                     <a href="index.html" class="logo">
                         <span class="logo-text">GOJO</span>
                     </a>
-                    
+
                     <nav class="main-nav">
                         <a href="attractions.html" class="nav-link active">Attractions</a>
                         <a href="accommodations.html" class="nav-link">Accommodations</a>
                         <a href="experiences.html" class="nav-link">Experiences</a>
-                        <a href="liked-attractions.html" class="nav-link">My Likes</a>
+                        <a href="liked-attractions.html" class="nav-link">My Fav</a>
                         <a href="about.html" class="nav-link">About Jordan</a>
                     </nav>
                 </div>
-                
+
                 <div class="header-right">
                     <button class="btn-icon" aria-label="Search">
                         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -43,12 +48,17 @@
                         </svg>
                     </a>
                     <button class="btn-icon" id="theme-toggle" aria-label="Toggle theme">
-                        <svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
                             <circle cx="12" cy="12" r="5"></circle>
-                            <line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line>
-                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                            <line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line>
-                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
                         </svg>
                     </button>
                     <a href="accommodations.html" class="btn-primary">Book Now</a>
@@ -61,14 +71,14 @@
                     </button>
                 </div>
             </div>
-            
+
             <!-- Mobile Menu -->
             <div class="mobile-menu" id="mobileMenu">
                 <nav class="mobile-nav">
                     <a href="attractions.html" class="mobile-nav-link active">Attractions</a>
                     <a href="accommodations.html" class="mobile-nav-link">Accommodations</a>
                     <a href="experiences.html" class="mobile-nav-link">Experiences</a>
-                    <a href="liked-attractions.html" class="mobile-nav-link">My Likes</a>
+                    <a href="liked-attractions.html" class="mobile-nav-link">My Fav</a>
                     <a href="about.html" class="mobile-nav-link">About Jordan</a>
                     <a href="accommodations.html" class="btn-primary mobile-book-btn">Book Now</a>
                 </nav>
@@ -83,12 +93,19 @@
                 <h1 class="detail-title" id="attractionName"></h1>
                 <div class="detail-subtitle-info">
                     <div class="detail-rating">
-                        <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon></svg>
+                        <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                            <polygon
+                                points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26">
+                            </polygon>
+                        </svg>
                         <span id="attractionRating"></span>
                     </div>
                     <span class="separator">·</span>
                     <div class="detail-location">
-                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
                         <span id="attractionLocation"></span>
                     </div>
                 </div>
@@ -97,7 +114,9 @@
             <!-- Main Image -->
             <section class="detail-gallery">
                 <div class="gallery-main-image">
-                    <img id="attractionImage" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Attraction Image">
+                    <img id="attractionImage"
+                        src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                        alt="Attraction Image">
                 </div>
             </section>
 
@@ -112,16 +131,20 @@
                     <section class="detail-info-block">
                         <h2 class="detail-section-title">Key Information</h2>
                         <div class="info-grid">
-                            <div class="info-item"><strong>Category:</strong> <span id="attractionCategory"></span></div>
+                            <div class="info-item"><strong>Category:</strong> <span id="attractionCategory"></span>
+                            </div>
                             <div class="info-item"><strong>Price:</strong> <span id="attractionPrice"></span></div>
-                            <div class="info-item"><strong>Duration:</strong> <span id="attractionDuration"></span></div>
+                            <div class="info-item"><strong>Duration:</strong> <span id="attractionDuration"></span>
+                            </div>
                         </div>
                     </section>
 
                     <section class="detail-map">
                         <h2 class="detail-section-title">Location</h2>
                         <div class="map-placeholder">
-                            <p id="mapText">Map Area - Integration with Google Maps or Leaflet.js would go here for <span id="attractionMapLocation"></span>.</p>
+                            <p id="mapText">Map Area - Integration with Google Maps or Leaflet.js would go here for
+                                <span id="attractionMapLocation"></span>.
+                            </p>
                         </div>
                     </section>
                 </div>
@@ -134,6 +157,11 @@
                             <span class="price-period">/ person</span>
                         </div>
                         <div class="booking-form">
+                            <div class="guest-input">
+                                <label for="bookingDate">Select Date</label>
+                                <input type="date" id="bookingDate"
+                                    style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); background-color: var(--bg-secondary); color: var(--text-primary);">
+                            </div>
                             <div class="guest-input">
                                 <label for="guests">Number of People</label>
                                 <select id="guests">
@@ -162,8 +190,9 @@
 
     <!-- Back to Top Button -->
     <button id="backToTopBtn" class="back-to-top-btn" title="Go to top">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 19V5M5 12l7-7 7 7"/>
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M12 19V5M5 12l7-7 7 7" />
         </svg>
     </button>
 
@@ -171,4 +200,5 @@
     <script src="scripts/api.js"></script>
     <script src="scripts/attraction-detail.js"></script>
 </body>
+
 </html>

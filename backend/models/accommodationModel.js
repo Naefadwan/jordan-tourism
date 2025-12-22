@@ -32,6 +32,8 @@ const Accommodation = {
             type: row.type,
             location: row.location,
             description: row.description,
+            price: parseFloat(row.price || 0),
+            fromPrice: parseFloat(row.from_price || row.price || 0),
             mainImage: row.main_image_url || 'public/placeholder-image.jpg'
         }));
         return mappedRows;
@@ -47,15 +49,26 @@ const Accommodation = {
             type: row.type,
             location: row.location,
             description: row.description,
+            price: parseFloat(row.price || 0),
+            fromPrice: parseFloat(row.from_price || row.price || 0),
             mainImage: row.main_image_url || 'public/placeholder-image.jpg'
         };
     },
 
     create: async (data) => {
-        const { name, type, location, description, main_image_url } = data;
+        const { name, type, location, description, main_image_url, price, from_price } = data;
         const { rows } = await db.query(
-            'INSERT INTO accommodations (name, type, location, description, main_image_url) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-            [name, type, location, description, main_image_url]
+            'INSERT INTO accommodations (name, type, location, description, main_image_url, price, from_price) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+            [name, type, location, description, main_image_url, price || 0, from_price || price || 0]
+        );
+        return rows[0];
+    },
+
+    update: async (id, data) => {
+        const { name, type, location, description, main_image_url, price, from_price } = data;
+        const { rows } = await db.query(
+            'UPDATE accommodations SET name = $1, type = $2, location = $3, description = $4, main_image_url = COALESCE($5, main_image_url), price = $6, from_price = $7 WHERE id = $8 RETURNING *',
+            [name, type, location, description, main_image_url, price || 0, from_price || price || 0, id]
         );
         return rows[0];
     },

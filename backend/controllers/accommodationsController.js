@@ -45,6 +45,10 @@ exports.getAccommodationById = async (req, res) => {
 exports.createAccommodation = async (req, res) => {
     try {
         const accommodationData = req.body;
+        // Ensure price fields are numbers
+        if (accommodationData.price) accommodationData.price = parseFloat(accommodationData.price);
+        if (accommodationData.from_price) accommodationData.from_price = parseFloat(accommodationData.from_price);
+
         // If file was uploaded, add the image URL
         if (req.file) {
             accommodationData.main_image_url = `public/uploads/${req.file.filename}`;
@@ -53,6 +57,31 @@ exports.createAccommodation = async (req, res) => {
         res.status(201).json(newAccommodation);
     } catch (error) {
         console.error('Error creating accommodation:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
+exports.updateAccommodation = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const accommodationData = req.body;
+
+        // Ensure price fields are numbers
+        if (accommodationData.price) accommodationData.price = parseFloat(accommodationData.price);
+        if (accommodationData.from_price) accommodationData.from_price = parseFloat(accommodationData.from_price);
+
+        // If file was uploaded, add the image URL
+        if (req.file) {
+            accommodationData.main_image_url = `public/uploads/${req.file.filename}`;
+        }
+
+        const updatedAccommodation = await Accommodation.update(id, accommodationData);
+        if (!updatedAccommodation) {
+            return res.status(404).json({ message: 'Accommodation not found' });
+        }
+        res.json(updatedAccommodation);
+    } catch (error) {
+        console.error('Error updating accommodation:', error);
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 };

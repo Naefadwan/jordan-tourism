@@ -11,6 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const includesList = document.getElementById('includesList');
     const startDateInput = document.getElementById('startDate');
     const guestsInput = document.getElementById('guests');
+    const ticketSection = document.getElementById('ticketSection');
+    const includeTicketCheckbox = document.getElementById('includeTicket');
+    const ticketPriceLabel = document.getElementById('ticketPrice');
+    const ticketDateWrapper = document.getElementById('ticketDateWrapper');
+    const ticketDateInput = document.getElementById('ticketDate');
     const bookBtn = document.getElementById('bookPackageBtn');
 
     const params = new URLSearchParams(window.location.search);
@@ -72,6 +77,33 @@ document.addEventListener('DOMContentLoaded', () => {
             includesList.innerHTML += `<li>${pkg.nights} nights at ${pkg.accommodation.name}</li>`;
             includesList.innerHTML += `<li>Guided visits to key attractions in the itinerary</li>`;
             includesList.innerHTML += `<li>All taxes and standard fees</li>`;
+
+            // Setup ticket option if available
+            if (pkg.has_ticket) {
+                ticketSection.style.display = 'block';
+                ticketPriceLabel.textContent = pkg.ticket_price || 0;
+
+                includeTicketCheckbox.addEventListener('change', (e) => {
+                    ticketDateWrapper.style.display = e.target.checked ? 'block' : 'none';
+                    if (!e.target.checked) ticketDateInput.value = '';
+                });
+
+                // Update date constraints when start date changes
+                startDateInput.addEventListener('change', updateTicketDateConstraints);
+                updateTicketDateConstraints();
+            }
+
+            function updateTicketDateConstraints() {
+                const startVal = startDateInput.value;
+                if (startVal && pkg.nights) {
+                    const start = new Date(startVal);
+                    const end = new Date(start);
+                    end.setDate(end.getDate() + pkg.nights);
+
+                    ticketDateInput.min = start.toISOString().split('T')[0];
+                    ticketDateInput.max = end.toISOString().split('T')[0];
+                }
+            }
         } catch (err) {
             console.error(err);
             alert('Could not load package. Returning to packages list.');
@@ -88,9 +120,18 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        window.location.href =
-            `package-booking.html?packageId=${encodeURIComponent(packageId)}&` +
+        let url = `package-booking.html?packageId=${encodeURIComponent(packageId)}&` +
             `startDate=${encodeURIComponent(startDate)}&guests=${encodeURIComponent(guests)}`;
+
+        if (includeTicketCheckbox.checked) {
+            if (!ticketDateInput.value) {
+                alert('Please select a date for your tickets');
+                return;
+            }
+            url += `&includeTicket=true&ticketDate=${encodeURIComponent(ticketDateInput.value)}`;
+        }
+
+        window.location.href = url;
     });
 
     loadPackage();

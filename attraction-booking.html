@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Attraction Booking - GOJO</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/dark-theme-polish.css">
+    <link rel="stylesheet" href="styles/package-booking.css"> <!-- Reusing package booking styles -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="header-left">
+                    <a href="index.html" class="logo">
+                        <span class="logo-text">GOJO</span>
+                    </a>
+                </div>
+                <div class="header-right">
+                    <a href="attractions.html" class="nav-link">Back to Attractions</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <div class="booking-page-wrapper">
+            <div class="booking-layout">
+                <!-- Left: Summary -->
+                <section class="booking-main">
+                    <h1 class="booking-title">Confirm Your Visit</h1>
+                    <p class="booking-subtitle">Review your details and complete payment.</p>
+
+                    <div class="booking-summary-card">
+                        <h2>Attraction Details</h2>
+                        <div id="attractionSummary">
+                            <p>Loading details...</p>
+                        </div>
+
+                        <div class="summary-details" style="margin-top: 1.5rem;">
+                            <div class="summary-row">
+                                <span>Date</span>
+                                <span id="summaryDate"></span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Guests</span>
+                                <span id="summaryGuests"></span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Price per person</span>
+                                <span id="summaryPricePerPerson"></span>
+                            </div>
+                            <div class="summary-row total"
+                                style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                                <span>Total Price</span>
+                                <span id="summaryTotalPrice"></span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Right: Payment -->
+                <aside class="booking-sidebar">
+                    <div class="booking-payment-card">
+                        <h2>Payment</h2>
+                        <p class="small-text">Payments are processed securely via Stripe.</p>
+
+                        <form id="payment-form">
+                            <div id="payment-element"></div>
+                            <div id="payment-message" class="error-message" style="margin-top: 1rem;"></div>
+                            <button id="submit-payment" class="btn-primary btn-block" type="submit"
+                                style="margin-top: 1.5rem;">
+                                Pay <span id="payAmountBtn"></span>
+                            </button>
+                        </form>
+                    </div>
+
+                    <div id="successState" class="booking-success-card"
+                        style="display: none; text-align: center; padding: 2rem;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">🎉</div>
+                        <h2>Booking Confirmed!</h2>
+                        <p>Your booking reference is:</p>
+                        <p class="booking-ref" id="bookingRef"
+                            style="font-size: 1.2rem; font-weight: bold; margin: 0.5rem 0;"></p>
+                        <a href="profile.html" class="btn-primary btn-block" style="margin-top: 1rem;">View My
+                            Bookings</a>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="scripts/main.js"></script>
+    <script src="scripts/api.js"></script>
+    <script src="scripts/attraction-booking.js"></script>
+</body>
+
+</html>

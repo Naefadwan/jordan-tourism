@@ -23,13 +23,15 @@ const PackageBooking = {
         end_date,
         guests,
         total_price,
-        payment_intent_id
+        payment_intent_id,
+        has_ticket,
+        ticket_date
     }) {
         const { rows } = await db.query(
             `INSERT INTO package_bookings
        (booking_reference, user_id, package_id, start_date, end_date,
-        guests, total_price, payment_intent_id, status)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'confirmed')
+        guests, total_price, payment_intent_id, has_ticket, ticket_date, status)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,'confirmed')
        RETURNING *`,
             [
                 booking_reference,
@@ -39,7 +41,9 @@ const PackageBooking = {
                 end_date,
                 guests,
                 total_price,
-                payment_intent_id
+                payment_intent_id,
+                has_ticket,
+                ticket_date
             ]
         );
         return rows[0];

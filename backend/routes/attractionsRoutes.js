@@ -11,6 +11,7 @@ router.get('/:id', attractionsController.getAttractionById);
 
 // Admin routes
 router.post('/', authMiddleware, adminMiddleware, upload.single('image'), attractionsController.createAttraction);
+router.put('/:id', authMiddleware, adminMiddleware, upload.single('image'), attractionsController.updateAttraction);
 router.delete('/:id', authMiddleware, adminMiddleware, attractionsController.deleteAttraction);
 
 module.exports = router;

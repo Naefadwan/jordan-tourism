@@ -50,11 +50,11 @@ document.addEventListener('DOMContentLoaded', () => {
         document.title = `${accommodation.name} - Discover Jordan`;
         accommodationNameElem.textContent = accommodation.name;
         accommodationRatingElem.textContent = `${accommodation.rating} (${accommodation.reviews.length} reviews)`;
-        if(accommodationLocationElem) accommodationLocationElem.textContent = accommodation.location;
-        if(mapLocationElem) mapLocationElem.textContent = accommodation.location;
+        if (accommodationLocationElem) accommodationLocationElem.textContent = accommodation.location;
+        if (mapLocationElem) mapLocationElem.textContent = accommodation.location;
 
         accommodationDescriptionElem.innerHTML = `<p>${accommodation.description}</p>`;
-        bookingPriceDisplay.querySelector('.price-amount').textContent = `From $${accommodation.rooms[0]?.pricePerNight || 0}`;
+        bookingPriceDisplay.querySelector('.price-amount').textContent = `From $${accommodation.fromPrice || accommodation.price || 0}`;
 
         // Gallery
         mainImage.src = accommodation.mainImage;
@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Gallery thumbnail click handler
-    galleryThumbnails.addEventListener('click', function(e) {
+    galleryThumbnails.addEventListener('click', function (e) {
         if (e.target.classList.contains('thumbnail')) {
             mainImage.src = e.target.src;
             galleryThumbnails.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // "Book Now" button on detail page
     if (checkAvailabilityBtn) {
-        checkAvailabilityBtn.addEventListener('click', function(e) {
+        checkAvailabilityBtn.addEventListener('click', function (e) {
             e.preventDefault();
             const checkin = document.getElementById('checkin-date').value;
             const checkout = document.getElementById('checkout-date').value;

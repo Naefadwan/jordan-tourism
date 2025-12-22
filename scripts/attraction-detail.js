@@ -58,6 +58,37 @@ document.addEventListener('DOMContentLoaded', () => {
         attractionMapLocationElem.textContent = attraction.location;
         widgetPriceElem.textContent = `$${attraction.price}`;
 
+        // Initialize Date Picker logic
+        const dateInput = document.getElementById('bookingDate');
+        if (dateInput) {
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.min = today;
+            dateInput.addEventListener('change', () => {
+                dateInput.style.borderColor = ''; // Clear error style
+            });
+        }
+
+        // Handle Booking Button Click
+        const bookingBtn = document.querySelector('.booking-btn');
+        bookingBtn.replaceWith(bookingBtn.cloneNode(true)); // Reset listeners
+        const newBookingBtn = document.querySelector('.booking-btn');
+
+        newBookingBtn.addEventListener('click', () => {
+            const date = document.getElementById('bookingDate').value;
+            const guests = document.getElementById('guests').value;
+
+            if (!date) {
+                alert('Please select a date for your visit.');
+                const dateInput = document.getElementById('bookingDate');
+                dateInput.focus();
+                dateInput.style.borderColor = 'red';
+                return;
+            }
+
+            // Redirect to booking page
+            window.location.href = `attraction-booking.html?attractionId=${attraction.id}&date=${date}&guests=${guests}`;
+        });
+
         // Re-initialize lazy loading for the main image if it was lazy-loaded
         if (attractionImageElem.classList.contains('lazy') && typeof window.initializeLazyLoading === 'function') {
             window.initializeLazyLoading([attractionImageElem]);

@@ -34,6 +34,9 @@ app.use('/api/accommodations', accommodationsRoutes);
 const likesRoutes = require('./routes/likesRoutes');
 app.use('/api/likes', likesRoutes);
 
+const userRoutes = require('./routes/userRoutes');
+app.use('/api/users', userRoutes);
+
 // Bookings routes
 const bookingsRoutes = require('./routes/bookingsRoutes');
 app.use('/api/bookings', bookingsRoutes);
@@ -46,6 +49,9 @@ app.use('/api/packages', packageRoutes);
 const packageBookingsRoutes = require('./routes/packageBookingsRoutes');
 
 app.use('/api/package-bookings', packageBookingsRoutes);
+
+const attractionBookingsRoutes = require('./routes/attractionBookingsRoutes');
+app.use('/api/attraction-bookings', attractionBookingsRoutes);
 
 // Other routes will go here as they are implemented
 

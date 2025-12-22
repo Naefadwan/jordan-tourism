@@ -35,6 +35,7 @@
                         <button class="admin-nav-link active" data-tab="packages">Packages</button>
                         <button class="admin-nav-link" data-tab="accommodations">Accommodations</button>
                         <button class="admin-nav-link" data-tab="attractions">Attractions</button>
+                        <button class="admin-nav-link" data-tab="users">Users</button>
                     </nav>
                 </aside>
 
@@ -75,6 +76,7 @@
                                         <th>ID</th>
                                         <th>Name</th>
                                         <th>Type</th>
+                                        <th>Price</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -98,6 +100,31 @@
                                         <th>ID</th>
                                         <th>Name</th>
                                         <th>Category</th>
+                                        <th>Price</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Users Tab -->
+                    <div id="users-tab" class="admin-tab-content">
+                        <div class="tab-header">
+                            <h2>Manage Users</h2>
+                            <!-- No Add User button needed for now -->
+                        </div>
+                        <div class="admin-table-wrapper">
+                            <table class="admin-table" id="usersTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Full Name</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -137,6 +164,14 @@
                 <div class="form-group">
                     <label for="pkgNights">Nights</label>
                     <input type="number" id="pkgNights" name="nights" required>
+                </div>
+                <div class="form-group-checkbox">
+                    <input type="checkbox" id="pkgHasTicket" name="has_ticket">
+                    <label for="pkgHasTicket">Include Optional Ticket</label>
+                </div>
+                <div class="form-group">
+                    <label for="pkgTicketPrice">Ticket Price (Optional)</label>
+                    <input type="number" id="pkgTicketPrice" name="ticket_price" step="0.01" value="0">
                 </div>
                 <div class="form-group">
                     <label for="pkgOrigin">Origin City</label>
@@ -179,6 +214,10 @@
                 <div class="form-group">
                     <label for="accDesc">Description</label>
                     <textarea id="accDesc" name="description" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="accPrice">From Price</label>
+                    <input type="number" id="accPrice" name="price" required>
                 </div>
                 <div class="form-group">
                     <label for="accImage">Accommodation Image</label>
@@ -227,6 +266,32 @@
                     <input type="file" id="attImage" name="image" accept="image/*" required>
                 </div>
                 <button type="submit" class="btn-primary">Save Attraction</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="userModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Edit User</h2>
+            <form id="userForm">
+                <div class="form-group">
+                    <label for="userName">Full Name</label>
+                    <input type="text" id="userName" name="full_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="userEmail">Email</label>
+                    <input type="email" id="userEmail" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="userRole">Role</label>
+                    <select id="userRole" name="role" required>
+                        <option value="user">User</option>
+                        <option value="admin">Admin</option>
+                        <option value="company">Company</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary">Update User</button>
             </form>
         </div>
     </div>

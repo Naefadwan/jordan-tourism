@@ -45,15 +45,34 @@ const Package = {
         const {
             slug, name, description, from_price, nights,
             origin_city, destination_city, includes_flights,
-            accommodation_id, image_url
+            accommodation_id, image_url, has_ticket, ticket_price
         } = data;
 
         const { rows } = await db.query(
             `INSERT INTO travel_packages 
-            (slug, name, description, from_price, nights, origin_city, destination_city, includes_flights, accommodation_id, image_url, is_active)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, true)
+            (slug, name, description, from_price, nights, origin_city, destination_city, includes_flights, accommodation_id, image_url, is_active, has_ticket, ticket_price)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, true, $11, $12)
             RETURNING *`,
-            [slug, name, description, from_price, nights, origin_city, destination_city, includes_flights, accommodation_id, image_url]
+            [slug, name, description, from_price, nights, origin_city, destination_city, includes_flights, accommodation_id, image_url, has_ticket || false, ticket_price || 0]
+        );
+        return rows[0];
+    },
+
+    async update(id, data) {
+        const {
+            slug, name, description, from_price, nights,
+            origin_city, destination_city, includes_flights,
+            accommodation_id, image_url, has_ticket, ticket_price
+        } = data;
+
+        const { rows } = await db.query(
+            `UPDATE travel_packages 
+            SET slug = $1, name = $2, description = $3, from_price = $4, nights = $5, 
+                origin_city = $6, destination_city = $7, includes_flights = $8, 
+                accommodation_id = $9, image_url = COALESCE($10, image_url), 
+                has_ticket = $11, ticket_price = $12
+            WHERE id = $13 RETURNING *`,
+            [slug, name, description, from_price, nights, origin_city, destination_city, includes_flights, accommodation_id, image_url, has_ticket, ticket_price, id]
         );
         return rows[0];
     },

@@ -70,6 +70,15 @@ const Attraction = {
         return rows[0];
     },
 
+    update: async (id, data) => {
+        const { name, category, description, location, duration, price, image_url } = data;
+        const { rows } = await db.query(
+            'UPDATE attractions SET name = $1, category = $2, description = $3, location = $4, duration = $5, price = $6, image_url = COALESCE($7, image_url) WHERE id = $8 RETURNING *',
+            [name, category, description, location, duration, price, image_url, id]
+        );
+        return rows[0];
+    },
+
     delete: async (id) => {
         const { rows } = await db.query(
             'DELETE FROM attractions WHERE id = $1 RETURNING *',

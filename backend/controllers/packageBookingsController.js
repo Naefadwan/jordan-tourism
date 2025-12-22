@@ -11,7 +11,7 @@ function generateBookingReference() {
 // POST /api/package-payments/create-intent
 exports.createPackagePaymentIntent = async (req, res) => {
     try {
-        const { packageId, startDate, guests } = req.body;
+        const { packageId, startDate, guests, includeTicket } = req.body;
 
         if (!packageId || !startDate || !guests) {
             return res.status(400).json({ message: 'Package, start date, and guests are required' });
@@ -23,18 +23,24 @@ exports.createPackagePaymentIntent = async (req, res) => {
         }
 
         const basePrice = parseFloat(pkg.from_price);
-        const totalPrice = basePrice * Number(guests || 1);
+        let totalPrice = basePrice * Number(guests || 1);
+
+        if (includeTicket && pkg.has_ticket) {
+            totalPrice += parseFloat(pkg.ticket_price || 0) * Number(guests || 1);
+        }
+
         const amountInCents = Math.round(totalPrice * 100);
 
         const paymentIntent = await stripe.paymentIntents.create({
             amount: amountInCents,
             currency: 'usd',
-            automatic_payment_methods: { enabled: true },
+            payment_method_types: ['card'], // Explicitly allow only cards to avoid Amazon Pay/CashApp
             metadata: {
                 type: 'package',
                 packageId,
                 guests,
-                startDate
+                startDate,
+                includeTicket: String(includeTicket)
             }
         });
 
@@ -51,7 +57,7 @@ exports.createPackagePaymentIntent = async (req, res) => {
 // POST /api/package-bookings
 exports.createPackageBooking = async (req, res) => {
     try {
-        const { packageId, startDate, guests, paymentIntentId } = req.body;
+        const { packageId, startDate, guests, paymentIntentId, includeTicket, ticketDate } = req.body;
 
         if (!packageId || !startDate || !guests || !paymentIntentId) {
             return res.status(400).json({ message: 'Missing required booking fields' });
@@ -72,7 +78,11 @@ exports.createPackageBooking = async (req, res) => {
         const end = new Date(start);
         end.setDate(end.getDate() + pkg.nights);
 
-        const totalPrice = parseFloat(pkg.from_price) * Number(guests || 1);
+        let totalPrice = parseFloat(pkg.from_price) * Number(guests || 1);
+        if (includeTicket && pkg.has_ticket) {
+            totalPrice += parseFloat(pkg.ticket_price || 0) * Number(guests || 1);
+        }
+
         const booking_reference = generateBookingReference();
 
         const newBooking = await PackageBooking.create({
@@ -83,7 +93,9 @@ exports.createPackageBooking = async (req, res) => {
             end_date: end.toISOString().split('T')[0],
             guests: Number(guests),
             total_price: totalPrice,
-            payment_intent_id: paymentIntentId
+            payment_intent_id: paymentIntentId,
+            has_ticket: !!includeTicket,
+            ticket_date: includeTicket ? (ticketDate || startDate) : null
         });
 
         res.status(201).json(newBooking);
