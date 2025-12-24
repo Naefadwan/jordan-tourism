@@ -79,7 +79,7 @@
                 <nav class="mobile-nav">
                     <a href="attractions.html" class="mobile-nav-link">Attractions</a>
                     <a href="accommodations.html" class="mobile-nav-link">Accommodations</a>
-                    <a href="experiences.html" class="mobile-nav-link">Experiences</a>
+                    <a href="packages.html" class="mobile-nav-link">Packages</a>
                     <a href="liked-attractions.html" class="mobile-nav-link">My Fav</a>
                     <a href="about.html" class="mobile-nav-link">About Jordan</a>
                     <a href="accommodations.html" class="btn-primary mobile-book-btn">Book Now</a>
@@ -128,63 +128,8 @@
                         into the country's rich heritage.</p>
                 </div>
 
-                <div class="destinations-grid">
-                    <div class="destination-card" data-attraction="petra">
-                        <div class="destination-image">
-                            <img data-src="public/petra-treasury-jordan-ancient-city.jpg" alt="Petra" class="lazy"
-                                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
-                            <div class="destination-price">From $50</div>
-                        </div>
-                        <div class="destination-content">
-                            <h3 class="destination-name">Petra</h3>
-                            <p class="destination-description">Ancient Nabataean city carved into rose-red cliffs</p>
-                            <a href="attractions.html?search=petra" class="btn-outline destination-btn">View Details</a>
-                        </div>
-                    </div>
-
-                    <div class="destination-card" data-attraction="wadi-rum">
-                        <div class="destination-image">
-                            <img data-src="public/wadi-rum-desert-jordan-red-sand.jpg" alt="Wadi Rum" class="lazy"
-                                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
-                            <div class="destination-price">From $35</div>
-                        </div>
-                        <div class="destination-content">
-                            <h3 class="destination-name">Wadi Rum</h3>
-                            <p class="destination-description">Spectacular desert landscape with towering sandstone
-                                mountains</p>
-                            <a href="attractions.html?search=wadi%20rum" class="btn-outline destination-btn">View
-                                Details</a>
-                        </div>
-                    </div>
-
-                    <div class="destination-card" data-attraction="dead-sea">
-                        <div class="destination-image">
-                            <img data-src="public/dead-sea-jordan-floating-sunset.jpg" alt="Dead Sea" class="lazy"
-                                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
-                            <div class="destination-price">From $25</div>
-                        </div>
-                        <div class="destination-content">
-                            <h3 class="destination-name">Dead Sea</h3>
-                            <p class="destination-description">Float in the world's saltiest body of water</p>
-                            <a href="attractions.html?search=dead%20sea" class="btn-outline destination-btn">View
-                                Details</a>
-                        </div>
-                    </div>
-
-                    <div class="destination-card" data-attraction="jerash">
-                        <div class="destination-image">
-                            <img data-src="public/jerash-roman-ruins-jordan-columns.jpg" alt="Jerash" class="lazy"
-                                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
-                            <div class="destination-price">From $20</div>
-                        </div>
-                        <div class="destination-content">
-                            <h3 class="destination-name">Jerash</h3>
-                            <p class="destination-description">Remarkably preserved Roman ruins and ancient architecture
-                            </p>
-                            <a href="attractions.html?search=jerash" class="btn-outline destination-btn">View
-                                Details</a>
-                        </div>
-                    </div>
+                <div class="destinations-grid" id="featuredAttractionsGrid">
+                    <!-- Dynamic Attractions Loaded Here -->
                 </div>
             </div>
         </section>
@@ -275,109 +220,15 @@
         </section>
 
         <!-- Popular Experiences -->
-        <section class="popular-experiences fade-in-section">
-            <div class="container">
-                <div class="section-header">
-                    <h2 class="section-title">Popular Experiences</h2>
-                    <p class="section-subtitle">Immerse yourself in Jordan's culture, adventure, and natural beauty.</p>
-                </div>
+        <div class="section-header">
+            <h2 class="section-title">Tour Packages</h2>
+            <p class="section-subtitle">Comprehensive travel plans designed for ultimate comfort and discovery.</p>
+        </div>
 
-                <div class="experiences-grid">
-                    <div class="experience-card">
-                        <div class="experience-image">
-                            <img data-src="public/petra-by-night-candles-treasury.jpg" alt="Petra by Night" class="lazy"
-                                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
-                        </div>
-                        <div class="experience-content">
-                            <div class="experience-rating">
-                                <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
-                                    <polygon
-                                        points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26">
-                                    </polygon>
-                                </svg>
-                                <span class="rating-score">4.9</span>
-                                <span class="rating-count">(2847 reviews)</span>
-                            </div>
-                            <h3 class="experience-title">Petra by Night</h3>
-                            <p class="experience-description">Experience the Treasury illuminated by 1,500 candles</p>
-                            <div class="experience-footer">
-                                <div class="experience-duration">
-                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                        stroke-width="2">
-                                        <circle cx="12" cy="12" r="10"></circle>
-                                        <polyline points="12,6 12,12 16,14"></polyline>
-                                    </svg>
-                                    <span>2 hours</span>
-                                </div>
-                                <a href="attractions.html?search=petra" class="btn-primary btn-sm">Book Now</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="experience-card">
-                        <div class="experience-image">
-                            <img data-src="public/wadi-rum-jeep-safari-desert.jpg" alt="Wadi Rum Jeep Safari"
-                                class="lazy"
-                                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
-                        </div>
-                        <div class="experience-content">
-                            <div class="experience-rating">
-                                <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
-                                    <polygon
-                                        points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26">
-                                    </polygon>
-                                </svg>
-                                <span class="rating-score">4.8</span>
-                                <span class="rating-count">(1923 reviews)</span>
-                            </div>
-                            <h3 class="experience-title">Wadi Rum Jeep Safari</h3>
-                            <p class="experience-description">Explore the Martian landscape in a 4x4 adventure</p>
-                            <div class="experience-footer">
-                                <div class="experience-duration">
-                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                        stroke-width="2">
-                                        <circle cx="12" cy="12" r="10"></circle>
-                                        <polyline points="12,6 12,12 16,14"></polyline>
-                                    </svg>
-                                    <span>4 hours</span>
-                                </div>
-                                <a href="attractions.html?search=wadi%20rum" class="btn-primary btn-sm">Book Now</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="experience-card">
-                        <div class="experience-image">
-                            <img data-src="public/dead-sea-spa-mud-treatment.jpg" alt="Dead Sea Spa Day" class="lazy"
-                                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
-                        </div>
-                        <div class="experience-content">
-                            <div class="experience-rating">
-                                <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
-                                    <polygon
-                                        points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26">
-                                    </polygon>
-                                </svg>
-                                <span class="rating-score">4.7</span>
-                                <span class="rating-count">(1456 reviews)</span>
-                            </div>
-                            <h3 class="experience-title">Dead Sea Spa Day</h3>
-                            <p class="experience-description">Relax and rejuvenate with mineral-rich mud treatments</p>
-                            <div class="experience-footer">
-                                <div class="experience-duration">
-                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                        stroke-width="2">
-                                        <circle cx="12" cy="12" r="10"></circle>
-                                        <polyline points="12,6 12,12 16,14"></polyline>
-                                    </svg>
-                                    <span>Full day</span>
-                                </div>
-                                <a href="attractions.html?search=dead%20sea" class="btn-primary btn-sm">Book Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="experiences-grid" id="featuredPackagesGrid">
+            <!-- Dynamic Packages Loaded Here -->
+        </div>
+        </div>
         </section>
 
         <!-- Testimonials Section -->

@@ -281,7 +281,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (state.includeTicket && !state.ticketDate) {
-                showError('Please select a date for your attraction tickets.');
+                showError('Please select a date for your flight tickets.');
                 return;
             }
 

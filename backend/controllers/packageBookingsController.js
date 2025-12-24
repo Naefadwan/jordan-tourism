@@ -55,6 +55,19 @@ exports.createPackagePaymentIntent = async (req, res) => {
 };
 
 // POST /api/package-bookings
+exports.getMyPackageBookings = async (req, res) => {
+    try {
+        const user = await User.findByEmail(req.user.id);
+        if (!user) return res.status(404).json({ message: 'User not found' });
+
+        const bookings = await PackageBooking.findByUserId(user.id);
+        res.json(bookings);
+    } catch (error) {
+        console.error('Error fetching package bookings:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
 exports.createPackageBooking = async (req, res) => {
     try {
         const { packageId, startDate, guests, paymentIntentId, includeTicket, ticketDate } = req.body;

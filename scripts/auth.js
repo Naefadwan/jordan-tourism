@@ -137,12 +137,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function fetchMyBookings() {
         try {
-            const [roomBookings, attractionBookings] = await Promise.all([
+            const [roomBookings, attractionBookings, packageBookings] = await Promise.all([
                 api('/bookings/my-bookings', { auth: true }).catch(() => []),
-                api('/attraction-bookings/my-bookings', { auth: true }).catch(() => [])
+                api('/attraction-bookings/my-bookings', { auth: true }).catch(() => []),
+                api('/package-bookings/my-bookings', { auth: true }).catch(() => [])
             ]);
 
-            const allBookings = [...(roomBookings || []), ...(attractionBookings || [])];
+            const allBookings = [
+                ...(roomBookings || []).map(b => ({ ...b, type: 'accommodation' })),
+                ...(attractionBookings || []).map(b => ({ ...b, type: 'attraction' })),
+                ...(packageBookings || []).map(b => ({ ...b, type: 'package' }))
+            ];
 
             if (allBookings.length === 0) {
                 if (noBookingsMessage) noBookingsMessage.style.display = 'block';
@@ -152,10 +157,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (noBookingsMessage) noBookingsMessage.style.display = 'none';
             profileBookingsGrid.innerHTML = '';
 
-            // Optional: Sort by date (desc)
+            // Sort by date (desc)
             allBookings.sort((a, b) => {
-                const dateA = new Date(a.check_in_date || a.booking_date);
-                const dateB = new Date(b.check_in_date || b.booking_date);
+                const dateA = new Date(a.check_in_date || a.booking_date || a.start_date);
+                const dateB = new Date(b.check_in_date || b.booking_date || b.start_date);
                 return dateB - dateA;
             });
 
@@ -177,24 +182,50 @@ document.addEventListener('DOMContentLoaded', () => {
         card.className = 'booking-card';
 
         // Normalize Data
-        const isAttraction = !!booking.attraction_id;
-        const imageSrc = isAttraction ? booking.attraction_image : booking.accommodation_image;
-        const titleText = isAttraction ? booking.attraction_name : booking.accommodation_name;
+        let imageSrc, titleText, dateText, typeLabel;
 
-        let dateText;
-        if (isAttraction) {
+        if (booking.type === 'attraction') {
+            imageSrc = booking.attraction_image;
+            titleText = booking.attraction_name;
             dateText = new Date(booking.booking_date).toLocaleDateString();
+            typeLabel = 'Attraction';
+        } else if (booking.type === 'package') {
+            imageSrc = booking.package_image;
+            titleText = booking.package_name;
+            dateText = `${new Date(booking.start_date).toLocaleDateString()} - ${new Date(booking.end_date).toLocaleDateString()}`;
+            typeLabel = 'Travel Package';
         } else {
+            imageSrc = booking.accommodation_image;
+            titleText = booking.accommodation_name;
             dateText = `${new Date(booking.check_in_date).toLocaleDateString()} - ${new Date(booking.check_out_date).toLocaleDateString()}`;
+            typeLabel = 'Stay';
+        }
+
+        // Fix image paths - normalize slashes first
+        if (imageSrc) {
+            imageSrc = imageSrc.replace(/\\/g, '/');
+            if (!imageSrc.startsWith('http') && !imageSrc.startsWith('/') && !imageSrc.startsWith('public/')) {
+                imageSrc = 'public/' + imageSrc;
+            }
+        }
+
+        // Fallback for missing titles
+        if (!titleText || titleText.trim() === '') {
+            titleText = 'Jordan Exploration';
         }
 
         const img = document.createElement('img');
-        img.src = imageSrc || 'public/placeholder-image.jpg';
+        img.src = imageSrc || 'public/placeholder.jpg';
         img.alt = titleText || 'Booking';
         img.className = 'booking-card-image';
+        img.onerror = () => { img.src = 'public/placeholder.jpg'; };
 
         const content = document.createElement('div');
         content.className = 'booking-card-content';
+
+        const type = document.createElement('span');
+        type.className = 'booking-card-type';
+        type.textContent = typeLabel;
 
         const title = document.createElement('h3');
         title.className = 'booking-card-title';
@@ -212,6 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
         status.className = `booking-card-status status-${booking.status}`;
         status.textContent = booking.status;
 
+        content.appendChild(type);
         content.appendChild(title);
         content.appendChild(dates);
         content.appendChild(ref);

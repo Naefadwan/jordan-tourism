@@ -5,6 +5,7 @@ const packageBookingsController = require('../controllers/packageBookingsControl
 
 router.use(authMiddleware);
 
+router.get('/my-bookings', packageBookingsController.getMyPackageBookings);
 router.post('/payments/create-intent', packageBookingsController.createPackagePaymentIntent);
 router.post('/', packageBookingsController.createPackageBooking);
 

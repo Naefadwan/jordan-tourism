@@ -46,8 +46,8 @@ exports.createAccommodation = async (req, res) => {
     try {
         const accommodationData = req.body;
         // Ensure price fields are numbers
-        if (accommodationData.price) accommodationData.price = parseFloat(accommodationData.price);
-        if (accommodationData.from_price) accommodationData.from_price = parseFloat(accommodationData.from_price);
+        if (accommodationData.price) accommodationData.price = Math.max(0, parseFloat(accommodationData.price));
+        if (accommodationData.from_price) accommodationData.from_price = Math.max(0, parseFloat(accommodationData.from_price));
 
         // If file was uploaded, add the image URL
         if (req.file) {
@@ -67,8 +67,8 @@ exports.updateAccommodation = async (req, res) => {
         const accommodationData = req.body;
 
         // Ensure price fields are numbers
-        if (accommodationData.price) accommodationData.price = parseFloat(accommodationData.price);
-        if (accommodationData.from_price) accommodationData.from_price = parseFloat(accommodationData.from_price);
+        if (accommodationData.price) accommodationData.price = Math.max(0, parseFloat(accommodationData.price));
+        if (accommodationData.from_price) accommodationData.from_price = Math.max(0, parseFloat(accommodationData.from_price));
 
         // If file was uploaded, add the image URL
         if (req.file) {

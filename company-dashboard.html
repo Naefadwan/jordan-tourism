@@ -118,7 +118,7 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="pkgPrice">From Price ($)</label>
-                        <input type="number" id="pkgPrice" name="from_price" step="0.01" required>
+                        <input type="number" id="pkgPrice" name="from_price" step="0.01" min="0" required>
                     </div>
                     <div class="form-group">
                         <label for="pkgNights">Nights</label>
@@ -143,11 +143,11 @@
                 <!-- Ticket Options -->
                 <div class="form-group checkbox-group">
                     <input type="checkbox" id="pkgHasTicket" name="has_ticket">
-                    <label for="pkgHasTicket">Offer Optional Entry Ticket</label>
+                    <label for="pkgHasTicket">Allow Flight Booking</label>
                 </div>
                 <div class="form-group" id="ticketPriceGroup" style="display:none;">
-                    <label for="pkgTicketPrice">Ticket Price ($)</label>
-                    <input type="number" id="pkgTicketPrice" name="ticket_price" step="0.01">
+                    <label for="pkgTicketPrice">Flight Ticket Price ($)</label>
+                    <input type="number" id="pkgTicketPrice" name="ticket_price" step="0.01" min="0">
                 </div>
 
                 <div class="form-group">
@@ -156,6 +156,50 @@
                 </div>
 
                 <button type="submit" class="btn-primary">Save Package</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Accommodation Modal -->
+    <div id="accommodationModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2 id="accModalTitle">Add New Accommodation</h2>
+            <form id="accommodationForm" enctype="multipart/form-data">
+                <input type="hidden" id="accId" name="id">
+                <div class="form-group">
+                    <label for="accName">Accommodation Name</label>
+                    <input type="text" id="accName" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="accType">Type</label>
+                    <select id="accType" name="type" required>
+                        <option value="hotel">Hotel</option>
+                        <option value="resort">Resort</option>
+                        <option value="apartment">Apartment</option>
+                        <option value="villa">Villa</option>
+                        <option value="camp">Camp</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="accLocation">Location (City/Area)</label>
+                    <input type="text" id="accLocation" name="location" required>
+                </div>
+                <div class="form-group">
+                    <label for="accDesc">Description</label>
+                    <textarea id="accDesc" name="description" rows="3" required></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="accPrice">Price per Night ($)</label>
+                        <input type="number" id="accPrice" name="price" step="0.01" min="0" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="accImage">Main Image</label>
+                    <input type="file" id="accImage" name="image" accept="image/*">
+                </div>
+                <button type="submit" class="btn-primary">Save Accommodation</button>
             </form>
         </div>
     </div>

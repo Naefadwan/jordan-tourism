@@ -4,6 +4,7 @@ const Room = require('../models/roomModel');
 const { validate: isUuid } = require('uuid'); // Assuming you might use UUIDs for IDs
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const crypto = require('crypto');
+const db = require('../config/db');
 
 exports.getMyBookings = async (req, res) => {
     try {
@@ -35,7 +36,7 @@ exports.createBooking = async (req, res) => {
         checkoutDate.setHours(0, 0, 0, 0);
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-        
+
         if (checkinDate >= checkoutDate) {
             return res.status(400).json({ message: 'Check-out date must be after check-in date.' });
         }
@@ -44,7 +45,7 @@ exports.createBooking = async (req, res) => {
         }
         if (!Number.isInteger(guests) || guests <= 0) {
             return res.status(400).json({ message: 'Number of guests must be a positive integer.' });
-        }        if (specialRequests && specialRequests.length > 500) {
+        } if (specialRequests && specialRequests.length > 500) {
             return res.status(400).json({ message: 'Special requests cannot exceed 500 characters.' });
         }
         if (!paymentIntentId || typeof paymentIntentId !== 'string' || !paymentIntentId.startsWith('pi_')) {
@@ -83,8 +84,8 @@ exports.createBooking = async (req, res) => {
             });
         } catch (stripeError) {
             console.error('Stripe API error:', stripeError);
-            return res.status(503).json({ 
-                message: 'Payment verification service temporarily unavailable. Please try again.' 
+            return res.status(503).json({
+                message: 'Payment verification service temporarily unavailable. Please try again.'
             });
         }
 
@@ -129,5 +130,50 @@ exports.createBooking = async (req, res) => {
             response.error = error.message;
         }
         res.status(500).json(response);
+    }
+};
+
+exports.getAllBookingsForAdmin = async (req, res) => {
+    try {
+        // Since we don't have owner filtering yet, we fetch all for admin/company roles
+        // 1. Fetch Accommodation Bookings
+        const accBookingsQuery = `
+            SELECT 
+                b.booking_reference as ref,
+                'Hotel/Resort: ' || a.name as item_name,
+                u.full_name as guest_name,
+                u.email as guest_email,
+                b.check_in_date as date,
+                b.status,
+                b.total_price
+            FROM bookings b
+            JOIN accommodations a ON b.accommodation_id = a.id
+            JOIN users u ON b.user_id = u.id
+        `;
+        const { rows: accBookings } = await db.query(accBookingsQuery);
+
+        // 2. Fetch Package Bookings
+        const pkgBookingsQuery = `
+            SELECT 
+                pb.booking_reference as ref,
+                'Package: ' || p.name as item_name,
+                u.full_name as guest_name,
+                u.email as guest_email,
+                pb.start_date as date,
+                pb.status,
+                pb.total_price
+            FROM package_bookings pb
+            JOIN travel_packages p ON pb.package_id = p.id
+            JOIN users u ON pb.user_id = u.id
+        `;
+        const { rows: pkgBookings } = await db.query(pkgBookingsQuery);
+
+        // Combine and sort by date descending
+        const allBookings = [...accBookings, ...pkgBookings].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        res.json(allBookings);
+    } catch (error) {
+        console.error('Error fetching admin bookings:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
     }
 };

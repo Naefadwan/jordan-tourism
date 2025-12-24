@@ -122,16 +122,80 @@
         });
     }
 
+    // Fetch and Display real data for homepage
+    async function initHomepageData() {
+        const attractionsGrid = document.getElementById('featuredAttractionsGrid');
+        const packagesGrid = document.getElementById('featuredPackagesGrid');
+
+        try {
+            // Fetch Attractions
+            const attractions = await api('/attractions?limit=4');
+            if (attractionsGrid) renderFeaturedAttractions(attractions, attractionsGrid);
+
+            // Fetch Packages
+            const packages = await api('/packages');
+            if (packagesGrid) renderFeaturedPackages(packages.slice(0, 3), packagesGrid);
+
+        } catch (err) {
+            console.error('Failed to load homepage data:', err);
+        }
+    }
+
+    function renderFeaturedAttractions(attractions, container) {
+        container.innerHTML = attractions.map(attraction => `
+            <div class="destination-card">
+                <div class="destination-image">
+                    <img src="${attraction.image_url || attraction.image || 'public/placeholder.jpg'}" alt="${attraction.name}" loading="lazy" onerror="this.src='public/placeholder.jpg'">
+                    <div class="destination-price">From $${attraction.price}</div>
+                </div>
+                <div class="destination-content">
+                    <h3 class="destination-name">${attraction.name}</h3>
+                    <p class="destination-description">${attraction.description.substring(0, 80)}...</p>
+                    <a href="attraction-detail.html?id=${attraction.id}" class="btn-outline destination-btn">View Details</a>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function renderFeaturedPackages(packages, container) {
+        container.innerHTML = packages.map(pkg => `
+            <div class="experience-card">
+                <div class="experience-image">
+                    <img src="${pkg.image || 'public/placeholder.jpg'}" alt="${pkg.name}" loading="lazy" onerror="this.src='public/placeholder.jpg'">
+                </div>
+                <div class="experience-content">
+                    <div class="experience-rating">
+                        <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                            <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon>
+                        </svg>
+                        <span class="rating-score">4.9</span>
+                        <span class="rating-count">(Featured)</span>
+                    </div>
+                    <h3 class="experience-title">${pkg.name}</h3>
+                    <p class="experience-description">${pkg.description.substring(0, 100)}...</p>
+                    <div class="experience-footer">
+                        <div class="experience-duration">
+                           <span>$${pkg.fromPrice}</span>
+                        </div>
+                        <a href="package-detail.html?id=${pkg.id}" class="btn-primary btn-sm">Book Package</a>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
     // Initialize all enhancements when DOM is ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => {
             initSearchModal();
             initCounterAnimation();
             initSmoothScroll();
+            initHomepageData();
         });
     } else {
         initSearchModal();
         initCounterAnimation();
         initSmoothScroll();
+        initHomepageData();
     }
 })();

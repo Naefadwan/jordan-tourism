@@ -109,18 +109,18 @@ function checkAuthState() {
   const user = localStorage.getItem("user");
 
   if (authLink) {
-      if (token && user) {
-          try {
-              const userData = JSON.parse(user);
-              // Update icon to link to profile, using full_name from backend
-              authLink.href = "profile.html";
-              authLink.setAttribute('aria-label', `View profile for ${userData.full_name}`);
-          } catch (e) { console.error("Error parsing user data from localStorage", e); }
-      } else {
-          // Update icon to link to login
-          authLink.href = "login.html";
-          authLink.setAttribute('aria-label', 'Login or create an account');
-      }
+    if (token && user) {
+      try {
+        const userData = JSON.parse(user);
+        // Update icon to link to profile, using full_name from backend
+        authLink.href = "profile.html";
+        authLink.setAttribute('aria-label', `View profile for ${userData.full_name}`);
+      } catch (e) { console.error("Error parsing user data from localStorage", e); }
+    } else {
+      // Update icon to link to login
+      authLink.href = "login.html";
+      authLink.setAttribute('aria-label', 'Login or create an account');
+    }
   }
 }
 
@@ -190,16 +190,16 @@ const themeToggle = document.getElementById('theme-toggle');
 const body = document.body;
 
 function applyTheme(theme) {
-    if (theme === 'light') {
-        body.classList.add('light-theme');
-        themeToggle.innerHTML = `
+  if (theme === 'light') {
+    body.classList.add('light-theme');
+    themeToggle.innerHTML = `
             <svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
             </svg>
         `;
-    } else {
-        body.classList.remove('light-theme');
-        themeToggle.innerHTML = `
+  } else {
+    body.classList.remove('light-theme');
+    themeToggle.innerHTML = `
             <svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="12" cy="12" r="5"></circle>
                 <line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line>
@@ -208,15 +208,15 @@ function applyTheme(theme) {
                 <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
             </svg>
         `;
-    }
+  }
 }
 
 if (themeToggle) {
-    themeToggle.addEventListener('click', () => {
-        const newTheme = body.classList.contains('light-theme') ? 'dark' : 'light';
-        localStorage.setItem('theme', newTheme);
-        applyTheme(newTheme);
-    });
+  themeToggle.addEventListener('click', () => {
+    const newTheme = body.classList.contains('light-theme') ? 'dark' : 'light';
+    localStorage.setItem('theme', newTheme);
+    applyTheme(newTheme);
+  });
 }
 
 // Apply saved theme on page load

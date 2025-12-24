@@ -33,6 +33,7 @@ exports.createAttraction = async (req, res) => {
         if (req.file) {
             attractionData.image_url = `public/uploads/${req.file.filename}`;
         }
+        if (attractionData.price) attractionData.price = Math.max(0, parseFloat(attractionData.price));
         const newAttraction = await Attraction.create(attractionData);
         res.status(201).json(newAttraction);
     } catch (error) {
@@ -48,6 +49,7 @@ exports.updateAttraction = async (req, res) => {
         if (req.file) {
             attractionData.image_url = `public/uploads/${req.file.filename}`;
         }
+        if (attractionData.price) attractionData.price = Math.max(0, parseFloat(attractionData.price));
         const updatedAttraction = await Attraction.update(id, attractionData);
         if (!updatedAttraction) {
             return res.status(404).json({ message: 'Attraction not found' });

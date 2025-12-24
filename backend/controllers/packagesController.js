@@ -80,7 +80,8 @@ exports.createPackage = async (req, res) => {
         if (packageData.has_ticket) {
             packageData.has_ticket = packageData.has_ticket === 'true' || packageData.has_ticket === true || packageData.has_ticket === 'on';
         }
-        if (packageData.ticket_price) packageData.ticket_price = parseFloat(packageData.ticket_price);
+        if (packageData.ticket_price) packageData.ticket_price = Math.max(0, parseFloat(packageData.ticket_price));
+        if (packageData.from_price) packageData.from_price = Math.max(0, parseFloat(packageData.from_price));
 
         if (!packageData.slug && packageData.name) {
             packageData.slug = packageData.name.toLowerCase()
@@ -107,7 +108,8 @@ exports.updatePackage = async (req, res) => {
         if (packageData.has_ticket) {
             packageData.has_ticket = packageData.has_ticket === 'true' || packageData.has_ticket === true || packageData.has_ticket === 'on';
         }
-        if (packageData.ticket_price) packageData.ticket_price = parseFloat(packageData.ticket_price);
+        if (packageData.ticket_price) packageData.ticket_price = Math.max(0, parseFloat(packageData.ticket_price));
+        if (packageData.from_price) packageData.from_price = Math.max(0, parseFloat(packageData.from_price));
 
         if (!packageData.slug && packageData.name) {
             packageData.slug = packageData.name.toLowerCase()

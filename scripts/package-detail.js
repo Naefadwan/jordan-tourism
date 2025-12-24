@@ -73,7 +73,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Includes list
             includesList.innerHTML = '';
-            includesList.innerHTML += `<li>Round-trip flights from ${pkg.originCity}</li>`;
+            if (pkg.includesFlights) {
+                includesList.innerHTML += `<li>Round-trip flights from ${pkg.originCity}</li>`;
+            }
             includesList.innerHTML += `<li>${pkg.nights} nights at ${pkg.accommodation.name}</li>`;
             includesList.innerHTML += `<li>Guided visits to key attractions in the itinerary</li>`;
             includesList.innerHTML += `<li>All taxes and standard fees</li>`;

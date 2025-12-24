@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td>${item.type}</td>
                     <td>$${item.price || 0}</td>
                     <td>
-                        <button class="btn-sm btn-outline">Edit</button>
+                        <button class="btn-sm btn-outline" onclick="editAccommodation(${item.id})">Edit</button>
                     </td>
                 </tr>
             `).join('');
@@ -113,7 +113,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function loadBookings() {
         const tbody = document.querySelector('#bookingsTable tbody');
-        tbody.innerHTML = '<tr><td colspan="5">No bookings found (Feature coming soon)</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5">Loading...</td></tr>';
+
+        try {
+            const res = await fetch(`${API_URL}/bookings/admin/all`, {
+                headers: { 'x-auth-token': token }
+            });
+            const data = await res.json();
+
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5">No bookings found</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = data.map(item => `
+                <tr>
+                    <td>${item.ref}</td>
+                    <td>${item.item_name}</td>
+                    <td>${item.guest_name}<br><small>${item.guest_email}</small></td>
+                    <td>${new Date(item.date).toLocaleDateString()}</td>
+                    <td><span class="status-badge ${item.status}">${item.status}</span></td>
+                </tr>
+            `).join('');
+        } catch (err) {
+            tbody.innerHTML = '<tr><td colspan="5">Error loading bookings</td></tr>';
+        }
     }
 
     // --- Modals & Forms ---
@@ -206,6 +230,77 @@ document.addEventListener('DOMContentLoaded', () => {
             } catch (err) {
                 console.error(err);
                 alert('Error saving package');
+            }
+        };
+    }
+
+    // --- Accommodation Modals & Forms ---
+    const accommodationModal = document.getElementById('accommodationModal');
+    const accommodationForm = document.getElementById('accommodationForm');
+    const closeAccommodationModal = accommodationModal.querySelector('.close-modal');
+
+    document.getElementById('addAccommodationBtn').onclick = () => {
+        openAccommodationModal();
+    };
+
+    closeAccommodationModal.onclick = () => accommodationModal.style.display = 'none';
+
+    window.editAccommodation = async (id) => {
+        try {
+            const res = await fetch(`${API_URL}/accommodations/${id}`);
+            if (!res.ok) throw new Error('Failed to fetch accommodation');
+            const acc = await res.json();
+            openAccommodationModal(acc);
+        } catch (err) {
+            alert('Error loading accommodation details');
+            console.error(err);
+        }
+    };
+
+    function openAccommodationModal(acc = null) {
+        currentEditingId = acc ? acc.id : null;
+        accommodationModal.style.display = 'block';
+        accommodationModal.querySelector('h2').textContent = acc ? 'Edit Accommodation' : 'Add New Accommodation';
+
+        if (acc) {
+            accommodationForm.name.value = acc.name;
+            accommodationForm.type.value = acc.type;
+            accommodationForm.location.value = acc.location;
+            accommodationForm.description.value = acc.description;
+            accommodationForm.price.value = acc.price;
+        } else {
+            accommodationForm.reset();
+        }
+
+        accommodationForm.onsubmit = async (e) => {
+            e.preventDefault();
+            const formData = new FormData(accommodationForm);
+
+            const url = currentEditingId
+                ? `${API_URL}/accommodations/${currentEditingId}`
+                : `${API_URL}/accommodations`;
+
+            const method = currentEditingId ? 'PUT' : 'POST';
+
+            try {
+                const token = localStorage.getItem('token');
+                const res = await fetch(url, {
+                    method: method,
+                    headers: { 'x-auth-token': token },
+                    body: formData
+                });
+
+                if (res.ok) {
+                    alert('Accommodation saved successfully');
+                    accommodationModal.style.display = 'none';
+                    loadAccommodations();
+                } else {
+                    const err = await res.json();
+                    alert('Failed to save: ' + (err.message || 'Unknown error'));
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Error saving accommodation');
             }
         };
     }

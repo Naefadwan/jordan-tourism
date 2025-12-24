@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         backBtn.style.display = bookingState.currentStep > 1 && bookingState.currentStep < 4 ? 'inline-flex' : 'none';
         nextBtn.style.display = bookingState.currentStep < 3 ? 'inline-flex' : 'none';
         confirmBtn.style.display = bookingState.currentStep === 3 ? 'inline-flex' : 'none';
-        
+
         if (bookingState.currentStep === 1) {
             nextBtn.style.display = 'none'; // Hide on step 1 until a room is selected
         }
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const checkoutDate = new Date(bookingState.checkout);
         const timeDiff = checkoutDate.getTime() - checkinDate.getTime();
         bookingState.nights = Math.ceil(timeDiff / (1000 * 3600 * 24));
-        
+
         if (bookingState.nights <= 0) bookingState.nights = 1;
 
         bookingState.basePrice = bookingState.roomPrice * bookingState.nights;
@@ -114,10 +114,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (savedBookingState) {
         const isRecent = (Date.now() - savedBookingState.ts) < 5 * 60 * 1000;
         if (isRecent) {
-                  Object.assign(bookingState, savedBookingState);
+            Object.assign(bookingState, savedBookingState);
         } else {
-                        console.warn("Booking state is stale (>5 minutes), discarding.");
-                    }
+            console.warn("Booking state is stale (>5 minutes), discarding.");
+        }
         sessionStorage.removeItem('bookingState');
     } else {
         // Initialize from URL for a new booking
@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
         bookingState.checkout = params.get('checkout') || new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0];
         bookingState.guests = params.get('guests') || 2;
     }
-    
+
     document.getElementById('date-range-display').textContent = `${bookingState.checkin} to ${bookingState.checkout}`;
     document.getElementById('guest-count-display').textContent = `${bookingState.guests} guests`;
 
@@ -152,13 +152,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const errorData = await configResponse.json();
                 throw new Error(errorData.message || 'Failed to fetch Stripe configuration');
             }
-            
+
             const { publishableKey } = await configResponse.json();
-            
+
             if (!publishableKey || typeof publishableKey !== 'string' || publishableKey.trim() === '') {
                 throw new Error('Stripe publishable key is missing or invalid');
             }
-            
+
             stripe = Stripe(publishableKey);
 
             const intentResponse = await fetch(`${API_URL}/payments/create-payment-intent`, {
@@ -173,18 +173,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     checkout: bookingState.checkout,
                 })
             });
-            
+
             if (!intentResponse.ok) {
                 const errorData = await intentResponse.json().catch(() => ({ message: 'Failed to create payment intent' }));
                 throw new Error(errorData.message || 'Failed to create payment intent');
             }
-            
+
             const { clientSecret } = await intentResponse.json();
             bookingState.clientSecret = clientSecret; // Store the client secret
             if (!clientSecret) {
                 throw new Error('Payment intent was created but no client secret was returned');
             }
-            
+
             elements = stripe.elements({ clientSecret });
             const paymentElement = elements.create('payment');
             paymentElement.mount('#payment-element');
@@ -207,13 +207,13 @@ document.addEventListener('DOMContentLoaded', () => {
     nextBtn.addEventListener('click', async () => {
         if (validateForm(bookingState.currentStep)) {
             clearAllErrors();
-            
+
             // Validate room selection before moving to step 2
             if (bookingState.currentStep === 1 && !bookingState.roomId) {
                 alert('Please select a room before continuing.');
                 return;
             }
-            
+
             bookingState.currentStep++;
             if (bookingState.currentStep === 3) {
                 updateSummary();
@@ -306,7 +306,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Remove any existing listeners by cloning
             const newButton = button.cloneNode(true);
             button.parentNode.replaceChild(newButton, button);
-            
+
             newButton.addEventListener('click', () => {
                 const roomId = parseInt(newButton.dataset.roomId);
                 if (!roomId || isNaN(roomId)) {
@@ -314,11 +314,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert('Room selection error: Invalid room ID. Please try again.');
                     return;
                 }
-                
+
                 bookingState.roomType = newButton.dataset.roomType;
                 bookingState.roomPrice = parseFloat(newButton.dataset.price);
                 bookingState.roomId = roomId;
-                
+
                 // Visually indicate selection
                 document.querySelectorAll('.room-type-card').forEach(c => c.classList.remove('selected'));
                 newButton.closest('.room-type-card').classList.add('selected');
@@ -335,28 +335,28 @@ document.addEventListener('DOMContentLoaded', () => {
             setupRoomSelectionHandlers(); // Set up handlers for hardcoded rooms
             return;
         }
-        
+
         try {
             const response = await fetch(`${API_URL}/accommodations/${bookingState.accommodationId}`);
             if (!response.ok) {
                 throw new Error('Failed to load accommodation details');
             }
-            
+
             const accommodation = await response.json();
             // Set the accommodation name in the state for the summary
             bookingState.accommodationName = accommodation.name;
 
             const roomsContainer = document.querySelector('.room-selection-grid');
-            
+
             if (!roomsContainer) {
                 console.error('Room selection grid not found');
                 setupRoomSelectionHandlers(); // Fallback to hardcoded rooms
                 return;
             }
-            
+
             // Clear existing rooms
             roomsContainer.innerHTML = '';
-            
+
             if (accommodation.rooms && accommodation.rooms.length > 0) {
                 accommodation.rooms.forEach(room => {
                     const roomCard = document.createElement('div');
@@ -369,7 +369,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     `;
                     roomsContainer.appendChild(roomCard);
                 });
-                
+
                 // Set up event handlers for dynamically loaded rooms
                 setupRoomSelectionHandlers();
             } else {
@@ -385,9 +385,9 @@ document.addEventListener('DOMContentLoaded', () => {
             setupRoomSelectionHandlers();
         }
     }
-    
+
     // Load rooms on page load
     loadRooms();
-    
+
     updateStepUI();
 });
