@@ -20,6 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!res.ok) throw new Error('Unauthorized');
 
             const user = await res.json();
+            console.log('User profile:', user); // Debug log
+
             // Check for company role (or admin/company)
             if (user.role !== 'company' && user.role !== 'admin') {
                 alert('Access denied. Company privileges required.');
@@ -27,7 +29,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            document.getElementById('companyName').textContent = user.fullName || user.email;
+            // Display company name
+            document.getElementById('companyName').textContent = user.companyName || user.fullName || user.email;
+
+            // Check account status and show appropriate banner
+            const pendingBanner = document.getElementById('pendingApprovalBanner');
+            const rejectedBanner = document.getElementById('rejectedAccountBanner');
+
+            console.log('Account Status:', user.accountStatus); // Debug log
+
+            if (user.accountStatus === 'pending') {
+                if (pendingBanner) pendingBanner.style.display = 'block';
+                disableCreateActions();
+            } else if (user.accountStatus === 'rejected') {
+                if (rejectedBanner) rejectedBanner.style.display = 'block';
+                disableCreateActions();
+            }
+            // If approved or admin, everything works normally
 
             // Load initial data
             loadPackages();
@@ -36,6 +54,44 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.removeItem('token');
             window.location.href = 'login.html';
         }
+    }
+
+    function disableCreateActions() {
+        // Disable all "Add New" buttons
+        const addPackageBtn = document.getElementById('addPackageBtn');
+        const addAccommodationBtn = document.getElementById('addAccommodationBtn');
+
+        if (addPackageBtn) {
+            addPackageBtn.disabled = true;
+            addPackageBtn.style.opacity = '0.5';
+            addPackageBtn.style.cursor = 'not-allowed';
+            addPackageBtn.title = 'Your account must be approved before you can create content';
+        }
+
+        if (addAccommodationBtn) {
+            addAccommodationBtn.disabled = true;
+            addAccommodationBtn.style.opacity = '0.5';
+            addAccommodationBtn.style.cursor = 'not-allowed';
+            addAccommodationBtn.title = 'Your account must be approved before you can create content';
+        }
+
+        // Disable all Edit buttons after content loads
+        setTimeout(() => {
+            document.querySelectorAll('.btn-edit').forEach(btn => {
+                btn.disabled = true;
+                btn.style.opacity = '0.5';
+                btn.style.cursor = 'not-allowed';
+                btn.title = 'Your account must be approved before you can edit content';
+            });
+        }, 500); // Wait for tables to load
+
+        // Override edit functions globally
+        window.editPackage = () => {
+            alert('Your account must be approved before you can edit content.');
+        };
+        window.editAccommodation = () => {
+            alert('Your account must be approved before you can edit content.');
+        };
     }
 
     // --- Logout ---

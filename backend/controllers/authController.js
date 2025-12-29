@@ -22,7 +22,7 @@ exports.sendOTP = async (req, res) => {
 
 exports.register = async (req, res) => {
     try {
-        const { fullName, email, password, otp } = req.body;
+        const { fullName, email, password, otp, accountType, companyName, businessLicense, phone, address } = req.body;
 
         if (!fullName || !email || !password || !otp) {
             return res.status(400).json({ message: 'Please enter all fields including OTP' });
@@ -41,10 +41,37 @@ exports.register = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        const newUser = await User.create({ fullName, email, password: hashedPassword, role: 'user' });
+        // Determine role and account status based on account type
+        const isCompany = accountType === 'business';
+        const role = isCompany ? 'company' : 'user';
+        const accountStatus = isCompany ? 'pending' : 'approved'; // Companies need approval
+
+        // Validate company fields if business account
+        if (isCompany) {
+            if (!companyName || !businessLicense || !phone || !address) {
+                return res.status(400).json({ message: 'Please provide all company details: company name, business license, phone, and address' });
+            }
+        }
+
+        const newUser = await User.create({
+            fullName,
+            email,
+            password: hashedPassword,
+            role,
+            companyName: isCompany ? companyName : null,
+            businessLicense: isCompany ? businessLicense : null,
+            phone: isCompany ? phone : null,
+            address: isCompany ? address : null,
+            accountStatus
+        });
+
         await OTP.deleteByEmail(email, 'registration');
 
-        res.status(201).json({ message: 'User registered successfully' });
+        const message = isCompany
+            ? 'Company account registered successfully. Your account is pending admin approval.'
+            : 'User registered successfully';
+
+        res.status(201).json({ message, requiresApproval: isCompany });
 
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
@@ -65,10 +92,19 @@ exports.login = async (req, res) => {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
 
-        const payload = { user: { id: user.email, role: user.role } }; // Use a unique ID in a real app
+        const payload = { user: { id: user.email, role: user.role, accountStatus: user.account_status } };
         const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-        res.json({ token, user: { full_name: user.full_name, email: user.email, role: user.role } });
+        res.json({
+            token,
+            user: {
+                full_name: user.full_name,
+                email: user.email,
+                role: user.role,
+                account_status: user.account_status,
+                company_name: user.company_name
+            }
+        });
 
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
@@ -80,7 +116,16 @@ exports.getProfile = async (req, res) => {
         // req.user is set by the authMiddleware
         const user = await User.findByEmail(req.user.id); // req.user.id is the email in our current payload
         if (!user) return res.status(404).json({ message: 'User not found' });
-        res.json({ fullName: user.full_name, email: user.email, role: user.role });
+        res.json({
+            fullName: user.full_name,
+            email: user.email,
+            role: user.role,
+            accountStatus: user.account_status,
+            companyName: user.company_name,
+            businessLicense: user.business_license,
+            phone: user.phone,
+            address: user.address
+        });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
     }

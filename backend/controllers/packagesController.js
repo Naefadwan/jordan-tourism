@@ -2,8 +2,23 @@ const Package = require('../models/packageModel');
 
 exports.getAllPackages = async (req, res) => {
     try {
-        const includePending = req.user && (req.user.role === 'admin' || req.user.role === 'company');
-        const packages = await Package.findAll({ includePending });
+        const filters = {};
+
+        // Companies see only their own content
+        if (req.user && req.user.role === 'company') {
+            const User = require('../models/userModel');
+            const user = await User.findByEmail(req.user.id); // req.user.id is actually the email from JWT
+            if (user) {
+                filters.user_id = user.id;
+                filters.includePending = true;
+            }
+        }
+        // Admin sees everything including pending
+        else if (req.user && req.user.role === 'admin') {
+            filters.includePending = true;
+        }
+
+        const packages = await Package.findAll(filters);
 
         const decorated = packages.map(pkg => ({
             id: pkg.id,
@@ -97,6 +112,15 @@ exports.createPackage = async (req, res) => {
             packageData.approval_status = packageData.approval_status || 'approved';
         } else {
             packageData.approval_status = 'pending';
+        }
+
+        // Save the user_id who created this package
+        if (req.user) {
+            const User = require('../models/userModel');
+            const user = await User.findByEmail(req.user.id); // req.user.id is the email from JWT
+            if (user) {
+                packageData.user_id = user.id;
+            }
         }
 
         const newPackage = await Package.create(packageData);

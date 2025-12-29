@@ -6,8 +6,23 @@ const Review = require('../models/reviewModel');
 exports.getAllAccommodations = async (req, res) => {
     try {
         const { type, search } = req.query;
-        const includePending = req.user && (req.user.role === 'admin' || req.user.role === 'company');
-        const accommodations = await Accommodation.findAll({ type, search, includePending });
+        const filters = { type, search };
+
+        // Companies see only their own content
+        if (req.user && req.user.role === 'company') {
+            const User = require('../models/userModel');
+            const user = await User.findByEmail(req.user.id);
+            if (user) {
+                filters.user_id = user.id;
+                filters.includePending = true;
+            }
+        }
+        // Admin sees everything including pending
+        else if (req.user && req.user.role === 'admin') {
+            filters.includePending = true;
+        }
+
+        const accommodations = await Accommodation.findAll(filters);
 
         // You can enhance this later to pull real ratings from your reviews table
         const accommodationsWithRatings = accommodations.map(acc => ({
@@ -61,6 +76,15 @@ exports.createAccommodation = async (req, res) => {
             accommodationData.approval_status = accommodationData.approval_status || 'approved';
         } else {
             accommodationData.approval_status = 'pending';
+        }
+
+        // Save the user_id who created this accommodation
+        if (req.user) {
+            const User = require('../models/userModel');
+            const user = await User.findByEmail(req.user.id);
+            if (user) {
+                accommodationData.user_id = user.id;
+            }
         }
 
         const newAccommodation = await Accommodation.create(accommodationData);

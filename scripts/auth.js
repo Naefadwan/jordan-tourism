@@ -26,6 +26,29 @@ document.addEventListener('DOMContentLoaded', () => {
         let otpSent = false;
         const submitBtn = document.getElementById('signup-submit-btn');
         const otpGroup = document.getElementById('otp-group');
+        const companyFields = document.getElementById('company-fields');
+        const accountTypeRadios = signupForm.querySelectorAll('input[name="accountType"]');
+
+        // Handle account type toggle
+        accountTypeRadios.forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                if (e.target.value === 'business') {
+                    companyFields.style.display = 'block';
+                    // Make company fields required
+                    document.getElementById('companyName').required = true;
+                    document.getElementById('businessLicense').required = true;
+                    document.getElementById('phone').required = true;
+                    document.getElementById('address').required = true;
+                } else {
+                    companyFields.style.display = 'none';
+                    // Make company fields optional
+                    document.getElementById('companyName').required = false;
+                    document.getElementById('businessLicense').required = false;
+                    document.getElementById('phone').required = false;
+                    document.getElementById('address').required = false;
+                }
+            });
+        });
 
         signupForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -61,6 +84,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     signupForm.fullName.disabled = true;
                     signupForm.email.disabled = true;
                     signupForm.password.disabled = true;
+
+                    // Disable account type selection
+                    accountTypeRadios.forEach(radio => radio.disabled = true);
+
+                    // Disable company fields if visible
+                    const accountType = signupForm.querySelector('input[name="accountType"]:checked').value;
+                    if (accountType === 'business') {
+                        document.getElementById('companyName').disabled = true;
+                        document.getElementById('businessLicense').disabled = true;
+                        document.getElementById('phone').disabled = true;
+                        document.getElementById('address').disabled = true;
+                    }
                 } else {
                     // Phase 2: Verify & Register
                     if (!otp) {
@@ -71,12 +106,39 @@ document.addEventListener('DOMContentLoaded', () => {
                     submitBtn.disabled = true;
                     submitBtn.textContent = 'Registering...';
 
-                    await api('/auth/register', {
+                    // Get account type and company fields
+                    const accountType = signupForm.querySelector('input[name="accountType"]:checked').value;
+                    const body = { fullName, email, password, otp, accountType };
+
+                    // Add company fields if business account
+                    if (accountType === 'business') {
+                        body.companyName = signupForm.companyName.value.trim();
+                        body.businessLicense = signupForm.businessLicense.value.trim();
+                        body.phone = signupForm.phone.value.trim();
+                        body.address = signupForm.address.value.trim();
+
+                        // Validate company fields
+                        if (!body.companyName || !body.businessLicense || !body.phone || !body.address) {
+                            showError('Please fill in all company fields.');
+                            submitBtn.disabled = false;
+                            submitBtn.textContent = 'Verify & Register';
+                            return;
+                        }
+                    }
+
+                    const registerResponse = await api('/auth/register', {
                         method: 'POST',
-                        body: { fullName, email, password, otp },
+                        body,
                     });
 
-                    // 2) Immediately log in
+                    // Check if company account that requires approval
+                    if (registerResponse.requiresApproval) {
+                        alert('Your company account has been registered successfully! Your account is pending admin approval. You will be notified once approved.');
+                        window.location.href = 'login.html';
+                        return;
+                    }
+
+                    // Regular user - log in immediately
                     const loginData = await api('/auth/login', {
                         method: 'POST',
                         body: { email, password },

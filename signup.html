@@ -39,6 +39,23 @@
                 <p class="auth-subtitle">Join us to start planning your adventure.</p>
                 <form id="signup-form" class="auth-form" novalidate>
                     <div id="signup-error" class="error-message" style="text-align: center; margin-bottom: 1rem;"></div>
+
+                    <!-- Account Type Selection -->
+                    <div class="form-group">
+                        <label>Account Type</label>
+                        <div style="display: flex; gap: 1.5rem; margin-top: 0.5rem;">
+                            <label style="display: flex; align-items: center; cursor: pointer;">
+                                <input type="radio" name="accountType" value="personal" checked
+                                    style="margin-right: 0.5rem;">
+                                <span>Personal Account</span>
+                            </label>
+                            <label style="display: flex; align-items: center; cursor: pointer;">
+                                <input type="radio" name="accountType" value="business" style="margin-right: 0.5rem;">
+                                <span>Business Account</span>
+                            </label>
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <label for="fullName">Full Name</label>
                         <input type="text" id="fullName" name="fullName" required>
@@ -54,6 +71,41 @@
                         <input type="password" id="password" name="password" required minlength="8">
                         <span class="error-message"></span>
                     </div>
+
+                    <!-- Company-specific fields (hidden by default) -->
+                    <div id="company-fields" style="display: none;">
+                        <div class="form-group">
+                            <label for="companyName">Company Name *</label>
+                            <input type="text" id="companyName" name="companyName"
+                                placeholder="Enter your company name">
+                            <span class="error-message"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="businessLicense">Business License Number *</label>
+                            <input type="text" id="businessLicense" name="businessLicense"
+                                placeholder="Enter business license or registration number">
+                            <span class="error-message"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number *</label>
+                            <input type="tel" id="phone" name="phone" placeholder="Enter contact phone number">
+                            <span class="error-message"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Business Address *</label>
+                            <textarea id="address" name="address" rows="3"
+                                placeholder="Enter your business address"></textarea>
+                            <span class="error-message"></span>
+                        </div>
+                        <div
+                            style="padding: 1rem; background: #fef3c7; border-left: 4px solid #f59e0b; margin-bottom: 1rem; border-radius: 4px;">
+                            <p style="margin: 0; font-size: 0.9rem; color: #92400e;">
+                                <strong>Note:</strong> Business accounts require admin approval before you can add
+                                tourism content.
+                            </p>
+                        </div>
+                    </div>
+
                     <div class="form-group" id="otp-group" style="display: none;">
                         <label for="otp">Verification Code (OTP)</label>
                         <input type="text" id="otp" name="otp" placeholder="Enter 6-digit code">

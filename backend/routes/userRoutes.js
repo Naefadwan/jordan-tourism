@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getAllUsers, deleteUser, updateUser, getUserById } = require('../controllers/userController');
+const { getAllUsers, deleteUser, updateUser, getUserById, approveCompany, rejectCompany } = require('../controllers/userController');
 const authMiddleware = require('../middleware/authMiddleware');
 
 // @route   GET /api/users
@@ -18,5 +18,13 @@ router.put('/:id', authMiddleware, updateUser);
 // @route   GET /api/users/:id
 // @desc    Get single user (Admin only)
 router.get('/:id', authMiddleware, getUserById);
+
+// @route   POST /api/users/:id/approve
+// @desc    Approve company account (Admin only)
+router.post('/:id/approve', authMiddleware, approveCompany);
+
+// @route   POST /api/users/:id/reject
+// @desc    Reject company account (Admin only)
+router.post('/:id/reject', authMiddleware, rejectCompany);
 
 module.exports = router;

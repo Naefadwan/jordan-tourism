@@ -185,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function loadUsers() {
         const tbody = document.querySelector('#usersTable tbody');
-        tbody.innerHTML = '<tr><td colspan="5">Loading...</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6">Loading...</td></tr>';
         try {
             const res = await fetch(`${API_URL}/users`, {
                 headers: getAuthHeaders()
@@ -194,30 +194,102 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!res.ok) throw new Error(data.message || 'Error fetching users');
 
-            tbody.innerHTML = data.map(item => `
+            tbody.innerHTML = data.map(item => {
+                const isPendingCompany = item.role === 'company' && item.account_status === 'pending';
+                const isRejectedCompany = item.role === 'company' && item.account_status === 'rejected';
+
+                // Status badge
+                let statusBadge = '';
+                if (item.account_status === 'pending') {
+                    statusBadge = '<span class="status-badge status-pending">Pending</span>';
+                } else if (item.account_status === 'rejected') {
+                    statusBadge = '<span class="status-badge status-rejected">Rejected</span>';
+                } else {
+                    statusBadge = '<span class="status-badge status-approved">Approved</span>';
+                }
+
+                return `
             <tr>
                 <td>${item.id}</td>
-                <td>${item.full_name || item.fullName}</td>
+                <td>${item.company_name || item.full_name || item.fullName}</td>
                 <td>${item.email}</td>
                 <td>${item.role}</td>
+                <td>${statusBadge}</td>
                 <td>
                     <div class="table-actions">
+                        ${isPendingCompany ? `
+                        <div class="action-group">
+                            <button class="btn-approve" onclick="approveCompany('${item.id}')">Approve</button>
+                            <button class="btn-delete" onclick="rejectCompany('${item.id}')">Reject</button>
+                        </div>
+                        <div class="action-divider"></div>
+                        ` : ''}
+                        ${isRejectedCompany ? `
+                        <div class="action-group">
+                            <button class="btn-approve" onclick="approveCompany('${item.id}')">Approve</button>
+                        </div>
+                        <div class="action-divider"></div>
+                        ` : ''}
                         <div class="action-group">
                             <button class="btn-edit" onclick="editItem('users', '${item.id}')">Edit</button>
                             ${item.role !== 'admin' ?
-                    `<button class="btn-delete" onclick="deleteItem('users', '${item.id}')">Delete</button>` :
-                    '<span style="color: grey; font-size: 0.75rem;">Admin</span>'
-                }
+                        `<button class="btn-delete" onclick="deleteItem('users', '${item.id}')">Delete</button>` :
+                        '<span style="color: grey; font-size: 0.75rem;">Admin</span>'
+                    }
                         </div>
                     </div>
                 </td>
             </tr>
-        `).join('');
+        `;
+            }).join('');
         } catch (err) {
             console.error(err);
-            tbody.innerHTML = '<tr><td colspan="5">Error loading users</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6">Error loading users</td></tr>';
         }
     }
+
+    // Company Approval Functions
+    window.approveCompany = async (userId) => {
+        if (!confirm('Approve this company account? They will be able to create content.')) return;
+        try {
+            const res = await fetch(`${API_URL}/users/${userId}/approve`, {
+                method: 'POST',
+                headers: getAuthHeaders()
+            });
+
+            if (res.ok) {
+                alert('Company approved successfully!');
+                loadUsers();
+            } else {
+                const error = await res.json();
+                alert('Failed to approve: ' + (error.message || 'Unknown error'));
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Error approving company');
+        }
+    };
+
+    window.rejectCompany = async (userId) => {
+        if (!confirm('Reject this company account? They will not be able to create content.')) return;
+        try {
+            const res = await fetch(`${API_URL}/users/${userId}/reject`, {
+                method: 'POST',
+                headers: getAuthHeaders()
+            });
+
+            if (res.ok) {
+                alert('Company rejected.');
+                loadUsers();
+            } else {
+                const error = await res.json();
+                alert('Failed to reject: ' + (error.message || 'Unknown error'));
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Error rejecting company');
+        }
+    };
 
     // --- Edit Functionality ---
     window.editMode = false;

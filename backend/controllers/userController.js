@@ -2,10 +2,13 @@ const User = require('../models/userModel');
 
 exports.getAllUsers = async (req, res) => {
     try {
-        // Ensure only admin can access this (check role if avail, otherwise rely on authMiddleware for now)
-        // Ideally: if (req.user.role !== 'admin') return res.status(403).json({ message: 'Access denied' });
+        const { role, accountStatus } = req.query;
+        const filters = {};
 
-        const users = await User.findAll();
+        if (role) filters.role = role;
+        if (accountStatus) filters.accountStatus = accountStatus;
+
+        const users = await User.findAll(filters);
         res.json(users);
     } catch (error) {
         console.error('Error fetching users:', error);
@@ -60,6 +63,46 @@ exports.getUserById = async (req, res) => {
         res.json(user);
     } catch (error) {
         console.error('Error fetching user:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+exports.approveCompany = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const updatedUser = await User.updateAccountStatus(id, 'approved');
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        if (updatedUser.role !== 'company') {
+            return res.status(400).json({ message: 'User is not a company account' });
+        }
+
+        res.json({ message: 'Company account approved successfully', user: updatedUser });
+    } catch (error) {
+        console.error('Error approving company:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+exports.rejectCompany = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const updatedUser = await User.updateAccountStatus(id, 'rejected');
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        if (updatedUser.role !== 'company') {
+            return res.status(400).json({ message: 'User is not a company account' });
+        }
+
+        res.json({ message: 'Company account rejected successfully', user: updatedUser });
+    } catch (error) {
+        console.error('Error rejecting company:', error);
         res.status(500).json({ message: 'Server error' });
     }
 };

@@ -6,6 +6,12 @@ const Accommodation = {
         const conditions = [];
         const values = [];
 
+        // Filter by user_id (for company users to see only their own content)
+        if (filters.user_id) {
+            conditions.push(`user_id = $${values.length + 1}`);
+            values.push(filters.user_id);
+        }
+
         if (filters.approval_status) {
             conditions.push(`approval_status = $${values.length + 1}`);
             values.push(filters.approval_status);
@@ -75,10 +81,10 @@ const Accommodation = {
     },
 
     create: async (data) => {
-        const { name, type, location, description, main_image_url, price, from_price } = data;
+        const { name, type, location, description, main_image_url, price, from_price, user_id } = data;
         const { rows } = await db.query(
-            'INSERT INTO accommodations (name, type, location, description, main_image_url, price, from_price, approval_status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
-            [name, type, location, description, main_image_url, price || 0, from_price || price || 0, data.approval_status || 'pending']
+            'INSERT INTO accommodations (name, type, location, description, main_image_url, price, from_price, approval_status, user_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *',
+            [name, type, location, description, main_image_url, price || 0, from_price || price || 0, data.approval_status || 'pending', user_id]
         );
         return rows[0];
     },

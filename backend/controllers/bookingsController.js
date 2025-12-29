@@ -135,7 +135,18 @@ exports.createBooking = async (req, res) => {
 
 exports.getAllBookingsForAdmin = async (req, res) => {
     try {
-        // Since we don't have owner filtering yet, we fetch all for admin/company roles
+        let whereClause = '';
+        const values = [];
+
+        // For company users, filter by their user_id
+        if (req.user && req.user.role === 'company') {
+            const user = await User.findByEmail(req.user.id);
+            if (user) {
+                whereClause = ' WHERE a.user_id = $1';
+                values.push(user.id);
+            }
+        }
+
         // 1. Fetch Accommodation Bookings
         const accBookingsQuery = `
             SELECT 
@@ -149,10 +160,22 @@ exports.getAllBookingsForAdmin = async (req, res) => {
             FROM bookings b
             JOIN accommodations a ON b.accommodation_id = a.id
             JOIN users u ON b.user_id = u.id
+            ${whereClause}
+            ORDER BY b.check_in_date DESC
         `;
-        const { rows: accBookings } = await db.query(accBookingsQuery);
+        const { rows: accBookings } = await db.query(accBookingsQuery, values);
 
-        // 2. Fetch Package Bookings
+        // 2. Fetch Package Bookings (same user_id filter)
+        let pkgWhereClause = '';
+        const pkgValues = [];
+        if (req.user && req.user.role === 'company') {
+            const user = await User.findByEmail(req.user.id);
+            if (user) {
+                pkgWhereClause = ' WHERE p.user_id = $1';
+                pkgValues.push(user.id);
+            }
+        }
+
         const pkgBookingsQuery = `
             SELECT 
                 pb.booking_reference as ref,
@@ -165,8 +188,10 @@ exports.getAllBookingsForAdmin = async (req, res) => {
             FROM package_bookings pb
             JOIN travel_packages p ON pb.package_id = p.id
             JOIN users u ON pb.user_id = u.id
+            ${pkgWhereClause}
+            ORDER BY pb.start_date DESC
         `;
-        const { rows: pkgBookings } = await db.query(pkgBookingsQuery);
+        const { rows: pkgBookings } = await db.query(pkgBookingsQuery, pkgValues);
 
         // Combine and sort by date descending
         const allBookings = [...accBookings, ...pkgBookings].sort((a, b) => new Date(b.date) - new Date(a.date));

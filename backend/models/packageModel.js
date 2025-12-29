@@ -12,6 +12,12 @@ const Package = {
         `;
         const values = [];
 
+        // Filter by user_id (for company users to see only their own content)
+        if (filters.user_id) {
+            values.push(filters.user_id);
+            query += ` AND p.user_id = $${values.length}`;
+        }
+
         if (filters.approval_status) {
             values.push(filters.approval_status);
             query += ` AND p.approval_status = $${values.length}`;
@@ -65,15 +71,15 @@ const Package = {
         const {
             slug, name, description, from_price, nights,
             origin_city, destination_city, includes_flights,
-            accommodation_id, image_url, has_ticket, ticket_price
+            accommodation_id, image_url, has_ticket, ticket_price, user_id
         } = data;
 
         const { rows } = await db.query(
             `INSERT INTO travel_packages 
-            (slug, name, description, from_price, nights, origin_city, destination_city, includes_flights, accommodation_id, image_url, is_active, has_ticket, ticket_price, approval_status)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, true, $11, $12, $13)
+            (slug, name, description, from_price, nights, origin_city, destination_city, includes_flights, accommodation_id, image_url, is_active, has_ticket, ticket_price, approval_status, user_id)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, true, $11, $12, $13, $14)
             RETURNING *`,
-            [slug, name, description, from_price, nights, origin_city, destination_city, includes_flights, accommodation_id, image_url, has_ticket || false, ticket_price || 0, data.approval_status || 'pending']
+            [slug, name, description, from_price, nights, origin_city, destination_city, includes_flights, accommodation_id, image_url, has_ticket || false, ticket_price || 0, data.approval_status || 'pending', user_id]
         );
         return rows[0];
     },
