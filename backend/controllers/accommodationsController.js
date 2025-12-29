@@ -6,7 +6,8 @@ const Review = require('../models/reviewModel');
 exports.getAllAccommodations = async (req, res) => {
     try {
         const { type, search } = req.query;
-        const accommodations = await Accommodation.findAll({ type, search });
+        const includePending = req.user && (req.user.role === 'admin' || req.user.role === 'company');
+        const accommodations = await Accommodation.findAll({ type, search, includePending });
 
         // You can enhance this later to pull real ratings from your reviews table
         const accommodationsWithRatings = accommodations.map(acc => ({
@@ -24,7 +25,8 @@ exports.getAllAccommodations = async (req, res) => {
 exports.getAccommodationById = async (req, res) => {
     try {
         const { id } = req.params;
-        const accommodation = await Accommodation.findById(id);
+        const includePending = req.user && (req.user.role === 'admin' || req.user.role === 'company');
+        const accommodation = await Accommodation.findById(id, { includePending });
 
         if (!accommodation) {
             return res.status(404).json({ message: 'Accommodation not found' });
@@ -53,6 +55,14 @@ exports.createAccommodation = async (req, res) => {
         if (req.file) {
             accommodationData.main_image_url = `public/uploads/${req.file.filename}`;
         }
+
+        // Force 'pending' for company users, allow 'approved' for admins
+        if (req.user && req.user.role === 'admin') {
+            accommodationData.approval_status = accommodationData.approval_status || 'approved';
+        } else {
+            accommodationData.approval_status = 'pending';
+        }
+
         const newAccommodation = await Accommodation.create(accommodationData);
         res.status(201).json(newAccommodation);
     } catch (error) {

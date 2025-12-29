@@ -1,7 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { register, login, getProfile } = require('../controllers/authController');
+const { register, login, getProfile, sendOTP } = require('../controllers/authController');
 const authMiddleware = require('../middleware/authMiddleware');
+
+// @route   POST /api/auth/send-otp
+router.post('/send-otp', sendOTP);
 
 // @route   POST /api/auth/register
 router.post('/register', register);

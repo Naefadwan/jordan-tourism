@@ -53,6 +53,9 @@ app.use('/api/package-bookings', packageBookingsRoutes);
 const attractionBookingsRoutes = require('./routes/attractionBookingsRoutes');
 app.use('/api/attraction-bookings', attractionBookingsRoutes);
 
+const roomsRoutes = require('./routes/roomsRoutes');
+app.use('/api/rooms', roomsRoutes);
+
 // Other routes will go here as they are implemented
 
 const PORT = process.env.PORT || 5000;

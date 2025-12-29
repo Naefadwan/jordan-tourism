@@ -2,7 +2,8 @@ const Package = require('../models/packageModel');
 
 exports.getAllPackages = async (req, res) => {
     try {
-        const packages = await Package.findAll();
+        const includePending = req.user && (req.user.role === 'admin' || req.user.role === 'company');
+        const packages = await Package.findAll({ includePending });
 
         const decorated = packages.map(pkg => ({
             id: pkg.id,
@@ -15,7 +16,8 @@ exports.getAllPackages = async (req, res) => {
             originCity: pkg.origin_city,
             destinationCity: pkg.destination_city,
             includesFlights: pkg.includes_flights,
-            accommodationName: pkg.accommodation_name
+            accommodationName: pkg.accommodation_name,
+            approval_status: pkg.approval_status
         }));
 
         res.json(decorated);
@@ -27,7 +29,8 @@ exports.getAllPackages = async (req, res) => {
 
 exports.getPackageById = async (req, res) => {
     try {
-        const pkg = await Package.findById(req.params.id);
+        const includePending = req.user && (req.user.role === 'admin' || req.user.role === 'company');
+        const pkg = await Package.findById(req.params.id, { includePending });
         if (!pkg) {
             return res.status(404).json({ message: 'Package not found' });
         }
@@ -87,6 +90,13 @@ exports.createPackage = async (req, res) => {
             packageData.slug = packageData.name.toLowerCase()
                 .replace(/[^a-z0-9]+/g, '-')
                 .replace(/^-+|-+$/g, '');
+        }
+
+        // Force 'pending' for company users, allow 'approved' for admins
+        if (req.user && req.user.role === 'admin') {
+            packageData.approval_status = packageData.approval_status || 'approved';
+        } else {
+            packageData.approval_status = 'pending';
         }
 
         const newPackage = await Package.create(packageData);

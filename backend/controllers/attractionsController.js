@@ -4,7 +4,8 @@ exports.getAllAttractions = async (req, res) => {
     try {
         // Pass query params directly to the model for server-side filtering
         const { category, search } = req.query;
-        const attractions = await Attraction.findAll({ category, search });
+        const includePending = req.user && (req.user.role === 'admin' || req.user.role === 'company');
+        const attractions = await Attraction.findAll({ category, search, includePending });
         res.json(attractions);
     } catch (error) {
         console.error('Error fetching attractions:', error);
@@ -15,7 +16,8 @@ exports.getAllAttractions = async (req, res) => {
 exports.getAttractionById = async (req, res) => {
     try {
         const { id } = req.params;
-        const attraction = await Attraction.findById(id);
+        const includePending = req.user && (req.user.role === 'admin' || req.user.role === 'company');
+        const attraction = await Attraction.findById(id, { includePending });
 
         if (!attraction) {
             return res.status(404).json({ message: 'Attraction not found' });
@@ -34,6 +36,14 @@ exports.createAttraction = async (req, res) => {
             attractionData.image_url = `public/uploads/${req.file.filename}`;
         }
         if (attractionData.price) attractionData.price = Math.max(0, parseFloat(attractionData.price));
+
+        // Force 'pending' for company users, allow 'approved' for admins
+        if (req.user && req.user.role === 'admin') {
+            attractionData.approval_status = attractionData.approval_status || 'approved';
+        } else {
+            attractionData.approval_status = 'pending';
+        }
+
         const newAttraction = await Attraction.create(attractionData);
         res.status(201).json(newAttraction);
     } catch (error) {

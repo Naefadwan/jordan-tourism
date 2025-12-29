@@ -1,29 +1,49 @@
 const db = require('../config/db');
 
 const Package = {
-    async findAll() {
-        const { rows } = await db.query(
-            `SELECT p.*,
+    async findAll(filters = {}) {
+        let query = `
+            SELECT p.*,
               a.name AS accommodation_name,
               a.main_image_url AS accommodation_image
-       FROM travel_packages p
-       LEFT JOIN accommodations a ON p.accommodation_id = a.id
-       WHERE p.is_active = true
-       ORDER BY p.from_price ASC`
-        );
+            FROM travel_packages p
+            LEFT JOIN accommodations a ON p.accommodation_id = a.id
+            WHERE p.is_active = true
+        `;
+        const values = [];
+
+        if (filters.approval_status) {
+            values.push(filters.approval_status);
+            query += ` AND p.approval_status = $${values.length}`;
+        } else if (!filters.includePending) {
+            query += " AND p.approval_status = 'approved'";
+        }
+
+        query += " ORDER BY p.from_price ASC";
+
+        const { rows } = await db.query(query, values);
         return rows;
     },
 
-    async findById(id) {
-        const { rows } = await db.query(
-            `SELECT p.*,
+    async findById(id, filters = {}) {
+        let query = `
+            SELECT p.*,
               a.name AS accommodation_name,
               a.main_image_url AS accommodation_image
-       FROM travel_packages p
-       LEFT JOIN accommodations a ON p.accommodation_id = a.id
-       WHERE p.id = $1 AND p.is_active = true`,
-            [id]
-        );
+            FROM travel_packages p
+            LEFT JOIN accommodations a ON p.accommodation_id = a.id
+            WHERE p.id = $1 AND p.is_active = true
+        `;
+        const values = [id];
+
+        if (filters.approval_status) {
+            values.push(filters.approval_status);
+            query += ` AND p.approval_status = $${values.length}`;
+        } else if (!filters.includePending) {
+            query += " AND p.approval_status = 'approved'";
+        }
+
+        const { rows } = await db.query(query, values);
         return rows[0] || null;
     },
 
@@ -50,30 +70,42 @@ const Package = {
 
         const { rows } = await db.query(
             `INSERT INTO travel_packages 
-            (slug, name, description, from_price, nights, origin_city, destination_city, includes_flights, accommodation_id, image_url, is_active, has_ticket, ticket_price)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, true, $11, $12)
+            (slug, name, description, from_price, nights, origin_city, destination_city, includes_flights, accommodation_id, image_url, is_active, has_ticket, ticket_price, approval_status)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, true, $11, $12, $13)
             RETURNING *`,
-            [slug, name, description, from_price, nights, origin_city, destination_city, includes_flights, accommodation_id, image_url, has_ticket || false, ticket_price || 0]
+            [slug, name, description, from_price, nights, origin_city, destination_city, includes_flights, accommodation_id, image_url, has_ticket || false, ticket_price || 0, data.approval_status || 'pending']
         );
         return rows[0];
     },
 
     async update(id, data) {
-        const {
-            slug, name, description, from_price, nights,
-            origin_city, destination_city, includes_flights,
-            accommodation_id, image_url, has_ticket, ticket_price
-        } = data;
+        const fields = [];
+        const values = [];
+        let index = 1;
 
-        const { rows } = await db.query(
-            `UPDATE travel_packages 
-            SET slug = $1, name = $2, description = $3, from_price = $4, nights = $5, 
-                origin_city = $6, destination_city = $7, includes_flights = $8, 
-                accommodation_id = $9, image_url = COALESCE($10, image_url), 
-                has_ticket = $11, ticket_price = $12
-            WHERE id = $13 RETURNING *`,
-            [slug, name, description, from_price, nights, origin_city, destination_city, includes_flights, accommodation_id, image_url, has_ticket, ticket_price, id]
-        );
+        for (const [key, value] of Object.entries(data)) {
+            // Map camelCase to snake_case if necessary, or just use keys directly if they match DB
+            // In this project, controllers usually send snake_case or we handle mapping here.
+            // Let's handle the specific fields used in this model.
+            const dbKey = key === 'fromPrice' ? 'from_price' :
+                key === 'originCity' ? 'origin_city' :
+                    key === 'destinationCity' ? 'destination_city' :
+                        key === 'includesFlights' ? 'includes_flights' :
+                            key === 'accommodationId' ? 'accommodation_id' :
+                                key === 'imageUrl' ? 'image_url' : key;
+
+            if (value !== undefined) {
+                fields.push(`${dbKey} = $${index++}`);
+                values.push(value);
+            }
+        }
+
+        if (fields.length === 0) return null;
+
+        values.push(id);
+        const query = `UPDATE travel_packages SET ${fields.join(', ')} WHERE id = $${index} RETURNING *`;
+
+        const { rows } = await db.query(query, values);
         return rows[0];
     },
 

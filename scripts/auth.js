@@ -23,6 +23,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // -------- SIGNUP --------
     if (signupForm) {
+        let otpSent = false;
+        const submitBtn = document.getElementById('signup-submit-btn');
+        const otpGroup = document.getElementById('otp-group');
+
         signupForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             clearError();
@@ -30,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const fullName = signupForm.fullName.value.trim();
             const email = signupForm.email.value.trim();
             const password = signupForm.password.value;
+            const otp = signupForm.otp ? signupForm.otp.value.trim() : '';
 
             if (!fullName || !email || !password) {
                 showError('Please fill in all fields.');
@@ -37,24 +42,56 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             try {
-                // 1) Register
-                await api('/auth/register', {
-                    method: 'POST',
-                    body: { fullName, email, password },
-                });
+                if (!otpSent) {
+                    // Phase 1: Send OTP
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Sending...';
 
-                // 2) Immediately log in
-                const loginData = await api('/auth/login', {
-                    method: 'POST',
-                    body: { email, password },
-                });
+                    await api('/auth/send-otp', {
+                        method: 'POST',
+                        body: { email },
+                    });
 
-                localStorage.setItem('token', loginData.token);
-                localStorage.setItem('user', JSON.stringify(loginData.user));
-                window.location.href = 'profile.html';
+                    otpSent = true;
+                    otpGroup.style.display = 'block';
+                    submitBtn.textContent = 'Verify & Register';
+                    submitBtn.disabled = false;
+
+                    // Disable other fields
+                    signupForm.fullName.disabled = true;
+                    signupForm.email.disabled = true;
+                    signupForm.password.disabled = true;
+                } else {
+                    // Phase 2: Verify & Register
+                    if (!otp) {
+                        showError('Please enter the OTP.');
+                        return;
+                    }
+
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Registering...';
+
+                    await api('/auth/register', {
+                        method: 'POST',
+                        body: { fullName, email, password, otp },
+                    });
+
+                    // 2) Immediately log in
+                    const loginData = await api('/auth/login', {
+                        method: 'POST',
+                        body: { email, password },
+                    });
+
+                    localStorage.setItem('token', loginData.token);
+                    localStorage.setItem('user', JSON.stringify(loginData.user));
+                    window.location.href = 'profile.html';
+                }
             } catch (err) {
                 console.error('Signup failed:', err);
                 showError(err.message || 'Signup failed.');
+                submitBtn.disabled = false;
+                if (!otpSent) submitBtn.textContent = 'Send OTP';
+                else submitBtn.textContent = 'Verify & Register';
             }
         });
     }

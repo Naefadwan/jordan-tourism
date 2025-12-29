@@ -56,6 +56,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const tabs = document.querySelectorAll('.admin-nav-link');
     const contents = document.querySelectorAll('.admin-tab-content');
 
+
+
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
             tabs.forEach(t => t.classList.remove('active'));
@@ -81,16 +83,28 @@ document.addEventListener('DOMContentLoaded', () => {
         const tbody = document.querySelector('#packagesTable tbody');
         tbody.innerHTML = '<tr><td colspan="4">Loading...</td></tr>';
         try {
-            const res = await fetch(`${API_URL}/packages`);
+            const res = await fetch(`${API_URL}/packages`, {
+                headers: getAuthHeaders()
+            });
             const data = await res.json();
             tbody.innerHTML = data.map(item => `
                 <tr>
                     <td>${item.id}</td>
                     <td>${item.name}</td>
                     <td>$${item.fromPrice}</td>
+                    <td><span class="status-badge status-${item.approval_status || 'approved'}">${item.approval_status || 'approved'}</span></td>
                     <td>
-                        <button class="btn-edit" onclick="editItem('packages', ${item.id})">Edit</button>
-                        <button class="btn-delete" onclick="deleteItem('packages', ${item.id})">Delete</button>
+                        <div class="table-actions">
+                            <div class="action-group">
+                                ${item.approval_status !== 'approved' ? `<button class="btn-approve" onclick="updateItemStatus('packages', '${item.id}', 'approved')">Approve</button>` : ''}
+                                ${item.approval_status !== 'rejected' ? `<button class="btn-delete" onclick="updateItemStatus('packages', '${item.id}', 'rejected')">Reject</button>` : ''}
+                            </div>
+                            <div class="action-divider"></div>
+                            <div class="action-group">
+                                <button class="btn-edit" onclick="editItem('packages', '${item.id}')">Edit</button>
+                                <button class="btn-delete" onclick="deleteItem('packages', '${item.id}')">Delete</button>
+                            </div>
+                        </div>
                     </td>
                 </tr>
             `).join('');
@@ -103,7 +117,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const tbody = document.querySelector('#accommodationsTable tbody');
         tbody.innerHTML = '<tr><td colspan="5">Loading...</td></tr>';
         try {
-            const res = await fetch(`${API_URL}/accommodations`);
+            const res = await fetch(`${API_URL}/accommodations`, {
+                headers: getAuthHeaders()
+            });
             const data = await res.json();
             tbody.innerHTML = data.map(item => `
             <tr>
@@ -111,9 +127,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${item.name}</td>
                 <td>${item.type}</td>
                 <td>$${item.fromPrice || item.price || 0}</td>
+                <td><span class="status-badge status-${item.approval_status || 'approved'}">${item.approval_status || 'approved'}</span></td>
                 <td>
-                    <button class="btn-edit" onclick="editItem('accommodations', ${item.id})">Edit</button>
-                    <button class="btn-delete" onclick="deleteItem('accommodations', ${item.id})">Delete</button>
+                    <div class="table-actions">
+                        <div class="action-group">
+                            ${item.approval_status !== 'approved' ? `<button class="btn-approve" onclick="updateItemStatus('accommodations', '${item.id}', 'approved')">Approve</button>` : ''}
+                            ${item.approval_status !== 'rejected' ? `<button class="btn-delete" onclick="updateItemStatus('accommodations', '${item.id}', 'rejected')">Reject</button>` : ''}
+                        </div>
+                        <div class="action-divider"></div>
+                        <div class="action-group">
+                            <button class="btn-edit" onclick="editItem('accommodations', '${item.id}')">Edit</button>
+                            <button class="btn-delete" onclick="deleteItem('accommodations', '${item.id}')">Delete</button>
+                        </div>
+                    </div>
                 </td>
             </tr>
         `).join('');
@@ -126,7 +152,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const tbody = document.querySelector('#attractionsTable tbody');
         tbody.innerHTML = '<tr><td colspan="5">Loading...</td></tr>';
         try {
-            const res = await fetch(`${API_URL}/attractions`);
+            const res = await fetch(`${API_URL}/attractions`, {
+                headers: getAuthHeaders()
+            });
             const data = await res.json();
             tbody.innerHTML = data.map(item => `
             <tr>
@@ -134,9 +162,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${item.name}</td>
                 <td>${item.category}</td>
                 <td>$${item.price}</td>
+                <td><span class="status-badge status-${item.approval_status || 'approved'}">${item.approval_status || 'approved'}</span></td>
                 <td>
-                    <button class="btn-edit" onclick="editItem('attractions', ${item.id})">Edit</button>
-                    <button class="btn-delete" onclick="deleteItem('attractions', ${item.id})">Delete</button>
+                    <div class="table-actions">
+                        <div class="action-group">
+                            ${item.approval_status !== 'approved' ? `<button class="btn-approve" onclick="updateItemStatus('attractions', '${item.id}', 'approved')">Approve</button>` : ''}
+                            ${item.approval_status !== 'rejected' ? `<button class="btn-delete" onclick="updateItemStatus('attractions', '${item.id}', 'rejected')">Reject</button>` : ''}
+                        </div>
+                        <div class="action-divider"></div>
+                        <div class="action-group">
+                            <button class="btn-edit" onclick="editItem('attractions', '${item.id}')">Edit</button>
+                            <button class="btn-delete" onclick="deleteItem('attractions', '${item.id}')">Delete</button>
+                        </div>
+                    </div>
                 </td>
             </tr>
         `).join('');
@@ -163,11 +201,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${item.email}</td>
                 <td>${item.role}</td>
                 <td>
-                    <button class="btn-edit" onclick="editItem('users', ${item.id})">Edit</button>
-                    ${item.role !== 'admin' ?
-                    `<button class="btn-delete" onclick="deleteItem('users', ${item.id})">Delete</button>` :
-                    '<span style="color: grey;">Admin (Protected)</span>'
+                    <div class="table-actions">
+                        <div class="action-group">
+                            <button class="btn-edit" onclick="editItem('users', '${item.id}')">Edit</button>
+                            ${item.role !== 'admin' ?
+                    `<button class="btn-delete" onclick="deleteItem('users', '${item.id}')">Delete</button>` :
+                    '<span style="color: grey; font-size: 0.75rem;">Admin</span>'
                 }
+                        </div>
+                    </div>
                 </td>
             </tr>
         `).join('');
@@ -212,6 +254,16 @@ document.addEventListener('DOMContentLoaded', () => {
             modal.querySelector('h2').textContent = `Edit ${type.slice(0, -1)}`;
             modal.querySelector('button[type="submit"]').textContent = 'Update Item';
 
+            // Show room management section only for accommodations in edit mode
+            const roomSection = document.getElementById('roomManagementSection');
+            if (type === 'accommodations') {
+                if (roomSection) roomSection.style.display = 'block';
+                currentAccommodationId = id;
+                loadRooms(id);
+            } else {
+                if (roomSection) roomSection.style.display = 'none';
+            }
+
             // Fill form fields
             for (const key in data) {
                 const field = form.elements[key];
@@ -232,6 +284,32 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (err) {
             console.error('Error fetching item for edit:', err);
             alert('Could not load item details.');
+        }
+    };
+
+    // --- Update Item Status (Approve/Reject) ---
+    window.updateItemStatus = async (type, id, status) => {
+        const action = status === 'approved' ? 'approve' : 'reject';
+        if (!confirm(`Are you sure you want to ${action} this ${type.slice(0, -1)}?`)) return;
+
+        try {
+            const res = await fetch(`${API_URL}/${type}/${id}`, {
+                method: 'PUT',
+                headers: getAuthHeaders(),
+                body: JSON.stringify({ approval_status: status })
+            });
+
+            if (res.ok) {
+                alert(`Item ${status} successfully`);
+                if (type === 'packages') loadPackages();
+                if (type === 'accommodations') loadAccommodations();
+                if (type === 'attractions') loadAttractions();
+            } else {
+                alert(`Failed to ${action} item`);
+            }
+        } catch (err) {
+            console.error(err);
+            alert(`Error ${action}ing item`);
         }
     };
 
@@ -290,14 +368,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.currentItemId = null;
                 modal.querySelector('h2').textContent = `Add New ${endpoint.slice(0, -1)}`;
                 modal.querySelector('button[type="submit"]').textContent = `Save ${endpoint.slice(0, -1)}`;
+
+                // Hide room section when adding new
+                const roomSection = document.getElementById('roomManagementSection');
+                if (roomSection) roomSection.style.display = 'none';
+
                 form.reset();
                 modal.style.display = 'block';
             };
         }
-        close.onclick = () => modal.style.display = 'none';
-        window.onclick = (e) => {
-            if (e.target == modal) modal.style.display = 'none';
+        close.onclick = () => {
+            modal.style.display = 'none';
         };
+        // Removed global window.onclick to prevent conflicts, using close buttons
 
         form.onsubmit = async (e) => {
             e.preventDefault();
@@ -349,6 +432,128 @@ document.addEventListener('DOMContentLoaded', () => {
             } catch (err) {
                 console.error(err);
                 alert(`Error ${isEdit ? 'updating' : 'adding'} item`);
+            }
+        };
+    }
+
+    // --- Room Management Integrated Logic ---
+    const roomForm = document.getElementById('roomForm');
+    const roomListSection = document.getElementById('roomListSection');
+    const roomFormSection = document.getElementById('roomFormSection');
+    let currentAccommodationId = null;
+    let currentRoomEditingId = null;
+
+    async function loadRooms(accommodationId) {
+        const tbody = document.querySelector('#roomsTable tbody');
+        if (!tbody) return;
+        tbody.innerHTML = '<tr><td colspan="4">Loading...</td></tr>';
+        try {
+            const res = await fetch(`${API_URL}/rooms/accommodation/${accommodationId}`, {
+                headers: getAuthHeaders()
+            });
+            const data = await res.json();
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4">No rooms found. Add one above!</td></tr>';
+            } else {
+                tbody.innerHTML = data.map(room => `
+                    <tr>
+                        <td>${room.roomType}</td>
+                        <td>$${room.pricePerNight}</td>
+                        <td>${room.maxGuests}</td>
+                        <td>
+                            <button class="btn-sm btn-outline" onclick="editRoom(${JSON.stringify(room).replace(/"/g, '&quot;')})">Edit</button>
+                            <button class="btn-sm btn-outline btn-delete" onclick="deleteRoom('${room.id}')">Delete</button>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+        } catch (err) {
+            tbody.innerHTML = '<tr><td colspan="4">Error loading rooms</td></tr>';
+        }
+    }
+
+    const addNewRoomBtn = document.getElementById('addNewRoomBtn');
+    if (addNewRoomBtn) {
+        addNewRoomBtn.onclick = () => {
+            currentRoomEditingId = null;
+            roomForm.reset();
+            document.getElementById('roomFormTitle').textContent = 'Add New Room';
+            roomFormSection.style.display = 'block';
+            roomListSection.style.display = 'none';
+        };
+    }
+
+    const cancelRoomBtn = document.getElementById('cancelRoomBtn');
+    if (cancelRoomBtn) {
+        cancelRoomBtn.onclick = () => {
+            roomFormSection.style.display = 'none';
+            roomListSection.style.display = 'block';
+        };
+    }
+
+    window.editRoom = (room) => {
+        currentRoomEditingId = room.id;
+        roomForm.roomType.value = room.roomType;
+        roomForm.pricePerNight.value = room.pricePerNight;
+        roomForm.maxGuests.value = room.maxGuests;
+        roomForm.description.value = room.description;
+        document.getElementById('roomFormTitle').textContent = 'Edit Room';
+        roomFormSection.style.display = 'block';
+        roomListSection.style.display = 'none';
+    };
+
+    window.deleteRoom = async (roomId) => {
+        if (!confirm('Are you sure you want to delete this room?')) return;
+        try {
+            const res = await fetch(`${API_URL}/rooms/${roomId}`, {
+                method: 'DELETE',
+                headers: getAuthHeaders()
+            });
+            if (res.ok) {
+                alert('Room deleted successfully');
+                loadRooms(currentAccommodationId);
+            } else {
+                alert('Failed to delete room');
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Error deleting room');
+        }
+    };
+
+    if (roomForm) {
+        roomForm.onsubmit = async (e) => {
+            e.preventDefault();
+            const roomData = {
+                accommodationId: currentAccommodationId,
+                roomType: roomForm.roomType.value,
+                pricePerNight: parseFloat(roomForm.pricePerNight.value),
+                maxGuests: parseInt(roomForm.maxGuests.value),
+                description: roomForm.description.value
+            };
+
+            const method = currentRoomEditingId ? 'PUT' : 'POST';
+            const url = currentRoomEditingId ? `${API_URL}/rooms/${currentRoomEditingId}` : `${API_URL}/rooms`;
+
+            try {
+                const res = await fetch(url, {
+                    method: method,
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify(roomData)
+                });
+
+                if (res.ok) {
+                    alert(currentRoomEditingId ? 'Room updated successfully' : 'Room added successfully');
+                    roomFormSection.style.display = 'none';
+                    roomListSection.style.display = 'block';
+                    loadRooms(currentAccommodationId);
+                } else {
+                    const err = await res.json();
+                    alert('Failed to save room: ' + (err.message || 'Unknown error'));
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Error saving room');
             }
         };
     }

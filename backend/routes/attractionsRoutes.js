@@ -1,17 +1,18 @@
 const express = require('express');
 const router = express.Router();
-const attractionsController = require('../controllers/attractionsController');
+const { getAllAttractions, getAttractionById, createAttraction, updateAttraction, deleteAttraction } = require('../controllers/attractionsController');
 const authMiddleware = require('../middleware/authMiddleware');
 const adminMiddleware = require('../middleware/adminMiddleware');
+const optionalAuth = require('../middleware/optionalAuthMiddleware');
 const upload = require('../middleware/upload');
 
 // Public routes
-router.get('/', attractionsController.getAllAttractions);
-router.get('/:id', attractionsController.getAttractionById);
+router.get('/', optionalAuth, getAllAttractions);
+router.get('/:id', optionalAuth, getAttractionById);
 
 // Admin routes
-router.post('/', authMiddleware, adminMiddleware, upload.single('image'), attractionsController.createAttraction);
-router.put('/:id', authMiddleware, adminMiddleware, upload.single('image'), attractionsController.updateAttraction);
-router.delete('/:id', authMiddleware, adminMiddleware, attractionsController.deleteAttraction);
+router.post('/', authMiddleware, adminMiddleware, upload.single('image'), createAttraction);
+router.put('/:id', authMiddleware, adminMiddleware, upload.single('image'), updateAttraction);
+router.delete('/:id', authMiddleware, adminMiddleware, deleteAttraction);
 
 module.exports = router;

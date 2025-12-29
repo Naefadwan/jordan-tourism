@@ -2,9 +2,16 @@
 
 const Attraction = {
     findAll: async (filters = {}) => {
-        let query = 'SELECT * FROM attractions';
+        let query = "SELECT * FROM attractions WHERE 1=1";
         const conditions = [];
         const values = [];
+
+        if (filters.approval_status) {
+            conditions.push(`approval_status = $${values.length + 1}`);
+            values.push(filters.approval_status);
+        } else if (!filters.includePending) {
+            conditions.push("approval_status = 'approved'");
+        }
 
         if (filters.category && filters.category !== 'all') {
             conditions.push(`category = $${values.length + 1}`);
@@ -21,7 +28,7 @@ const Attraction = {
         }
 
         if (conditions.length > 0) {
-            query += ' WHERE ' + conditions.join(' AND ');
+            query += ' AND ' + conditions.join(' AND ');
         }
 
         const { rows } = await db.query(query, values);
@@ -36,14 +43,25 @@ const Attraction = {
             location: row.location,
             description: row.description,
             duration: row.duration,
-            image: row.image_url || 'public/placeholder-image.jpg'
+            image: row.image_url || 'public/placeholder-image.jpg',
+            approval_status: row.approval_status
         }));
 
         return mappedRows;
     },
 
-    findById: async (id) => {
-        const { rows } = await db.query('SELECT * FROM attractions WHERE id = $1', [id]);
+    findById: async (id, filters = {}) => {
+        let query = "SELECT * FROM attractions WHERE id = $1";
+        const values = [id];
+
+        if (filters.approval_status) {
+            values.push(filters.approval_status);
+            query += ` AND approval_status = $${values.length}`;
+        } else if (!filters.includePending) {
+            query += " AND approval_status = 'approved'";
+        }
+
+        const { rows } = await db.query(query, values);
         if (rows.length === 0) return null;
 
         const row = rows[0];
@@ -57,25 +75,39 @@ const Attraction = {
             location: row.location,
             description: row.description,
             duration: row.duration,
-            image: row.image_url || 'public/placeholder-image.jpg'
+            image: row.image_url || 'public/placeholder-image.jpg',
+            approval_status: row.approval_status
         };
     },
 
     create: async (data) => {
         const { name, category, description, location, duration, price, image_url } = data;
         const { rows } = await db.query(
-            'INSERT INTO attractions (name, category, description, location, duration, price, image_url, rating, reviews_count) VALUES ($1, $2, $3, $4, $5, $6, $7, 4.5, 0) RETURNING *',
-            [name, category, description, location, duration, price, image_url]
+            'INSERT INTO attractions (name, category, description, location, duration, price, image_url, rating, reviews_count, approval_status) VALUES ($1, $2, $3, $4, $5, $6, $7, 4.5, 0, $8) RETURNING *',
+            [name, category, description, location, duration, price, image_url, data.approval_status || 'pending']
         );
         return rows[0];
     },
 
     update: async (id, data) => {
-        const { name, category, description, location, duration, price, image_url } = data;
-        const { rows } = await db.query(
-            'UPDATE attractions SET name = $1, category = $2, description = $3, location = $4, duration = $5, price = $6, image_url = COALESCE($7, image_url) WHERE id = $8 RETURNING *',
-            [name, category, description, location, duration, price, image_url, id]
-        );
+        const fields = [];
+        const values = [];
+        let index = 1;
+
+        for (const [key, value] of Object.entries(data)) {
+            const dbKey = key === 'image_url' || key === 'image' ? 'image_url' : key;
+            if (value !== undefined) {
+                fields.push(`${dbKey} = $${index++}`);
+                values.push(value);
+            }
+        }
+
+        if (fields.length === 0) return null;
+
+        values.push(id);
+        const query = `UPDATE attractions SET ${fields.join(', ')} WHERE id = $${index} RETURNING *`;
+
+        const { rows } = await db.query(query, values);
         return rows[0];
     },
 

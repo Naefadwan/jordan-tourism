@@ -5,10 +5,11 @@ const authMiddleware = require('../middleware/authMiddleware');
 const adminMiddleware = require('../middleware/adminMiddleware');
 const companyMiddleware = require('../middleware/companyMiddleware');
 const upload = require('../middleware/upload');
+const optionalAuth = require('../middleware/optionalAuthMiddleware');
 
 // Public routes
-router.get('/', accommodationsController.getAllAccommodations);
-router.get('/:id', accommodationsController.getAccommodationById);
+router.get('/', optionalAuth, accommodationsController.getAllAccommodations);
+router.get('/:id', optionalAuth, accommodationsController.getAccommodationById);
 
 // Admin/Company routes
 router.post('/', authMiddleware, companyMiddleware, upload.single('image'), accommodationsController.createAccommodation);

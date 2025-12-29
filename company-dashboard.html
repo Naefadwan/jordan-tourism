@@ -41,6 +41,7 @@
                                 <th>Name</th>
                                 <th>Price</th>
                                 <th>Bookings</th>
+                                <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -64,6 +65,7 @@
                                 <th>Name</th>
                                 <th>Type</th>
                                 <th>Price</th>
+                                <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -201,6 +203,62 @@
                 </div>
                 <button type="submit" class="btn-primary">Save Accommodation</button>
             </form>
+
+            <!-- Room Management Section -->
+            <div id="roomManagementSection" style="border-top: 1px solid #444; margin-top: 30px; padding-top: 20px;">
+                <div class="tab-header">
+                    <h3>Rooms</h3>
+                    <button class="btn-primary btn-sm" id="addNewRoomBtn">Add Room</button>
+                </div>
+
+                <div id="roomListSection">
+                    <div class="admin-table-wrapper">
+                        <table class="admin-table" id="roomsTable">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Price</th>
+                                    <th>Capacity</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="roomFormSection"
+                    style="display: none; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; margin-top: 15px;">
+                    <h4 id="roomFormTitle">Add New Room</h4>
+                    <form id="roomForm">
+                        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div class="form-group">
+                                <label for="roomType">Room Type</label>
+                                <input type="text" id="roomType" name="roomType" placeholder="e.g. Deluxe Room"
+                                    required>
+                            </div>
+                            <div class="form-group">
+                                <label for="roomPrice">Price per Night ($)</label>
+                                <input type="number" id="roomPrice" name="pricePerNight" step="0.01" min="0" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="roomGuests">Max Guests</label>
+                            <input type="number" id="roomGuests" name="maxGuests" min="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="roomDesc">Description</label>
+                            <textarea id="roomDesc" name="description" rows="2" required></textarea>
+                        </div>
+                        <div style="display: flex; gap: 10px; margin-top: 10px;">
+                            <button type="submit" class="btn-primary btn-sm">Save Room</button>
+                            <button type="button" class="btn-secondary btn-sm" id="cancelRoomBtn">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 

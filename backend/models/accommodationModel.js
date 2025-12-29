@@ -2,9 +2,16 @@ const db = require('../config/db');
 
 const Accommodation = {
     findAll: async (filters = {}) => {
-        let query = 'SELECT * FROM accommodations';
+        let query = "SELECT * FROM accommodations WHERE 1=1";
         const conditions = [];
         const values = [];
+
+        if (filters.approval_status) {
+            conditions.push(`approval_status = $${values.length + 1}`);
+            values.push(filters.approval_status);
+        } else if (!filters.includePending) {
+            conditions.push("approval_status = 'approved'");
+        }
 
         if (filters.type && filters.type !== 'all') {
             conditions.push(`type = $${values.length + 1}`);
@@ -21,7 +28,7 @@ const Accommodation = {
         }
 
         if (conditions.length > 0) {
-            query += ' WHERE ' + conditions.join(' AND ');
+            query += ' AND ' + conditions.join(' AND ');
         }
 
         const { rows } = await db.query(query, values);
@@ -34,13 +41,24 @@ const Accommodation = {
             description: row.description,
             price: parseFloat(row.price || 0),
             fromPrice: parseFloat(row.from_price || row.price || 0),
-            mainImage: row.main_image_url || 'public/placeholder-image.jpg'
+            mainImage: row.main_image_url || 'public/placeholder-image.jpg',
+            approval_status: row.approval_status
         }));
         return mappedRows;
     },
 
-    findById: async (id) => {
-        const { rows } = await db.query('SELECT * FROM accommodations WHERE id = $1', [id]);
+    findById: async (id, filters = {}) => {
+        let query = "SELECT * FROM accommodations WHERE id = $1";
+        const values = [id];
+
+        if (filters.approval_status) {
+            values.push(filters.approval_status);
+            query += ` AND approval_status = $${values.length}`;
+        } else if (!filters.includePending) {
+            query += " AND approval_status = 'approved'";
+        }
+
+        const { rows } = await db.query(query, values);
         if (rows.length === 0) return null;
         const row = rows[0];
         return {
@@ -51,25 +69,39 @@ const Accommodation = {
             description: row.description,
             price: parseFloat(row.price || 0),
             fromPrice: parseFloat(row.from_price || row.price || 0),
-            mainImage: row.main_image_url || 'public/placeholder-image.jpg'
+            mainImage: row.main_image_url || 'public/placeholder-image.jpg',
+            approval_status: row.approval_status
         };
     },
 
     create: async (data) => {
         const { name, type, location, description, main_image_url, price, from_price } = data;
         const { rows } = await db.query(
-            'INSERT INTO accommodations (name, type, location, description, main_image_url, price, from_price) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
-            [name, type, location, description, main_image_url, price || 0, from_price || price || 0]
+            'INSERT INTO accommodations (name, type, location, description, main_image_url, price, from_price, approval_status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
+            [name, type, location, description, main_image_url, price || 0, from_price || price || 0, data.approval_status || 'pending']
         );
         return rows[0];
     },
 
     update: async (id, data) => {
-        const { name, type, location, description, main_image_url, price, from_price } = data;
-        const { rows } = await db.query(
-            'UPDATE accommodations SET name = $1, type = $2, location = $3, description = $4, main_image_url = COALESCE($5, main_image_url), price = $6, from_price = $7 WHERE id = $8 RETURNING *',
-            [name, type, location, description, main_image_url, price || 0, from_price || price || 0, id]
-        );
+        const fields = [];
+        const values = [];
+        let index = 1;
+
+        for (const [key, value] of Object.entries(data)) {
+            const dbKey = key === 'main_image_url' || key === 'imageUrl' ? 'main_image_url' : key;
+            if (value !== undefined) {
+                fields.push(`${dbKey} = $${index++}`);
+                values.push(value);
+            }
+        }
+
+        if (fields.length === 0) return null;
+
+        values.push(id);
+        const query = `UPDATE accommodations SET ${fields.join(', ')} WHERE id = $${index} RETURNING *`;
+
+        const { rows } = await db.query(query, values);
         return rows[0];
     },
 

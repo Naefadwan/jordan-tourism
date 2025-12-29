@@ -1,15 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up - GOJO</title>
     <meta name="description" content="Create an account with Discover Jordan.">
-    <link rel="stylesheet" href="styles/main.css">`n    <link rel="stylesheet" href="styles/dark-theme-polish.css">
+    <link rel="stylesheet" href="styles/main.css">`n
+    <link rel="stylesheet" href="styles/dark-theme-polish.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
     <!-- Header -->
     <header class="site-header scrolled">
@@ -49,7 +54,14 @@
                         <input type="password" id="password" name="password" required minlength="8">
                         <span class="error-message"></span>
                     </div>
-                    <button type="submit" class="btn-primary auth-btn">Create Account</button>
+                    <div class="form-group" id="otp-group" style="display: none;">
+                        <label for="otp">Verification Code (OTP)</label>
+                        <input type="text" id="otp" name="otp" placeholder="Enter 6-digit code">
+                        <span class="error-message"></span>
+                        <p style="font-size: 0.8rem; margin-top: 5px;">Check your email (or console during development)
+                            for the code.</p>
+                    </div>
+                    <button type="submit" id="signup-submit-btn" class="btn-primary auth-btn">Send OTP</button>
                 </form>
                 <p class="auth-switch-text">
                     Already have an account? <a href="login.html" class="link">Login</a>
@@ -71,4 +83,5 @@
     <script src="scripts/api.js"></script>
     <script src="scripts/auth.js"></script>
 </body>
+
 </html>

@@ -70,7 +70,9 @@ document.addEventListener('DOMContentLoaded', () => {
         tbody.innerHTML = '<tr><td colspan="4">Loading...</td></tr>';
 
         try {
-            const res = await fetch(`${API_URL}/packages`); // TODO: Add ?owner=me
+            const res = await fetch(`${API_URL}/packages`, {
+                headers: { 'x-auth-token': token }
+            });
             const data = await res.json();
 
             tbody.innerHTML = data.map(item => `
@@ -78,8 +80,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td>${item.name}</td>
                     <td>$${item.fromPrice || item.from_price || 0}</td>
                     <td>${item.booking_count || 0}</td>
+                    <td><span class="status-badge status-${item.approval_status || 'approved'}">${item.approval_status === 'pending' ? 'Waiting Approval' : (item.approval_status || 'Approved')}</span></td>
                     <td>
-                        <button class="btn-sm btn-outline" onclick="editPackage(${item.id})">Edit</button>
+                        <div class="table-actions">
+                            <div class="action-group">
+                                <button class="btn-edit" onclick="editPackage('${item.id}')">Edit</button>
+                            </div>
+                        </div>
                     </td>
                 </tr>
             `).join('');
@@ -93,7 +100,9 @@ document.addEventListener('DOMContentLoaded', () => {
         tbody.innerHTML = '<tr><td colspan="4">Loading...</td></tr>';
 
         try {
-            const res = await fetch(`${API_URL}/accommodations`); // TODO: Add ?owner=me
+            const res = await fetch(`${API_URL}/accommodations`, {
+                headers: { 'x-auth-token': token }
+            });
             const data = await res.json();
 
             tbody.innerHTML = data.map(item => `
@@ -101,8 +110,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td>${item.name}</td>
                     <td>${item.type}</td>
                     <td>$${item.price || 0}</td>
+                    <td><span class="status-badge status-${item.approval_status || 'approved'}">${item.approval_status === 'pending' ? 'Waiting Approval' : (item.approval_status || 'Approved')}</span></td>
                     <td>
-                        <button class="btn-sm btn-outline" onclick="editAccommodation(${item.id})">Edit</button>
+                        <div class="table-actions">
+                            <div class="action-group">
+                                <button class="btn-edit" onclick="editAccommodation('${item.id}')">Edit</button>
+                            </div>
+                        </div>
                     </td>
                 </tr>
             `).join('');
@@ -257,10 +271,29 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // Temporary storage for rooms when creating new accommodation
+    let temporaryRooms = [];
+
     function openAccommodationModal(acc = null) {
         currentEditingId = acc ? acc.id : null;
         accommodationModal.style.display = 'block';
         accommodationModal.querySelector('h2').textContent = acc ? 'Edit Accommodation' : 'Add New Accommodation';
+
+        // Always show room management section
+        const roomSection = document.getElementById('roomManagementSection');
+        if (roomSection) roomSection.style.display = 'block';
+
+        if (acc) {
+            // Editing existing accommodation
+            currentAccommodationId = acc.id;
+            temporaryRooms = [];
+            loadRooms(acc.id);
+        } else {
+            // Adding new accommodation
+            currentAccommodationId = null;
+            temporaryRooms = [];
+            displayTemporaryRooms();
+        }
 
         if (acc) {
             accommodationForm.name.value = acc.name;
@@ -291,6 +324,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 if (res.ok) {
+                    const savedAccommodation = await res.json();
+
+                    // If we have temporary rooms and this is a new accommodation, save them
+                    if (!currentEditingId && temporaryRooms.length > 0) {
+                        await saveTemporaryRooms(savedAccommodation.id);
+                    }
+
                     alert('Accommodation saved successfully');
                     accommodationModal.style.display = 'none';
                     loadAccommodations();
@@ -301,6 +341,220 @@ document.addEventListener('DOMContentLoaded', () => {
             } catch (err) {
                 console.error(err);
                 alert('Error saving accommodation');
+            }
+        };
+    }
+
+    // Save temporary rooms after accommodation is created
+    async function saveTemporaryRooms(accommodationId) {
+        for (const room of temporaryRooms) {
+            const roomData = {
+                accommodationId: accommodationId,
+                roomType: room.roomType,
+                pricePerNight: room.pricePerNight,
+                maxGuests: room.maxGuests,
+                description: room.description
+            };
+
+            try {
+                await fetch(`${API_URL}/rooms`, {
+                    method: 'POST',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify(roomData)
+                });
+            } catch (err) {
+                console.error('Error saving room:', err);
+            }
+        }
+    }
+
+    // Display temporary rooms in the table
+    function displayTemporaryRooms() {
+        const tbody = document.querySelector('#roomsTable tbody');
+        if (!tbody) return;
+
+        if (temporaryRooms.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4">No rooms added yet. Click "Add Room" to add one!</td></tr>';
+        } else {
+            tbody.innerHTML = temporaryRooms.map((room, index) => `
+                <tr>
+                    <td>${room.roomType}</td>
+                    <td>$${room.pricePerNight}</td>
+                    <td>${room.maxGuests}</td>
+                    <td>
+                        <button class="btn-sm btn-outline" onclick="editTemporaryRoom(${index})">Edit</button>
+                        <button class="btn-sm btn-outline btn-delete" onclick="deleteTemporaryRoom(${index})">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+    }
+
+    function getAuthHeaders() {
+        return {
+            'Content-Type': 'application/json',
+            'x-auth-token': localStorage.getItem('token')
+        };
+    }
+
+    // --- Room Management Integrated Logic ---
+    const roomForm = document.getElementById('roomForm');
+    const roomListSection = document.getElementById('roomListSection');
+    const roomFormSection = document.getElementById('roomFormSection');
+    let currentAccommodationId = null;
+    let currentRoomEditingId = null;
+
+    async function loadRooms(accommodationId) {
+        const tbody = document.querySelector('#roomsTable tbody');
+        if (!tbody) return;
+        tbody.innerHTML = '<tr><td colspan="4">Loading...</td></tr>';
+        try {
+            const res = await fetch(`${API_URL}/rooms/accommodation/${accommodationId}`, {
+                headers: getAuthHeaders()
+            });
+            const data = await res.json();
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4">No rooms found. Add one above!</td></tr>';
+            } else {
+                tbody.innerHTML = data.map(room => `
+                    <tr>
+                        <td>${room.roomType}</td>
+                        <td>$${room.pricePerNight}</td>
+                        <td>${room.maxGuests}</td>
+                        <td>
+                            <button class="btn-sm btn-outline" onclick="editRoom(${JSON.stringify(room).replace(/"/g, '&quot;')})">Edit</button>
+                            <button class="btn-sm btn-outline btn-delete" onclick="deleteRoom('${room.id}')">Delete</button>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+        } catch (err) {
+            tbody.innerHTML = '<tr><td colspan="4">Error loading rooms</td></tr>';
+        }
+    }
+
+    const addNewRoomBtn = document.getElementById('addNewRoomBtn');
+    if (addNewRoomBtn) {
+        addNewRoomBtn.onclick = () => {
+            currentRoomEditingId = null;
+            roomForm.reset();
+            document.getElementById('roomFormTitle').textContent = 'Add New Room';
+            roomFormSection.style.display = 'block';
+            roomListSection.style.display = 'none';
+        };
+    }
+
+    const cancelRoomBtn = document.getElementById('cancelRoomBtn');
+    if (cancelRoomBtn) {
+        cancelRoomBtn.onclick = () => {
+            roomFormSection.style.display = 'none';
+            roomListSection.style.display = 'block';
+        };
+    }
+
+    window.editRoom = (room) => {
+        currentRoomEditingId = room.id;
+        roomForm.roomType.value = room.roomType;
+        roomForm.pricePerNight.value = room.pricePerNight;
+        roomForm.maxGuests.value = room.maxGuests;
+        roomForm.description.value = room.description;
+        document.getElementById('roomFormTitle').textContent = 'Edit Room';
+        roomFormSection.style.display = 'block';
+        roomListSection.style.display = 'none';
+    };
+
+    window.deleteRoom = async (roomId) => {
+        if (!confirm('Are you sure you want to delete this room?')) return;
+        try {
+            const res = await fetch(`${API_URL}/rooms/${roomId}`, {
+                method: 'DELETE',
+                headers: getAuthHeaders()
+            });
+            if (res.ok) {
+                alert('Room deleted successfully');
+                loadRooms(currentAccommodationId);
+            } else {
+                alert('Failed to delete room');
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Error deleting room');
+        }
+    };
+
+    // Handle temporary room editing
+    window.editTemporaryRoom = (index) => {
+        const room = temporaryRooms[index];
+        currentRoomEditingId = index; // Use index as ID for temporary rooms
+        roomForm.roomType.value = room.roomType;
+        roomForm.pricePerNight.value = room.pricePerNight;
+        roomForm.maxGuests.value = room.maxGuests;
+        roomForm.description.value = room.description;
+        document.getElementById('roomFormTitle').textContent = 'Edit Room';
+        roomFormSection.style.display = 'block';
+        roomListSection.style.display = 'none';
+    };
+
+    // Handle temporary room deletion
+    window.deleteTemporaryRoom = (index) => {
+        if (!confirm('Are you sure you want to remove this room?')) return;
+        temporaryRooms.splice(index, 1);
+        displayTemporaryRooms();
+    };
+
+    if (roomForm) {
+        roomForm.onsubmit = async (e) => {
+            e.preventDefault();
+            const roomData = {
+                roomType: roomForm.roomType.value,
+                pricePerNight: parseFloat(roomForm.pricePerNight.value),
+                maxGuests: parseInt(roomForm.maxGuests.value),
+                description: roomForm.description.value
+            };
+
+            // If we're working with a new accommodation (no currentAccommodationId)
+            if (!currentAccommodationId) {
+                // Add to temporary storage
+                if (typeof currentRoomEditingId === 'number' && currentRoomEditingId >= 0) {
+                    // Editing existing temporary room
+                    temporaryRooms[currentRoomEditingId] = roomData;
+                } else {
+                    // Adding new temporary room
+                    temporaryRooms.push(roomData);
+                }
+                roomFormSection.style.display = 'none';
+                roomListSection.style.display = 'block';
+                displayTemporaryRooms();
+                currentRoomEditingId = null;
+            } else {
+                // Working with existing accommodation - save to API
+                roomData.accommodationId = currentAccommodationId;
+                const method = (typeof currentRoomEditingId === 'string') ? 'PUT' : 'POST';
+                const url = (typeof currentRoomEditingId === 'string')
+                    ? `${API_URL}/rooms/${currentRoomEditingId}`
+                    : `${API_URL}/rooms`;
+
+                try {
+                    const res = await fetch(url, {
+                        method: method,
+                        headers: getAuthHeaders(),
+                        body: JSON.stringify(roomData)
+                    });
+
+                    if (res.ok) {
+                        alert(currentRoomEditingId ? 'Room updated successfully' : 'Room added successfully');
+                        roomFormSection.style.display = 'none';
+                        roomListSection.style.display = 'block';
+                        loadRooms(currentAccommodationId);
+                        currentRoomEditingId = null;
+                    } else {
+                        const err = await res.json();
+                        alert('Failed to save room: ' + (err.message || 'Unknown error'));
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert('Error saving room');
+                }
             }
         };
     }
