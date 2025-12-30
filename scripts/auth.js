@@ -58,6 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = signupForm.email.value.trim();
             const password = signupForm.password.value;
             const otp = signupForm.otp ? signupForm.otp.value.trim() : '';
+            const accountType = signupForm.querySelector('input[name="accountType"]:checked').value;
 
             if (!fullName || !email || !password) {
                 showError('Please fill in all fields.');
@@ -72,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     await api('/auth/send-otp', {
                         method: 'POST',
-                        body: { email },
+                        body: { email, accountType },
                     });
 
                     otpSent = true;
@@ -89,7 +90,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     accountTypeRadios.forEach(radio => radio.disabled = true);
 
                     // Disable company fields if visible
-                    const accountType = signupForm.querySelector('input[name="accountType"]:checked').value;
                     if (accountType === 'business') {
                         document.getElementById('companyName').disabled = true;
                         document.getElementById('businessLicense').disabled = true;
@@ -107,7 +107,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     submitBtn.textContent = 'Registering...';
 
                     // Get account type and company fields
-                    const accountType = signupForm.querySelector('input[name="accountType"]:checked').value;
                     const body = { fullName, email, password, otp, accountType };
 
                     // Add company fields if business account

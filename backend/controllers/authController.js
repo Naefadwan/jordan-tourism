@@ -1,18 +1,18 @@
 const User = require('../models/userModel');
 const OTP = require('../models/otpModel');
-const { sendOTP } = require('../services/emailService');
+const { sendOTP, sendCompanyRegistrationEmail } = require('../services/emailService');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 
 exports.sendOTP = async (req, res) => {
     try {
-        const { email } = req.body;
+        const { email, accountType } = req.body;
         if (!email) return res.status(400).json({ message: 'Email is required' });
 
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
         await OTP.create(email, otp, 'registration');
-        await sendOTP(email, otp);
+        await sendOTP(email, otp, accountType);
 
         res.json({ message: 'OTP sent successfully' });
     } catch (error) {
@@ -66,6 +66,10 @@ exports.register = async (req, res) => {
         });
 
         await OTP.deleteByEmail(email, 'registration');
+
+        if (isCompany) {
+            await sendCompanyRegistrationEmail(email, companyName);
+        }
 
         const message = isCompany
             ? 'Company account registered successfully. Your account is pending admin approval.'
