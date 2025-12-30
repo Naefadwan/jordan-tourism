@@ -441,9 +441,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 modal.querySelector('h2').textContent = `Add New ${endpoint.slice(0, -1)}`;
                 modal.querySelector('button[type="submit"]').textContent = `Save ${endpoint.slice(0, -1)}`;
 
-                // Hide room section when adding new
+                // Special handling for accommodations: show room section and reset temp rooms
                 const roomSection = document.getElementById('roomManagementSection');
-                if (roomSection) roomSection.style.display = 'none';
+                if (endpoint === 'accommodations') {
+                    if (roomSection) roomSection.style.display = 'block';
+                    currentAccommodationId = null;
+                    temporaryRooms = [];
+                    displayTemporaryRooms();
+                } else {
+                    if (roomSection) roomSection.style.display = 'none';
+                }
 
                 form.reset();
                 modal.style.display = 'block';
@@ -493,6 +500,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 if (res.ok) {
+                    const responseData = await res.json();
+
+                    // Special handling for accommodations - save temporary rooms if any
+                    if (endpoint === 'accommodations' && !isEdit) {
+                        const newAccId = responseData.id || responseData.accommodation?.id;
+                        if (newAccId && temporaryRooms.length > 0) {
+                            await saveTemporaryRooms(newAccId);
+                        }
+                    }
+
                     alert(isEdit ? 'Item updated successfully' : 'Item added successfully');
                     modal.style.display = 'none';
                     form.reset();
@@ -514,6 +531,72 @@ document.addEventListener('DOMContentLoaded', () => {
     const roomFormSection = document.getElementById('roomFormSection');
     let currentAccommodationId = null;
     let currentRoomEditingId = null;
+    let temporaryRooms = [];
+
+    // Save temporary rooms after accommodation is created
+    async function saveTemporaryRooms(accommodationId) {
+        for (const room of temporaryRooms) {
+            const roomData = {
+                accommodationId: accommodationId,
+                roomType: room.roomType,
+                pricePerNight: room.pricePerNight,
+                maxGuests: room.maxGuests,
+                description: room.description
+            };
+
+            try {
+                await fetch(`${API_URL}/rooms`, {
+                    method: 'POST',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify(roomData)
+                });
+            } catch (err) {
+                console.error('Error saving room:', err);
+            }
+        }
+    }
+
+    // Display temporary rooms in the table
+    function displayTemporaryRooms() {
+        const tbody = document.querySelector('#roomsTable tbody');
+        if (!tbody) return;
+
+        if (temporaryRooms.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4">No rooms added yet. Click "Add Room" to add one!</td></tr>';
+        } else {
+            tbody.innerHTML = temporaryRooms.map((room, index) => `
+                <tr>
+                    <td>${room.roomType}</td>
+                    <td>$${room.pricePerNight}</td>
+                    <td>${room.maxGuests}</td>
+                    <td>
+                        <button class="btn-sm btn-outline" onclick="editTemporaryRoom(${index})">Edit</button>
+                        <button class="btn-sm btn-outline btn-delete" onclick="deleteTemporaryRoom(${index})">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+    }
+
+    // Handle temporary room editing
+    window.editTemporaryRoom = (index) => {
+        const room = temporaryRooms[index];
+        currentRoomEditingId = index; // Use index as ID for temporary rooms
+        roomForm.roomType.value = room.roomType;
+        roomForm.pricePerNight.value = room.pricePerNight;
+        roomForm.maxGuests.value = room.maxGuests;
+        roomForm.description.value = room.description;
+        document.getElementById('roomFormTitle').textContent = 'Edit Room';
+        roomFormSection.style.display = 'block';
+        roomListSection.style.display = 'none';
+    };
+
+    // Handle temporary room deletion
+    window.deleteTemporaryRoom = (index) => {
+        if (!confirm('Are you sure you want to remove this room?')) return;
+        temporaryRooms.splice(index, 1);
+        displayTemporaryRooms();
+    };
 
     async function loadRooms(accommodationId) {
         const tbody = document.querySelector('#roomsTable tbody');
@@ -597,35 +680,55 @@ document.addEventListener('DOMContentLoaded', () => {
         roomForm.onsubmit = async (e) => {
             e.preventDefault();
             const roomData = {
-                accommodationId: currentAccommodationId,
                 roomType: roomForm.roomType.value,
                 pricePerNight: parseFloat(roomForm.pricePerNight.value),
                 maxGuests: parseInt(roomForm.maxGuests.value),
                 description: roomForm.description.value
             };
 
-            const method = currentRoomEditingId ? 'PUT' : 'POST';
-            const url = currentRoomEditingId ? `${API_URL}/rooms/${currentRoomEditingId}` : `${API_URL}/rooms`;
-
-            try {
-                const res = await fetch(url, {
-                    method: method,
-                    headers: getAuthHeaders(),
-                    body: JSON.stringify(roomData)
-                });
-
-                if (res.ok) {
-                    alert(currentRoomEditingId ? 'Room updated successfully' : 'Room added successfully');
-                    roomFormSection.style.display = 'none';
-                    roomListSection.style.display = 'block';
-                    loadRooms(currentAccommodationId);
+            // If we're working with a new accommodation (no currentAccommodationId)
+            if (!currentAccommodationId) {
+                // Add to temporary storage
+                if (typeof currentRoomEditingId === 'number' && currentRoomEditingId >= 0) {
+                    // Editing existing temporary room
+                    temporaryRooms[currentRoomEditingId] = roomData;
                 } else {
-                    const err = await res.json();
-                    alert('Failed to save room: ' + (err.message || 'Unknown error'));
+                    // Adding new temporary room
+                    temporaryRooms.push(roomData);
                 }
-            } catch (err) {
-                console.error(err);
-                alert('Error saving room');
+                roomFormSection.style.display = 'none';
+                roomListSection.style.display = 'block';
+                displayTemporaryRooms();
+                currentRoomEditingId = null;
+            } else {
+                // Working with existing accommodation - save to API
+                roomData.accommodationId = currentAccommodationId;
+                const method = (typeof currentRoomEditingId === 'string') ? 'PUT' : 'POST';
+                const url = (typeof currentRoomEditingId === 'string')
+                    ? `${API_URL}/rooms/${currentRoomEditingId}`
+                    : `${API_URL}/rooms`;
+
+                try {
+                    const res = await fetch(url, {
+                        method: method,
+                        headers: getAuthHeaders(),
+                        body: JSON.stringify(roomData)
+                    });
+
+                    if (res.ok) {
+                        alert(currentRoomEditingId ? 'Room updated successfully' : 'Room added successfully');
+                        roomFormSection.style.display = 'none';
+                        roomListSection.style.display = 'block';
+                        loadRooms(currentAccommodationId);
+                        currentRoomEditingId = null;
+                    } else {
+                        const err = await res.json();
+                        alert('Failed to save room: ' + (err.message || 'Unknown error'));
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert('Error saving room');
+                }
             }
         };
     }

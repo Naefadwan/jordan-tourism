@@ -284,18 +284,18 @@ document.addEventListener('DOMContentLoaded', () => {
         let imageSrc, titleText, dateText, typeLabel;
 
         if (booking.type === 'attraction') {
-            imageSrc = booking.attraction_image;
-            titleText = booking.attraction_name;
+            imageSrc = booking.attraction_image || booking.image_url;
+            titleText = booking.attraction_name || booking.name || booking.item_name;
             dateText = new Date(booking.booking_date).toLocaleDateString();
             typeLabel = 'Attraction';
         } else if (booking.type === 'package') {
-            imageSrc = booking.package_image;
-            titleText = booking.package_name;
+            imageSrc = booking.package_image || booking.image_url;
+            titleText = booking.package_name || booking.name || booking.item_name;
             dateText = `${new Date(booking.start_date).toLocaleDateString()} - ${new Date(booking.end_date).toLocaleDateString()}`;
             typeLabel = 'Travel Package';
         } else {
-            imageSrc = booking.accommodation_image;
-            titleText = booking.accommodation_name;
+            imageSrc = booking.accommodation_image || booking.image_url;
+            titleText = booking.accommodation_name || booking.name || booking.item_name;
             dateText = `${new Date(booking.check_in_date).toLocaleDateString()} - ${new Date(booking.check_out_date).toLocaleDateString()}`;
             typeLabel = 'Stay';
         }
@@ -350,6 +350,116 @@ document.addEventListener('DOMContentLoaded', () => {
 
         card.appendChild(img);
         card.appendChild(content);
+
+        // Add click listener for details
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', () => showBookingDetails(booking));
+
         return card;
+    }
+
+    function showBookingDetails(booking) {
+        const modal = document.getElementById('bookingDetailsModal');
+        const content = document.getElementById('bookingDetailsContent');
+        if (!modal || !content) return;
+
+        // Re-normalize for modal view
+        let imageSrc, titleText, typeLabel, detailsHtml = '';
+
+        if (booking.type === 'attraction') {
+            imageSrc = booking.attraction_image || booking.image_url;
+            titleText = booking.attraction_name || booking.name || booking.item_name;
+            typeLabel = 'Attraction';
+            detailsHtml = `
+                <div class="detail-item">
+                    <span class="detail-label">Date</span>
+                    <span class="detail-value">${new Date(booking.booking_date).toLocaleDateString(undefined, { dateStyle: 'long' })}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Guests</span>
+                    <span class="detail-value">${booking.num_guests || booking.guests || 1} Person(s)</span>
+                </div>
+            `;
+        } else if (booking.type === 'package') {
+            imageSrc = booking.package_image || booking.image_url;
+            titleText = booking.package_name || booking.name || booking.item_name;
+            typeLabel = 'Travel Package';
+            detailsHtml = `
+                <div class="detail-item">
+                    <span class="detail-label">Start Date</span>
+                    <span class="detail-value">${new Date(booking.start_date).toLocaleDateString(undefined, { dateStyle: 'long' })}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">End Date</span>
+                    <span class="detail-value">${new Date(booking.end_date).toLocaleDateString(undefined, { dateStyle: 'long' })}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Guests</span>
+                    <span class="detail-value">${booking.guests} Person(s)</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Include Ticket</span>
+                    <span class="detail-value">${booking.has_ticket ? 'Yes' : 'No'}</span>
+                </div>
+            `;
+        } else {
+            imageSrc = booking.accommodation_image || booking.image_url;
+            titleText = booking.accommodation_name || booking.name || booking.item_name;
+            typeLabel = 'Stay';
+            detailsHtml = `
+                <div class="detail-item">
+                    <span class="detail-label">Check-in</span>
+                    <span class="detail-value">${new Date(booking.check_in_date).toLocaleDateString(undefined, { dateStyle: 'long' })}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Check-out</span>
+                    <span class="detail-value">${new Date(booking.check_out_date).toLocaleDateString(undefined, { dateStyle: 'long' })}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Guests</span>
+                    <span class="detail-value">${booking.num_guests || booking.guests || 1} Person(s)</span>
+                </div>
+            `;
+        }
+
+        // Fix image paths
+        if (imageSrc) {
+            imageSrc = imageSrc.replace(/\\/g, '/');
+            if (!imageSrc.startsWith('http') && !imageSrc.startsWith('/') && !imageSrc.startsWith('public/')) {
+                imageSrc = 'public/' + imageSrc;
+            }
+        }
+
+        content.innerHTML = `
+            <div class="booking-details-header">
+                <img src="${imageSrc || 'public/placeholder.jpg'}" alt="${titleText}">
+            </div>
+            <div class="booking-details-info">
+                <span class="booking-details-type">${typeLabel}</span>
+                <h3 class="booking-details-title">${titleText || 'Jordan Exploration'}</h3>
+                
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <span class="detail-label">Reference</span>
+                        <span class="detail-value">#${booking.booking_reference}</span>
+                    </div>
+                    ${detailsHtml}
+                </div>
+
+                <div class="booking-details-footer">
+                    <div class="booking-details-price">$${parseFloat(booking.total_price).toFixed(2)}</div>
+                    <div class="booking-details-status status-${booking.status}">${booking.status}</div>
+                </div>
+            </div>
+        `;
+
+        modal.style.display = 'block';
+
+        // Close logic
+        const closeBtn = modal.querySelector('.close-modal');
+        closeBtn.onclick = () => { modal.style.display = 'none'; };
+        window.onclick = (event) => {
+            if (event.target == modal) modal.style.display = 'none';
+        };
     }
 });
