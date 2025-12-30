@@ -476,6 +476,15 @@ body.light-theme {
   -webkit-backdrop-filter: blur(10px);
   border-radius: 1rem;
   border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.light-theme .hero-content {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 .hero-title {
@@ -485,7 +494,13 @@ body.light-theme {
   margin-bottom: 1.5rem;
   line-height: 1.1;
   color: hsl(var(--foreground));
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.light-theme .hero-title {
+  text-shadow: none;
+  color: #1a1a1a;
 }
 
 @media (min-width: 768px) {
@@ -508,8 +523,14 @@ body.light-theme {
   margin-right: auto;
   line-height: 1.6;
   color: hsl(var(--foreground) / 0.9);
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
   font-weight: 400;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.light-theme .hero-subtitle {
+  text-shadow: none;
+  color: #4a4a4a;
 }
 
 @media (min-width: 768px) {
