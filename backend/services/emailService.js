@@ -14,8 +14,8 @@ const sendOTP = async (email, otp, accountType = 'personal') => {
     try {
         const transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
-            port: 587,
-            secure: false,
+            port: 465,
+            secure: true,
             auth: {
                 user: process.env.EMAIL_USER,
                 pass: process.env.EMAIL_APP_PASSWORD,
@@ -72,7 +72,7 @@ const sendOTP = async (email, otp, accountType = 'personal') => {
     } catch (error) {
         console.error('[GOJO EMAIL SERVICE] ❌ Failed to send email:', error.message);
         console.log(`[GOJO EMAIL SERVICE] OTP for ${email}: ${otp} (Fallback - email failed)`);
-        throw new Error('Failed to send verification email. Please try again.');
+        return false;
     }
 };
 
@@ -87,8 +87,8 @@ const sendCompanyRegistrationEmail = async (email, companyName) => {
     try {
         const transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
-            port: 587,
-            secure: false,
+            port: 465,
+            secure: true,
             auth: {
                 user: process.env.EMAIL_USER,
                 pass: process.env.EMAIL_APP_PASSWORD,

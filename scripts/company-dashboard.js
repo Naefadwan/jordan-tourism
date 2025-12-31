@@ -134,6 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tbody.innerHTML = data.map(item => `
                 <tr>
                     <td>${item.name}</td>
+                    <td>${item.slug}</td>
                     <td>$${item.fromPrice || item.from_price || 0}</td>
                     <td>${item.booking_count || 0}</td>
                     <td><span class="status-badge status-${item.approval_status || 'approved'}">${item.approval_status === 'pending' ? 'Waiting Approval' : (item.approval_status || 'Approved')}</span></td>
@@ -255,6 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (pkg) {
             packageForm.name.value = pkg.name;
+            packageForm.slug.value = pkg.slug;
             packageForm.description.value = pkg.description;
             packageForm.from_price.value = pkg.fromPrice || pkg.from_price;
             packageForm.nights.value = pkg.nights;
