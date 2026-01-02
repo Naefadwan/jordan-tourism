@@ -1,15 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Complete Your Booking - GOJO</title>
     <meta name="description" content="Securely complete your booking for your stay in Jordan.">
-    <link rel="stylesheet" href="styles/main.css">    <link rel="stylesheet" href="styles/dark-theme-polish.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/dark-theme-polish.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
     <!-- Header -->
     <header class="site-header scrolled">
@@ -17,7 +22,7 @@
             <div class="header-content">
                 <div class="header-left">
                     <a href="index.html" class="logo">
-                        <span class="logo-text">GOJO</span>
+                        <img src="public/logo.jpg" alt="GOJO Jordan Tourism" class="logo-img">
                     </a>
                 </div>
                 <div class="header-right">
@@ -57,25 +62,29 @@
                 <!-- Step 1: Dates & Rooms -->
                 <div class="booking-step active" data-step="1">
                     <h2 class="booking-step-title">1. Select Your Room</h2>
-                    <p class="booking-step-subtitle">Your selected dates: <strong id="date-range-display"></strong> for <strong id="guest-count-display"></strong>.</p>
+                    <p class="booking-step-subtitle">Your selected dates: <strong id="date-range-display"></strong> for
+                        <strong id="guest-count-display"></strong>.</p>
                     <div class="room-selection-grid">
                         <div class="room-type-card">
                             <h3>Standard Room</h3>
                             <p>Comfortable room with a city view.</p>
                             <div class="room-price">$200/night</div>
-                            <button class="btn-primary select-room-btn" data-room-id="1" data-room-type="Standard Room" data-price="200">Select</button>
+                            <button class="btn-primary select-room-btn" data-room-id="1" data-room-type="Standard Room"
+                                data-price="200">Select</button>
                         </div>
                         <div class="room-type-card">
                             <h3>Deluxe Room</h3>
                             <p>Spacious room with a balcony and pool view.</p>
                             <div class="room-price">$280/night</div>
-                            <button class="btn-primary select-room-btn" data-room-id="2" data-room-type="Deluxe Room" data-price="280">Select</button>
+                            <button class="btn-primary select-room-btn" data-room-id="2" data-room-type="Deluxe Room"
+                                data-price="280">Select</button>
                         </div>
                         <div class="room-type-card">
                             <h3>Junior Suite</h3>
                             <p>Large suite with a separate living area.</p>
                             <div class="room-price">$450/night</div>
-                            <button class="btn-primary select-room-btn" data-room-id="3" data-room-type="Junior Suite" data-price="450">Select</button>
+                            <button class="btn-primary select-room-btn" data-room-id="3" data-room-type="Junior Suite"
+                                data-price="450">Select</button>
                         </div>
                     </div>
                 </div>
@@ -149,7 +158,8 @@
                     <div class="confirmation-container">
                         <div class="confirmation-icon">✓</div>
                         <h2 class="booking-step-title">Booking Confirmed!</h2>
-                        <p>Thank you for booking with Discover Jordan. Your confirmation and receipt have been sent to your email address.</p>
+                        <p>Thank you for booking with Discover Jordan. Your confirmation and receipt have been sent to
+                            your email address.</p>
                         <div class="confirmation-details">
                             <p><strong>Booking Reference:</strong> <span id="booking-ref"></span></p>
                             <p><strong>Total Amount Paid:</strong> <span id="final-price"></span></p>
@@ -173,4 +183,5 @@
     <script src="scripts/api.js"></script>
     <script src="scripts/booking.js"></script>
 </body>
+
 </html>

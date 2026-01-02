@@ -50,6 +50,21 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
+        function validatePassword(password) {
+            const minLength = 8;
+            const hasUpper = /[A-Z]/.test(password);
+            const hasLower = /[a-z]/.test(password);
+            const hasDigit = /[0-9]/.test(password);
+            const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+            if (password.length < minLength) return 'Password must be at least 8 characters long.';
+            if (!hasUpper) return 'Password must contain at least one uppercase letter.';
+            if (!hasLower) return 'Password must contain at least one lowercase letter.';
+            if (!hasDigit) return 'Password must contain at least one number.';
+            if (!hasSpecial) return 'Password must contain at least one special character.';
+            return null;
+        }
+
         signupForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             clearError();
@@ -63,6 +78,15 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!fullName || !email || !password) {
                 showError('Please fill in all fields.');
                 return;
+            }
+
+            // Phase 1: Pre-OTP Validation (including password complexity)
+            if (!otpSent) {
+                const passwordError = validatePassword(password);
+                if (passwordError) {
+                    showError(passwordError);
+                    return;
+                }
             }
 
             try {

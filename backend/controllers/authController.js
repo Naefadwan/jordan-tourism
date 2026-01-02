@@ -28,6 +28,17 @@ exports.register = async (req, res) => {
             return res.status(400).json({ message: 'Please enter all fields including OTP' });
         }
 
+        // Password complexity validation
+        const minLength = 8;
+        const hasUpper = /[A-Z]/.test(password);
+        const hasLower = /[a-z]/.test(password);
+        const hasDigit = /[0-9]/.test(password);
+        const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+        if (password.length < minLength || !hasUpper || !hasLower || !hasDigit || !hasSpecial) {
+            return res.status(400).json({ message: 'Password does not meet complexity requirements.' });
+        }
+
         const isOtpValid = await OTP.verify(email, otp, 'registration');
         if (!isOtpValid) {
             return res.status(400).json({ message: 'Invalid or expired OTP' });

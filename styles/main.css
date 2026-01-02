@@ -211,6 +211,20 @@ body.light-theme {
   color: hsl(var(--primary));
 }
 
+.logo-img {
+  height: 3rem;
+  width: auto;
+  object-fit: contain;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 8px;
+  filter: drop-shadow(0 0 8px hsl(var(--primary) / 0.3));
+}
+
+.logo:hover .logo-img {
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 12px hsl(var(--primary) / 0.5)) brightness(1.1);
+}
+
 .main-nav {
   display: none;
   align-items: center;
