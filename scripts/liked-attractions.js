@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
         card.dataset.rating = attraction.rating || 0;
         card.dataset.reviews = attraction.reviews || 0;
         card.dataset.attractionId = attraction.id;
+        card.dataset.image = attraction.image || '';
 
         const placeholderSrc =
             'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
@@ -53,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     data-src="${attraction.image}"
                     alt="${attraction.name}"
                     loading="lazy"
-                    src="${placeholderSrc}"
+                    src="${attraction.image}"
                 >
                 <div class="attraction-badge">${capitalize(attraction.category || 'Attraction')}</div>
                 <button class="btn-icon like-btn liked" aria-label="Unlike ${attraction.name}" data-attraction-id="${attraction.id}">
