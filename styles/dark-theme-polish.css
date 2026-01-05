@@ -108,7 +108,10 @@ textarea::placeholder {
 /* Price tags with better visibility */
 .price,
 .package-price,
-.accommodation-price,
+.accommodation-price{
+    color:Black;
+    font-weight: 600;
+}
 .attraction-price {
     color: hsl(var(--accent));
     font-weight: 600;
